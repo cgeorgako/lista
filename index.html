@@ -10,8 +10,6 @@
 body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-height:100vh;color:#1a1a1a}
 .screen{display:none;min-height:100vh;flex-direction:column}
 .screen.active{display:flex}
-
-/* LOGIN */
 #loginScreen{background:linear-gradient(160deg,#1a7f4b 0%,#0d5c35 100%);align-items:center;justify-content:center;padding:2rem}
 .login-box{background:#fff;border-radius:20px;padding:2rem;width:100%;max-width:340px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.15)}
 .app-icon{font-size:48px;margin-bottom:0.5rem}
@@ -30,30 +28,22 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
 .num-btn:active{background:#e0e0e0;transform:scale(0.95)}
 .num-btn.del{background:#fff3f3;color:#e53935}
 .err-msg{color:#e53935;font-size:0.82rem;margin-top:0.75rem;min-height:1rem}
-
-/* HEADER */
 .app-header{background:#1a7f4b;color:#fff;padding:1rem 1.25rem 0.75rem;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
 .app-header h2{font-size:1.1rem;font-weight:700;flex:1}
 .hdr-sub{font-size:0.75rem;opacity:0.8;display:block}
 .hdr-btn{background:rgba(255,255,255,0.2);border:none;color:#fff;border-radius:10px;padding:8px 12px;font-size:0.82rem;cursor:pointer;white-space:nowrap}
-
-/* TABS */
 .tabs{display:flex;background:#fff;border-bottom:1px solid #e8e8e8;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tab{padding:0.7rem 1.1rem;border:none;background:none;font-size:0.82rem;color:#777;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.2s}
 .tab.active{color:#1a7f4b;border-bottom-color:#1a7f4b;font-weight:600}
-
-/* LIST */
 .content-area{flex:1;overflow-y:auto;padding:0.75rem}
 .add-bar{display:flex;gap:8px;margin-bottom:0.75rem}
 .add-bar input{flex:1;padding:0.65rem 1rem;border:1.5px solid #e0e0e0;border-radius:12px;font-size:0.9rem;background:#fff;outline:none}
 .add-bar input:focus{border-color:#1a7f4b}
 .add-bar button{padding:0.65rem 1rem;background:#1a7f4b;color:#fff;border:none;border-radius:12px;font-size:1.2rem;cursor:pointer;flex-shrink:0}
-
 .products-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:0.75rem}
 .prod-btn{padding:0.6rem 0.5rem;background:#fff;border:1.5px solid #e0e0e0;border-radius:10px;font-size:0.78rem;color:#444;cursor:pointer;text-align:center;transition:all 0.2s}
 .prod-btn:active{background:#f0faf5;border-color:#1a7f4b}
-
 .section-lbl{font-size:0.75rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin:0.5rem 0 0.4rem;padding-left:2px}
 .list-item{display:flex;align-items:center;gap:12px;background:#fff;border-radius:12px;padding:0.8rem 1rem;margin-bottom:8px;border:1px solid #f0f0f0;animation:slideIn 0.25s ease}
 @keyframes slideIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
@@ -67,37 +57,28 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
 .item-del:hover{color:#e53935}
 .empty-state{text-align:center;padding:3rem 1rem;color:#aaa}
 .empty-state .es-icon{font-size:3rem;margin-bottom:0.5rem}
-.empty-state p{font-size:0.9rem}
 .badge{background:#e8f5ee;color:#1a7f4b;border-radius:20px;padding:2px 10px;font-size:0.75rem;font-weight:600}
-.status-bar{background:#fff3cd;padding:0.5rem 1rem;font-size:0.78rem;color:#856404;display:flex;align-items:center;gap:6px}
+.status-bar{padding:0.5rem 1rem;font-size:0.78rem;display:flex;align-items:center;gap:6px;background:#fff3cd;color:#856404}
 .status-bar.ok{background:#d4edda;color:#155724}
+.status-bar.err{background:#f8d7da;color:#721c24}
 .dot-pulse{width:8px;height:8px;border-radius:50%;background:currentColor;flex-shrink:0}
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
 <div id="loginScreen" class="screen active">
   <div class="login-box">
     <div class="app-icon">🛒</div>
     <h1>Λίστα Αγορών</h1>
     <p>Κοινή λίστα για τους δύο σας</p>
-
     <div class="user-btns">
-      <button class="user-btn" id="btn-u1" onclick="selectUser(0)">
-        <span class="u-icon">👨</span>Χρήστης Α
-      </button>
-      <button class="user-btn" id="btn-u2" onclick="selectUser(1)">
-        <span class="u-icon">👩</span>Χρήστης Β
-      </button>
+      <button class="user-btn" id="btn-u1" onclick="selectUser(0)"><span class="u-icon">👨</span>Χρήστης Α</button>
+      <button class="user-btn" id="btn-u2" onclick="selectUser(1)"><span class="u-icon">👩</span>Χρήστης Β</button>
     </div>
-
     <div class="pin-label">Εισάγετε PIN (4 ψηφία)</div>
     <div class="pin-dots">
-      <div class="pin-dot" id="d0"></div>
-      <div class="pin-dot" id="d1"></div>
-      <div class="pin-dot" id="d2"></div>
-      <div class="pin-dot" id="d3"></div>
+      <div class="pin-dot" id="d0"></div><div class="pin-dot" id="d1"></div>
+      <div class="pin-dot" id="d2"></div><div class="pin-dot" id="d3"></div>
     </div>
     <div class="numpad">
       <button class="num-btn" onclick="addDigit('1')">1</button>
@@ -117,7 +98,6 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
   </div>
 </div>
 
-<!-- MAIN SCREEN -->
 <div id="mainScreen" class="screen">
   <div class="app-header">
     <div style="flex:1">
@@ -126,13 +106,26 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
     </div>
     <button class="hdr-btn" onclick="logout()">Έξοδος</button>
   </div>
-  <div id="statusBar" class="status-bar ok"><div class="dot-pulse"></div><span id="statusTxt">Live σύνδεση ενεργή</span></div>
-
+  <div id="statusBar" class="status-bar"><div class="dot-pulse"></div><span id="statusTxt">Σύνδεση με Firebase...</span></div>
   <div class="tabs" id="tabBar"></div>
   <div class="content-area" id="contentArea"></div>
 </div>
 
-<script>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getDatabase, ref, onValue, set, remove, update } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC3drMmRGbykwTInDbRhLwdG9ulRz8Iq_0",
+  authDomain: "lista-agoron-ea924.firebaseapp.com",
+  databaseURL: "https://lista-agoron-ea924-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "lista-agoron-ea924"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const listRef = ref(db, 'lista');
+
 const USERS=[{name:'Χρήστης Α',pin:'1234',icon:'👨'},{name:'Χρήστης Β',pin:'5678',icon:'👩'}];
 const CATEGORIES=[
   {id:'dairy',label:'🥛 Γαλακτοκομικά',items:['Γάλα','Γιαούρτι','Τυρί Φέτα','Βούτυρο','Κρέμα γάλακτος','Τυρί τριμμένο','Αυγά']},
@@ -145,75 +138,71 @@ const CATEGORIES=[
   {id:'clean',label:'🧴 Καθαριότητα',items:['Απορρυπαντικό','Χαρτί υγείας','Χαρτί κουζίνας','Σαπούνι','Σαμπουάν','Αφρόλουτρο','Οδοντόκρεμα','Σφουγγάρια','Λευκαντικό','Μαλακτικό']},
   {id:'house',label:'🧹 Είδη Σπιτιού',items:['Σακούλες σκουπιδιών','Σφουγγαρίστρα','Σκούπα','Χαρτοπετσέτες','Μεμβράνη','Αλουμινόχαρτο']}
 ];
-const ALL_TAB={id:'all',label:'📋 Λίστα'};
-const ADD_TAB={id:'add',label:'➕ Προσθήκη'};
 
-let currentUser=null, pinBuffer='', activeTab='all';
-let sharedList=JSON.parse(localStorage.getItem('sharedList')||'[]');
-let addCategory=CATEGORIES[0].id;
+let currentUser=null, pinBuffer='', activeTab='all', addCategory='dairy';
+let sharedList={};
 
-function selectUser(i){
+// Firebase listener — real-time sync
+onValue(listRef, snap=>{
+  sharedList = snap.val() || {};
+  if(document.getElementById('mainScreen').classList.contains('active')) renderContent();
+  setStatus('ok','🟢 Live σύνδεση ενεργή');
+}, err=>{
+  setStatus('err','❌ Σφάλμα σύνδεσης');
+});
+
+// PIN / LOGIN
+window.selectUser=i=>{
   currentUser=i;
   document.querySelectorAll('.user-btn').forEach((b,j)=>b.classList.toggle('selected',i===j));
   clearPin();
-}
-function addDigit(d){
-  if(!currentUser!==null && pinBuffer.length<4){
-    if(currentUser===null){document.getElementById('errMsg').textContent='Επιλέξτε χρήστη πρώτα';return;}
-    pinBuffer+=d;
-    updateDots();
-    if(pinBuffer.length===4) setTimeout(tryLogin,200);
-  } else if(currentUser!==null && pinBuffer.length<4){
-    pinBuffer+=d;
-    updateDots();
-    if(pinBuffer.length===4) setTimeout(tryLogin,200);
-  }
-}
-function delDigit(){pinBuffer=pinBuffer.slice(0,-1);updateDots();}
-function clearPin(){pinBuffer='';updateDots();document.getElementById('errMsg').textContent='';}
-function updateDots(){
-  for(let i=0;i<4;i++) document.getElementById('d'+i).classList.toggle('filled',i<pinBuffer.length);
-}
+};
+window.addDigit=d=>{
+  if(currentUser===null){document.getElementById('errMsg').textContent='Επιλέξτε χρήστη πρώτα';return;}
+  if(pinBuffer.length<4){pinBuffer+=d;updateDots();if(pinBuffer.length===4)setTimeout(tryLogin,200);}
+};
+window.delDigit=()=>{pinBuffer=pinBuffer.slice(0,-1);updateDots();};
+window.clearPin=()=>{pinBuffer='';updateDots();document.getElementById('errMsg').textContent='';};
+function updateDots(){for(let i=0;i<4;i++)document.getElementById('d'+i).classList.toggle('filled',i<pinBuffer.length);}
 function tryLogin(){
-  if(currentUser===null){document.getElementById('errMsg').textContent='Επιλέξτε χρήστη';return;}
   if(pinBuffer===USERS[currentUser].pin){
     document.getElementById('loginScreen').classList.remove('active');
     document.getElementById('mainScreen').classList.add('active');
     document.getElementById('hdrSub').textContent=USERS[currentUser].icon+' '+USERS[currentUser].name;
     renderTabs();renderContent();
-    startSync();
   } else {
     document.getElementById('errMsg').textContent='❌ Λάθος PIN, δοκιμάστε ξανά';
     pinBuffer='';updateDots();
   }
 }
-function logout(){
+window.logout=()=>{
   currentUser=null;pinBuffer='';
   updateDots();
   document.querySelectorAll('.user-btn').forEach(b=>b.classList.remove('selected'));
   document.getElementById('errMsg').textContent='';
   document.getElementById('mainScreen').classList.remove('active');
   document.getElementById('loginScreen').classList.add('active');
-  stopSync();
-}
+};
 
+// TABS
 function renderTabs(){
-  const bar=document.getElementById('tabBar');
-  const tabs=[ALL_TAB,ADD_TAB];
-  bar.innerHTML=tabs.map(t=>`<button class="tab${activeTab===t.id?' active':''}" onclick="setTab('${t.id}')">${t.label}</button>`).join('');
+  document.getElementById('tabBar').innerHTML=
+    [{id:'all',label:'📋 Λίστα'},{id:'add',label:'➕ Προσθήκη'}]
+    .map(t=>`<button class="tab${activeTab===t.id?' active':''}" onclick="setTab('${t.id}')">${t.label}</button>`).join('');
 }
-function setTab(id){activeTab=id;renderTabs();renderContent();}
+window.setTab=id=>{activeTab=id;renderTabs();renderContent();};
 
 function renderContent(){
   const ca=document.getElementById('contentArea');
-  if(activeTab==='all') renderList(ca);
-  else if(activeTab==='add') renderAdd(ca);
+  activeTab==='all'?renderList(ca):renderAdd(ca);
 }
 
+// LIST
 function renderList(ca){
-  const active=sharedList.filter(i=>!i.done);
-  const done=sharedList.filter(i=>i.done);
-  if(sharedList.length===0){
+  const items=Object.entries(sharedList).map(([id,v])=>({id,...v}));
+  const active=items.filter(i=>!i.done);
+  const done=items.filter(i=>i.done);
+  if(items.length===0){
     ca.innerHTML=`<div class="empty-state"><div class="es-icon">🛒</div><p>Η λίστα είναι άδεια!<br>Πατήστε <b>➕ Προσθήκη</b> για να ξεκινήσετε.</p></div>`;return;
   }
   let html=`<div class="section-lbl">Εκκρεμή <span class="badge">${active.length}</span></div>`;
@@ -226,18 +215,21 @@ function renderList(ca){
   }
   ca.innerHTML=html;
 }
-
 function itemHTML(item){
   const catLabel=CATEGORIES.find(c=>c.id===item.cat)?.label||'';
-  return `<div class="list-item${item.done?' done':''}" id="item-${item.id}">
+  return `<div class="list-item${item.done?' done':''}">
     <button class="item-check${item.done?' checked':''}" onclick="toggleItem('${item.id}')">${item.done?'✓':''}</button>
     <div style="flex:1"><span class="item-name">${item.name}</span><span class="item-cat">${catLabel}</span></div>
     <button class="item-del" onclick="deleteItem('${item.id}')">✕</button>
   </div>`;
 }
 
+// ADD
 function renderAdd(ca){
-  const catBtns=CATEGORIES.map(c=>{const sel=addCategory===c.id;return`<button class="prod-btn" onclick="setAddCat('${c.id}')" style="${sel?'border-color:#1a7f4b;background:#f0faf5;color:#1a7f4b;font-weight:600':''}">${c.label}</button>`;}).join('');
+  const catBtns=CATEGORIES.map(c=>{
+    const sel=addCategory===c.id;
+    return `<button class="prod-btn" onclick="setAddCat('${c.id}')" style="${sel?'border-color:#1a7f4b;background:#f0faf5;color:#1a7f4b;font-weight:600':''}">${c.label}</button>`;
+  }).join('');
   const cat=CATEGORIES.find(c=>c.id===addCategory);
   const prodBtns=cat.items.map(p=>`<button class="prod-btn" onclick="quickAdd('${p.replace(/'/g,"\\'")}','${addCategory}')">${p}</button>`).join('');
   ca.innerHTML=`
@@ -248,50 +240,40 @@ function renderAdd(ca){
     <div class="section-lbl">Κατηγορία</div>
     <div class="products-grid">${catBtns}</div>
     <div class="section-lbl" style="margin-top:0.5rem">Προϊόντα — ${cat.label}</div>
-    <div class="products-grid">${prodBtns}</div>
-  `;
+    <div class="products-grid">${prodBtns}</div>`;
 }
-function setAddCat(id){addCategory=id;renderContent();}
-function quickAdd(name,cat){addItem(name,cat);}
-function manualAdd(){
+window.setAddCat=id=>{addCategory=id;renderContent();};
+window.quickAdd=(name,cat)=>addItem(name,cat);
+window.manualAdd=()=>{
   const inp=document.getElementById('manualInput');
   const v=inp.value.trim();
   if(v){addItem(v,addCategory);inp.value='';}
-}
+};
+
+// FIREBASE CRUD
 function addItem(name,cat){
-  if(sharedList.find(i=>i.name.toLowerCase()===name.toLowerCase()&&!i.done)){
-    showStatus('Ήδη στη λίστα: '+name,'warn');return;
-  }
-  sharedList.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2),name,cat,done:false,ts:Date.now()});
-  saveList();showStatus('Προστέθηκε: '+name,'ok');
+  const existing=Object.values(sharedList).find(i=>i.name.toLowerCase()===name.toLowerCase()&&!i.done);
+  if(existing){setStatus('warn','⚠️ Ήδη στη λίστα: '+name);return;}
+  const id=Date.now().toString(36)+Math.random().toString(36).slice(2);
+  set(ref(db,'lista/'+id),{name,cat,done:false,ts:Date.now()});
+  setStatus('ok','✅ Προστέθηκε: '+name);
 }
-function toggleItem(id){
-  const item=sharedList.find(i=>i.id===id);
-  if(item){item.done=!item.done;item.ts=Date.now();saveList();renderContent();}
-}
-function deleteItem(id){
-  sharedList=sharedList.filter(i=>i.id!==id);saveList();renderContent();
-}
-function clearDone(){sharedList=sharedList.filter(i=>!i.done);saveList();renderContent();}
-function saveList(){localStorage.setItem('sharedList',JSON.stringify(sharedList));}
-function showStatus(msg,type){
+window.toggleItem=id=>{
+  const item=sharedList[id];
+  if(item) update(ref(db,'lista/'+id),{done:!item.done,ts:Date.now()});
+};
+window.deleteItem=id=>remove(ref(db,'lista/'+id));
+window.clearDone=()=>{
+  Object.entries(sharedList).forEach(([id,v])=>{if(v.done)remove(ref(db,'lista/'+id));});
+};
+
+function setStatus(type,msg){
   const bar=document.getElementById('statusBar');
   const txt=document.getElementById('statusTxt');
-  bar.className='status-bar '+(type==='ok'?'ok':'');
+  bar.className='status-bar '+(type==='ok'?'ok':type==='err'?'err':'');
   txt.textContent=msg;
-  if(type==='ok') setTimeout(()=>{txt.textContent='Live σύνδεση ενεργή';},2500);
+  if(type==='ok'&&msg!=='🟢 Live σύνδεση ενεργή') setTimeout(()=>setStatus('ok','🟢 Live σύνδεση ενεργή'),2500);
 }
-
-let syncInterval=null;
-function startSync(){
-  syncInterval=setInterval(()=>{
-    const saved=JSON.parse(localStorage.getItem('sharedList')||'[]');
-    const localTs=sharedList.reduce((a,i)=>Math.max(a,i.ts||0),0);
-    const savedTs=saved.reduce((a,i)=>Math.max(a,i.ts||0),0);
-    if(savedTs>localTs){sharedList=saved;renderContent();}
-  },1500);
-}
-function stopSync(){clearInterval(syncInterval);}
 </script>
 </body>
 </html>
