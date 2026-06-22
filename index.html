@@ -71,6 +71,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
     <div class="app-icon">🛒</div>
     <h1>Λίστα Αγορών</h1>
     <p>Κοινή λίστα για τους δύο σας</p>
+    <p style="font-size:0.72rem;color:#aaa;margin-top:-0.75rem;margin-bottom:1rem">Χρήστος Γεωργακόπουλος · Ιούνιος 2026</p>
     <div class="user-btns">
       <button class="user-btn" id="btn-u1" onclick="selectUser(0)"><span class="u-icon">👨</span>Χρήστης Α</button>
       <button class="user-btn" id="btn-u2" onclick="selectUser(1)"><span class="u-icon">👩</span>Χρήστης Β</button>
@@ -217,9 +218,13 @@ function renderList(ca){
 }
 function itemHTML(item){
   const catLabel=CATEGORIES.find(c=>c.id===item.cat)?.label||'';
+  const qtyStr=item.qty&&item.unit?`${item.qty} ${item.unit}`:item.qty?`${item.qty} τεμ.`:'';
   return `<div class="list-item${item.done?' done':''}">
     <button class="item-check${item.done?' checked':''}" onclick="toggleItem('${item.id}')">${item.done?'✓':''}</button>
-    <div style="flex:1"><span class="item-name">${item.name}</span><span class="item-cat">${catLabel}</span></div>
+    <div style="flex:1">
+      <span class="item-name">${item.name}${qtyStr?` <span style="font-size:0.78rem;color:#1a7f4b;font-weight:600">(${qtyStr})</span>`:''}</span>
+      <span class="item-cat">${catLabel}</span>
+    </div>
     <button class="item-del" onclick="deleteItem('${item.id}')">✕</button>
   </div>`;
 }
@@ -237,11 +242,29 @@ function renderAdd(ca){
       <input id="manualInput" placeholder="Ή πληκτρολογήστε προϊόν..." onkeydown="if(event.key==='Enter')manualAdd()">
       <button onclick="manualAdd()">+</button>
     </div>
+    <div style="display:flex;gap:8px;margin-bottom:0.75rem;align-items:center">
+      <input id="qtyInput" type="number" min="0.1" step="0.1" value="1" style="width:70px;padding:0.5rem;border:1.5px solid #e0e0e0;border-radius:10px;font-size:0.9rem;text-align:center">
+      <div style="display:flex;gap:6px;flex:1">
+        <button onclick="setUnit('τεμ.')" id="btn-tem" style="flex:1;padding:0.5rem;border-radius:10px;border:1.5px solid #1a7f4b;background:#f0faf5;color:#1a7f4b;font-size:0.82rem;font-weight:600;cursor:pointer">τεμ.</button>
+        <button onclick="setUnit('κιλά')" id="btn-kila" style="flex:1;padding:0.5rem;border-radius:10px;border:1.5px solid #e0e0e0;background:#fff;color:#555;font-size:0.82rem;cursor:pointer">κιλά</button>
+        <button onclick="setUnit('γρ.')" id="btn-gr" style="flex:1;padding:0.5rem;border-radius:10px;border:1.5px solid #e0e0e0;background:#fff;color:#555;font-size:0.82rem;cursor:pointer">γρ.</button>
+        <button onclick="setUnit('lt')" id="btn-lt" style="flex:1;padding:0.5rem;border-radius:10px;border:1.5px solid #e0e0e0;background:#fff;color:#555;font-size:0.82rem;cursor:pointer">lt</button>
+      </div>
+    </div>
     <div class="section-lbl">Κατηγορία</div>
     <div class="products-grid">${catBtns}</div>
     <div class="section-lbl" style="margin-top:0.5rem">Προϊόντα — ${cat.label}</div>
     <div class="products-grid">${prodBtns}</div>`;
 }
+let activeUnit='τεμ.';
+window.setUnit=u=>{
+  activeUnit=u;
+  ['τεμ.','κιλά','γρ.','lt'].forEach(x=>{
+    const id='btn-'+x.replace('.','').replace('τεμ','tem').replace('κιλά','kila').replace('γρ','gr').replace('lt','lt');
+    const btn=document.getElementById(id);
+    if(btn){const sel=x===u;btn.style.borderColor=sel?'#1a7f4b':'#e0e0e0';btn.style.background=sel?'#f0faf5':'#fff';btn.style.color=sel?'#1a7f4b':'#555';btn.style.fontWeight=sel?'600':'400';}
+  });
+};
 window.setAddCat=id=>{addCategory=id;renderContent();};
 window.quickAdd=(name,cat)=>addItem(name,cat);
 window.manualAdd=()=>{
@@ -254,9 +277,11 @@ window.manualAdd=()=>{
 function addItem(name,cat){
   const existing=Object.values(sharedList).find(i=>i.name.toLowerCase()===name.toLowerCase()&&!i.done);
   if(existing){setStatus('warn','⚠️ Ήδη στη λίστα: '+name);return;}
+  const qty=parseFloat(document.getElementById('qtyInput')?.value||1);
+  const unit=activeUnit;
   const id=Date.now().toString(36)+Math.random().toString(36).slice(2);
-  set(ref(db,'lista/'+id),{name,cat,done:false,ts:Date.now()});
-  setStatus('ok','✅ Προστέθηκε: '+name);
+  set(ref(db,'lista/'+id),{name,cat,qty,unit,done:false,ts:Date.now()});
+  setStatus('ok',`✅ Προστέθηκε: ${qty} ${unit} ${name}`);
 }
 window.toggleItem=id=>{
   const item=sharedList[id];
