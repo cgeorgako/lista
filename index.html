@@ -57,6 +57,10 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
 .products-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:0.75rem}
 .prod-btn{padding:0.6rem 0.5rem;background:#fff;border:1.5px solid #e0e0e0;border-radius:10px;font-size:0.78rem;color:#444;cursor:pointer;text-align:center;transition:all 0.2s}
 .prod-btn:active{background:#f0faf5;border-color:#1a7f4b}
+.sugg-item{padding:0.65rem 1rem;font-size:0.9rem;cursor:pointer;border-bottom:1px solid #f0f0f0;transition:background 0.15s}
+.sugg-item:last-child{border-bottom:none}
+.sugg-item:hover,.sugg-item.sugg-sel{background:#f0faf5;color:#1a7f4b}
+.sugg-item b{color:#1a7f4b;font-weight:700}
 .prod-btn.fav{border-color:#ffb3b3;background:#fff8f8;color:#c62828}
 
 .section-lbl{font-size:0.75rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin:0.5rem 0 0.4rem;padding-left:2px}
@@ -301,10 +305,15 @@ function renderAdd(ca){
     : `<div style="grid-column:span 2;text-align:center;color:#bbb;font-size:0.82rem;padding:1rem">Δεν έχετε αγαπημένα ακόμα.<br>Πατήστε ❤️+ κατά την προσθήκη!</div>`;
 
   ca.innerHTML=`
-    <div class="add-bar">
-      <input id="manualInput" placeholder="Πληκτρολογήστε προϊόν..." onkeydown="if(event.key==='Enter')manualAdd()">
-      <button class="btn-add" onclick="manualAdd()" title="Προσθήκη στη λίστα">+</button>
-      <button class="btn-fav" onclick="manualAddFav()" title="Προσθήκη στη λίστα & Αγαπημένα">❤️+</button>
+    <div style="position:relative;margin-bottom:0.75rem">
+      <div class="add-bar" style="margin-bottom:0">
+        <input id="manualInput" placeholder="Πληκτρολογήστε προϊόν..." autocomplete="off"
+          oninput="showSuggestions(this.value)"
+          onkeydown="handleKey(event)">
+        <button class="btn-add" onclick="manualAdd()" title="Προσθήκη στη λίστα">+</button>
+        <button class="btn-fav" onclick="manualAddFav()" title="Προσθήκη στη λίστα & Αγαπημένα">❤️+</button>
+      </div>
+      <div id="suggBox" style="display:none;position:absolute;left:0;right:0;background:#fff;border:1.5px solid #1a7f4b;border-top:none;border-radius:0 0 12px 12px;z-index:300;max-height:180px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,0.1)"></div>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:0.75rem;align-items:center">
       <input id="qtyInput" type="number" min="0.1" step="0.1" value="1" style="width:70px;padding:0.5rem;border:1.5px solid #e0e0e0;border-radius:10px;font-size:0.9rem;text-align:center">
@@ -327,6 +336,47 @@ window.removeFav=name=>{
   set(favRef,newFavs.length>0?newFavs:[]);
   setStatus('ok','🗑 Αφαιρέθηκε από Αγαπημένα: '+name);
 };
+// AUTOCOMPLETE
+const ALL_PRODUCTS=[...new Set(CATEGORIES.filter(c=>c.id!=='fav').flatMap(c=>c.items))];
+let suggIdx=-1;
+
+window.showSuggestions=val=>{
+  const box=document.getElementById('suggBox');
+  if(!val||val.length<2){box.style.display='none';return;}
+  const q=val.toLowerCase();
+  // ιστορικό αγορών πρώτα, μετά έτοιμη λίστα
+  const history=[...new Set(Object.values(sharedList).map(i=>i.name))];
+  const pool=[...new Set([...history,...ALL_PRODUCTS,...favItems])];
+  const matches=pool.filter(p=>p.toLowerCase().includes(q) && p.toLowerCase()!==q).slice(0,6);
+  if(matches.length===0){box.style.display='none';return;}
+  suggIdx=-1;
+  box.innerHTML=matches.map((m,i)=>`<div class="sugg-item" id="sugg-${i}" onclick="pickSugg('${m.replace(/'/g,"\\'")}')">
+    ${m.replace(new RegExp('('+val.replace(/[.*+?^${}()|[\]\\]/g,'\\window.setUnit=u=>{')+')','gi'),'<b>$1</b>')}
+  </div>`).join('');
+  box.style.display='block';
+};
+window.pickSugg=val=>{
+  document.getElementById('manualInput').value=val;
+  document.getElementById('suggBox').style.display='none';
+  suggIdx=-1;
+};
+window.handleKey=e=>{
+  const box=document.getElementById('suggBox');
+  const items=box.querySelectorAll('.sugg-item');
+  if(e.key==='ArrowDown'){e.preventDefault();suggIdx=Math.min(suggIdx+1,items.length-1);}
+  else if(e.key==='ArrowUp'){e.preventDefault();suggIdx=Math.max(suggIdx-1,-1);}
+  else if(e.key==='Enter'){
+    if(suggIdx>=0&&items[suggIdx]){items[suggIdx].click();return;}
+    manualAdd();return;
+  } else if(e.key==='Escape'){box.style.display='none';return;}
+  items.forEach((el,i)=>{el.classList.toggle('sugg-sel',i===suggIdx);});
+  if(suggIdx>=0&&items[suggIdx]) document.getElementById('manualInput').value=items[suggIdx].textContent.trim();
+};
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#suggBox')&&!e.target.closest('#manualInput'))
+    document.getElementById('suggBox').style.display='none';
+});
+
 window.setUnit=u=>{
   activeUnit=u;
   document.querySelectorAll('.ubu').forEach(b=>b.classList.remove('sel'));
