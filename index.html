@@ -183,7 +183,7 @@ window.clearPin=()=>{pinBuffer='';updateDots();document.getElementById('errMsg')
 function updateDots(){for(let i=0;i<6;i++)document.getElementById('d'+i).classList.toggle('filled',i<pinBuffer.length);}
 
 function tryLogin(){
-  if(KNOWN_PINS[pinBuffer]){
+  if(KNOWN_PINS[pinBuffer]!==undefined){
     roomKey=pinBuffer;
     listRef=ref(db,'rooms/'+pinBuffer+'/lista');
     favRef=ref(db,'rooms/'+pinBuffer+'/favorites');
@@ -217,13 +217,16 @@ function startListeners(){
       updateFab();
     }
     setStatus('ok','🟢 Live σύνδεση ενεργή');
-  }, ()=>setStatus('err','❌ Σφάλμα σύνδεσης'));
+  }, err=>{
+    console.error(err);
+    setStatus('err','❌ Σφάλμα σύνδεσης');
+  });
 
   unsubFav = onValue(favRef, snap=>{
     favItems=snap.val()||[];
     CATEGORIES.find(c=>c.id==='fav').items=[...favItems];
     if(activeTab==='add') renderContent();
-  });
+  }, ()=>{favItems=[];});
 }
 
 // TABS
