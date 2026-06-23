@@ -261,7 +261,12 @@ function renderList(ca){
   if(items.length===0){
     ca.innerHTML=`<div class="empty-state"><div class="es-icon">🛒</div><p>Η λίστα είναι άδεια!<br>Πατήστε <b>➕ Προσθήκη</b> για να ξεκινήσετε.</p></div>`;return;
   }
-  let html=`<div class="section-lbl">Εκκρεμή <span class="badge">${active.length}</span></div>`;
+  let html=`<div style="display:flex;gap:8px;margin-bottom:0.75rem">
+    <button onclick="shareViber()" style="flex:1;padding:0.6rem;background:#7360f2;border:none;border-radius:10px;color:#fff;font-size:0.82rem;font-weight:600;cursor:pointer">📲 Viber</button>
+    <button onclick="shareSMS()" style="flex:1;padding:0.6rem;background:#1a7f4b;border:none;border-radius:10px;color:#fff;font-size:0.82rem;font-weight:600;cursor:pointer">✉️ SMS</button>
+    <button onclick="shareGeneric()" style="flex:1;padding:0.6rem;background:#555;border:none;border-radius:10px;color:#fff;font-size:0.82rem;font-weight:600;cursor:pointer">🔗 Κοινοποίηση</button>
+  </div>`;
+  html+=`<div class="section-lbl">Εκκρεμή <span class="badge">${active.length}</span></div>`;
   if(active.length===0) html+=`<div style="text-align:center;color:#bbb;padding:1rem;font-size:0.85rem">Όλα αγοράστηκαν! 🎉</div>`;
   active.forEach(item=>html+=itemHTML(item));
   if(done.length>0){
@@ -427,6 +432,37 @@ window.toggleItem=id=>{
   if(item) update(ref(db,'rooms/'+roomKey+'/lista/'+id),{done:!item.done,ts:Date.now()});
 };
 window.deleteItem=id=>remove(ref(db,'rooms/'+roomKey+'/lista/'+id));
+
+function buildShareText(){
+  const items=Object.values(sharedList).filter(i=>!i.done);
+  if(items.length===0) return 'Η λίστα αγορών είναι άδεια.';
+  let txt='🛒 ΛΙΣΤΑ ΑΓΟΡΩΝ\n\n';
+  items.forEach(i=>{
+    const qty=i.qty&&i.unit?` (${i.qty} ${i.unit})`:'';
+    txt+=`• ${i.name.toUpperCase()}${qty}\n`;
+  });
+  txt+=`\nΣύνολο: ${items.length} προϊόντα`;
+  return txt;
+}
+window.shareViber=()=>{
+  const txt=encodeURIComponent(buildShareText());
+  window.open('viber://forward?text='+txt,'_blank');
+};
+window.shareSMS=()=>{
+  const txt=encodeURIComponent(buildShareText());
+  window.open('sms:?body='+txt,'_blank');
+};
+window.shareGeneric=async()=>{
+  const text=buildShareText();
+  if(navigator.share){
+    try{await navigator.share({title:'Λίστα Αγορών',text});}catch(e){}
+  } else {
+    if(navigator.clipboard){
+      await navigator.clipboard.writeText(text);
+      setStatus('ok','📋 Η λίστα αντιγράφηκε στο clipboard');
+    }
+  }
+};
 
 window.checkPrice=name=>{
   // Αντιγραφή ονόματος στο clipboard + άνοιγμα PosoKanei
