@@ -4,23 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="theme-color" content="#1a7f4b">
+<link rel="manifest" href="manifest.json">
 <title>Λίστα Αγορών</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-height:100vh;color:#1a1a1a}
 .screen{display:none;min-height:100vh;flex-direction:column}
 .screen.active{display:flex}
+
+/* LOGIN */
 #loginScreen{background:linear-gradient(160deg,#1a7f4b 0%,#0d5c35 100%);align-items:center;justify-content:center;padding:2rem}
 .login-box{background:#fff;border-radius:20px;padding:2rem;width:100%;max-width:340px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.15)}
 .app-icon{font-size:48px;margin-bottom:0.5rem}
 .login-box h1{font-size:1.4rem;font-weight:700;color:#1a7f4b;margin-bottom:0.25rem}
-.login-box p{font-size:0.85rem;color:#666;margin-bottom:1.5rem}
-.user-btns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem}
-.user-btn{padding:1rem 0.5rem;border:2px solid #e8e8e8;border-radius:14px;background:#fff;cursor:pointer;transition:all 0.2s;font-size:0.85rem;color:#555}
-.user-btn .u-icon{font-size:28px;display:block;margin-bottom:6px}
-.user-btn.selected{border-color:#1a7f4b;background:#f0faf5;color:#1a7f4b;font-weight:600}
+.login-box p{font-size:0.85rem;color:#666;margin-bottom:0.25rem}
+.login-credit{font-size:0.72rem;color:#aaa;margin-bottom:1.5rem}
 .pin-label{font-size:0.8rem;color:#888;margin-bottom:0.5rem}
-.pin-dots{display:flex;justify-content:center;gap:14px;margin-bottom:1.2rem}
+.pin-dots{display:flex;justify-content:center;gap:10px;margin-bottom:1.2rem}
 .pin-dot{width:16px;height:16px;border-radius:50%;border:2px solid #ccc;background:transparent;transition:all 0.2s}
 .pin-dot.filled{background:#1a7f4b;border-color:#1a7f4b}
 .numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -28,33 +28,48 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
 .num-btn:active{background:#e0e0e0;transform:scale(0.95)}
 .num-btn.del{background:#fff3f3;color:#e53935}
 .err-msg{color:#e53935;font-size:0.82rem;margin-top:0.75rem;min-height:1rem}
+
+/* HEADER */
 .app-header{background:#1a7f4b;color:#fff;padding:1rem 1.25rem 0.75rem;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
 .app-header h2{font-size:1.1rem;font-weight:700;flex:1}
 .hdr-sub{font-size:0.75rem;opacity:0.8;display:block}
-.hdr-btn{background:rgba(255,255,255,0.2);border:none;color:#fff;border-radius:10px;padding:8px 12px;font-size:0.82rem;cursor:pointer;white-space:nowrap}
+.hdr-btn{background:rgba(255,255,255,0.2);border:none;color:#fff;border-radius:10px;padding:8px 12px;font-size:0.82rem;cursor:pointer}
+
+/* TABS */
 .tabs{display:flex;background:#fff;border-bottom:1px solid #e8e8e8;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tab{padding:0.7rem 1.1rem;border:none;background:none;font-size:0.82rem;color:#777;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.2s}
 .tab.active{color:#1a7f4b;border-bottom-color:#1a7f4b;font-weight:600}
+
+/* FLOATING LIST BUTTON */
+.fab-list{position:fixed;top:72px;right:16px;z-index:200;background:#1a7f4b;color:#fff;border:none;border-radius:24px;padding:10px 18px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(26,127,75,0.45);display:flex;align-items:center;gap:8px;transition:all 0.2s}
+.fab-list:active{transform:scale(0.96)}
+.fab-badge{background:#fff;color:#1a7f4b;border-radius:50%;width:22px;height:22px;font-size:0.75rem;font-weight:800;display:flex;align-items:center;justify-content:center}
+
+/* CONTENT */
 .content-area{flex:1;overflow-y:auto;padding:0.75rem}
 .add-bar{display:flex;gap:8px;margin-bottom:0.75rem}
 .add-bar input{flex:1;padding:0.65rem 1rem;border:1.5px solid #e0e0e0;border-radius:12px;font-size:0.9rem;background:#fff;outline:none}
 .add-bar input:focus{border-color:#1a7f4b}
-.add-bar button{padding:0.65rem 1rem;background:#1a7f4b;color:#fff;border:none;border-radius:12px;font-size:1.2rem;cursor:pointer;flex-shrink:0}
+.btn-add{padding:0.65rem 1rem;background:#1a7f4b;color:#fff;border:none;border-radius:12px;font-size:1.2rem;cursor:pointer;flex-shrink:0}
+.btn-fav{padding:0.65rem 1rem;background:#fff0f0;border:1.5px solid #ffb3b3;border-radius:12px;font-size:1.2rem;cursor:pointer;flex-shrink:0}
+
 .products-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:0.75rem}
 .prod-btn{padding:0.6rem 0.5rem;background:#fff;border:1.5px solid #e0e0e0;border-radius:10px;font-size:0.78rem;color:#444;cursor:pointer;text-align:center;transition:all 0.2s}
 .prod-btn:active{background:#f0faf5;border-color:#1a7f4b}
+.prod-btn.fav{border-color:#ffb3b3;background:#fff8f8;color:#c62828}
+
 .section-lbl{font-size:0.75rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin:0.5rem 0 0.4rem;padding-left:2px}
 .list-item{display:flex;align-items:center;gap:12px;background:#fff;border-radius:12px;padding:0.8rem 1rem;margin-bottom:8px;border:1px solid #f0f0f0;animation:slideIn 0.25s ease}
 @keyframes slideIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
 .list-item.done{opacity:0.4}
 .list-item.done .item-name{text-decoration:line-through;color:#aaa}
+.list-item.is-fav{border-left:3px solid #e53935}
 .item-check{width:26px;height:26px;border-radius:50%;border:2px solid #ccc;background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
 .item-check.checked{background:#1a7f4b;border-color:#1a7f4b;color:#fff}
 .item-name{flex:1;font-size:0.92rem}
 .item-cat{font-size:0.7rem;color:#999;display:block}
-.item-del{background:none;border:none;color:#ddd;font-size:1.2rem;cursor:pointer;padding:4px;transition:color 0.2s}
-.item-del:hover{color:#e53935}
+.item-del{background:none;border:none;color:#ddd;font-size:1.2rem;cursor:pointer;padding:4px}
 .empty-state{text-align:center;padding:3rem 1rem;color:#aaa}
 .empty-state .es-icon{font-size:3rem;margin-bottom:0.5rem}
 .badge{background:#e8f5ee;color:#1a7f4b;border-radius:20px;padding:2px 10px;font-size:0.75rem;font-weight:600}
@@ -66,20 +81,18 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
 </head>
 <body>
 
+<!-- LOGIN -->
 <div id="loginScreen" class="screen active">
   <div class="login-box">
     <div class="app-icon">🛒</div>
     <h1>Λίστα Αγορών</h1>
     <p>Κοινή λίστα για τους δύο σας</p>
-    <p style="font-size:0.72rem;color:#aaa;margin-top:-0.75rem;margin-bottom:1rem">Χρήστος Γεωργακόπουλος · Ιούνιος 2026</p>
-    <div class="user-btns">
-      <button class="user-btn" id="btn-u1" onclick="selectUser(0)"><span class="u-icon">👨</span>Χρήστης Α</button>
-      <button class="user-btn" id="btn-u2" onclick="selectUser(1)"><span class="u-icon">👩</span>Χρήστης Β</button>
-    </div>
-    <div class="pin-label">Εισάγετε PIN (4 ψηφία)</div>
+    <p class="login-credit">Χρήστος Γεωργακόπουλος · Ιούνιος 2026</p>
+    <div class="pin-label">Εισάγετε 6ψήφιο PIN</div>
     <div class="pin-dots">
       <div class="pin-dot" id="d0"></div><div class="pin-dot" id="d1"></div>
       <div class="pin-dot" id="d2"></div><div class="pin-dot" id="d3"></div>
+      <div class="pin-dot" id="d4"></div><div class="pin-dot" id="d5"></div>
     </div>
     <div class="numpad">
       <button class="num-btn" onclick="addDigit('1')">1</button>
@@ -99,17 +112,21 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
   </div>
 </div>
 
+<!-- MAIN -->
 <div id="mainScreen" class="screen">
   <div class="app-header">
     <div style="flex:1">
       <h2>🛒 Λίστα Αγορών</h2>
-      <span class="hdr-sub" id="hdrSub">Συνδεδεμένος</span>
+      <span class="hdr-sub" id="hdrSub"></span>
     </div>
     <button class="hdr-btn" onclick="logout()">Έξοδος</button>
   </div>
   <div id="statusBar" class="status-bar"><div class="dot-pulse"></div><span id="statusTxt">Σύνδεση με Firebase...</span></div>
   <div class="tabs" id="tabBar"></div>
   <div class="content-area" id="contentArea"></div>
+  <button class="fab-list" id="fabBtn" onclick="setTab('all')" style="display:none">
+    📋 Λίστα <span class="fab-badge" id="fabBadge">0</span>
+  </button>
 </div>
 
 <script type="module">
@@ -125,77 +142,99 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const listRef = ref(db, 'lista');
 
-const USERS=[{name:'Χρήστης Α',pin:'1234',icon:'👨'},{name:'Χρήστης Β',pin:'5678',icon:'👩'}];
-const CATEGORIES=[
-  {id:'dairy',label:'🥛 Γαλακτοκομικά',items:['Γάλα','Γιαούρτι','Τυρί Φέτα','Βούτυρο','Κρέμα γάλακτος','Τυρί τριμμένο','Αυγά']},
-  {id:'meat',label:'🥩 Κρέας / Ψάρι',items:['Κοτόπουλο','Κιμάς','Χοιρινό','Μοσχάρι','Ψάρι','Λουκάνικα','Μπέικον']},
-  {id:'veg',label:'🥦 Λαχανικά',items:['Ντομάτες','Πατάτες','Κρεμμύδια','Σκόρδο','Αγγούρι','Μαρούλι','Καρότα','Πιπεριές','Κολοκυθάκια']},
-  {id:'fruit',label:'🍎 Φρούτα',items:['Μήλα','Μπανάνες','Πορτοκάλια','Λεμόνια','Σταφύλια','Ροδάκινα','Φράουλες']},
-  {id:'pantry',label:'🥫 Παντοπωλείο',items:['Λάδι ελαιόλαδο','Ζυμαρικά','Ρύζι','Αλεύρι','Ζάχαρη','Αλάτι','Ξύδι','Κονσέρβες τόνου','Ντομάτα κονσέρβα','Φακές','Ρεβίθια']},
-  {id:'bakery',label:'🧁 Αρτοποιείο',items:['Ψωμί','Φρυγανιές','Κριτσίνια','Παξιμάδια','Πίτα']},
-  {id:'drinks',label:'🧃 Ροφήματα',items:['Νερό','Χυμός πορτοκάλι','Καφές','Τσάι','Αναψυκτικά','Μπύρα','Κρασί']},
-  {id:'clean',label:'🧴 Καθαριότητα',items:['Απορρυπαντικό','Χαρτί υγείας','Χαρτί κουζίνας','Σαπούνι','Σαμπουάν','Αφρόλουτρο','Οδοντόκρεμα','Σφουγγάρια','Λευκαντικό','Μαλακτικό']},
-  {id:'house',label:'🧹 Είδη Σπιτιού',items:['Σακούλες σκουπιδιών','Σφουγγαρίστρα','Σκούπα','Χαρτοπετσέτες','Μεμβράνη','Αλουμινόχαρτο']}
+// PIN → room mapping (6-digit PIN = shared room key)
+const KNOWN_PINS = {'123456':'home'};  // προσθέτεις κι άλλα εδώ
+let roomKey = null;
+let listRef = null;
+let favRef = null;
+
+const CATEGORIES = [
+  {id:'fav',   label:'❤️ Αγαπημένα',   items:[], dynamic:true},
+  {id:'dairy', label:'🥛 Γαλακτοκομικά',items:['Γάλα','Γιαούρτι','Τυρί Φέτα','Βούτυρο','Κρέμα γάλακτος','Τυρί τριμμένο','Αυγά']},
+  {id:'meat',  label:'🥩 Κρέας / Ψάρι', items:['Κοτόπουλο','Κιμάς','Χοιρινό','Μοσχάρι','Ψάρι','Λουκάνικα','Μπέικον']},
+  {id:'veg',   label:'🥦 Λαχανικά',     items:['Ντομάτες','Πατάτες','Κρεμμύδια','Σκόρδο','Αγγούρι','Μαρούλι','Καρότα','Πιπεριές','Κολοκυθάκια']},
+  {id:'fruit', label:'🍎 Φρούτα',        items:['Μήλα','Μπανάνες','Πορτοκάλια','Λεμόνια','Σταφύλια','Ροδάκινα','Φράουλες']},
+  {id:'pantry',label:'🥫 Παντοπωλείο',  items:['Λάδι ελαιόλαδο','Ζυμαρικά','Ρύζι','Αλεύρι','Ζάχαρη','Αλάτι','Ξύδι','Κονσέρβες τόνου','Ντομάτα κονσέρβα','Φακές','Ρεβίθια']},
+  {id:'bakery',label:'🧁 Αρτοποιείο',   items:['Ψωμί','Φρυγανιές','Κριτσίνια','Παξιμάδια','Πίτα']},
+  {id:'drinks',label:'🧃 Ροφήματα',     items:['Νερό','Χυμός πορτοκάλι','Καφές','Τσάι','Αναψυκτικά','Μπύρα','Κρασί']},
+  {id:'clean', label:'🧴 Καθαριότητα',  items:['Απορρυπαντικό','Χαρτί υγείας','Χαρτί κουζίνας','Σαπούνι','Σαμπουάν','Αφρόλουτρο','Οδοντόκρεμα','Σφουγγάρια','Λευκαντικό','Μαλακτικό']},
+  {id:'house', label:'🧹 Είδη Σπιτιού', items:['Σακούλες σκουπιδιών','Σφουγγαρίστρα','Σκούπα','Χαρτοπετσέτες','Μεμβράνη','Αλουμινόχαρτο']}
 ];
 
-let currentUser=null, pinBuffer='', activeTab='all', addCategory='dairy';
-let sharedList={};
+let pinBuffer='', activeTab='add', addCategory='dairy';
+let sharedList={}, favItems=[];
+let activeUnit='τεμ.';
+let unsubList=null, unsubFav=null;
 
-// Firebase listener — real-time sync
-onValue(listRef, snap=>{
-  sharedList = snap.val() || {};
-  if(document.getElementById('mainScreen').classList.contains('active')) renderContent();
-  setStatus('ok','🟢 Live σύνδεση ενεργή');
-}, err=>{
-  setStatus('err','❌ Σφάλμα σύνδεσης');
-});
-
-// PIN / LOGIN
-window.selectUser=i=>{
-  currentUser=i;
-  document.querySelectorAll('.user-btn').forEach((b,j)=>b.classList.toggle('selected',i===j));
-  clearPin();
-};
+// PIN
 window.addDigit=d=>{
-  if(currentUser===null){document.getElementById('errMsg').textContent='Επιλέξτε χρήστη πρώτα';return;}
-  if(pinBuffer.length<4){pinBuffer+=d;updateDots();if(pinBuffer.length===4)setTimeout(tryLogin,200);}
+  if(pinBuffer.length<6){pinBuffer+=d;updateDots();if(pinBuffer.length===6)setTimeout(tryLogin,200);}
 };
 window.delDigit=()=>{pinBuffer=pinBuffer.slice(0,-1);updateDots();};
 window.clearPin=()=>{pinBuffer='';updateDots();document.getElementById('errMsg').textContent='';};
-function updateDots(){for(let i=0;i<4;i++)document.getElementById('d'+i).classList.toggle('filled',i<pinBuffer.length);}
+function updateDots(){for(let i=0;i<6;i++)document.getElementById('d'+i).classList.toggle('filled',i<pinBuffer.length);}
+
 function tryLogin(){
-  if(pinBuffer===USERS[currentUser].pin){
+  if(KNOWN_PINS[pinBuffer]){
+    roomKey=pinBuffer;
+    listRef=ref(db,'rooms/'+pinBuffer+'/lista');
+    favRef=ref(db,'rooms/'+pinBuffer+'/favorites');
     document.getElementById('loginScreen').classList.remove('active');
     document.getElementById('mainScreen').classList.add('active');
-    document.getElementById('hdrSub').textContent=USERS[currentUser].icon+' '+USERS[currentUser].name;
+    document.getElementById('hdrSub').textContent='PIN: '+pinBuffer.slice(0,3)+'···';
+    startListeners();
     renderTabs();renderContent();
   } else {
-    document.getElementById('errMsg').textContent='❌ Λάθος PIN, δοκιμάστε ξανά';
+    document.getElementById('errMsg').textContent='❌ Άγνωστος κωδικός, δοκιμάστε ξανά';
     pinBuffer='';updateDots();
   }
 }
+
 window.logout=()=>{
-  currentUser=null;pinBuffer='';
+  if(unsubList) unsubList();
+  if(unsubFav) unsubFav();
+  roomKey=null; pinBuffer=''; sharedList={}; favItems=[];
   updateDots();
-  document.querySelectorAll('.user-btn').forEach(b=>b.classList.remove('selected'));
   document.getElementById('errMsg').textContent='';
   document.getElementById('mainScreen').classList.remove('active');
   document.getElementById('loginScreen').classList.add('active');
+  document.getElementById('fabBtn').style.display='none';
 };
+
+function startListeners(){
+  unsubList = onValue(listRef, snap=>{
+    sharedList=snap.val()||{};
+    if(document.getElementById('mainScreen').classList.contains('active')){
+      if(activeTab==='all') renderContent();
+      updateFab();
+    }
+    setStatus('ok','🟢 Live σύνδεση ενεργή');
+  }, ()=>setStatus('err','❌ Σφάλμα σύνδεσης'));
+
+  unsubFav = onValue(favRef, snap=>{
+    favItems=snap.val()||[];
+    CATEGORIES.find(c=>c.id==='fav').items=[...favItems];
+    if(activeTab==='add') renderContent();
+  });
+}
 
 // TABS
 function renderTabs(){
   document.getElementById('tabBar').innerHTML=
-    [{id:'all',label:'📋 Λίστα'},{id:'add',label:'➕ Προσθήκη'}]
+    [{id:'add',label:'➕ Προσθήκη'}]
     .map(t=>`<button class="tab${activeTab===t.id?' active':''}" onclick="setTab('${t.id}')">${t.label}</button>`).join('');
 }
-window.setTab=id=>{activeTab=id;renderTabs();renderContent();};
+window.setTab=id=>{
+  activeTab=id;
+  renderTabs();renderContent();
+  document.getElementById('fabBtn').style.display=id==='all'?'none':'flex';
+};
 
-function renderContent(){
-  const ca=document.getElementById('contentArea');
-  activeTab==='all'?renderList(ca):renderAdd(ca);
+function updateFab(){
+  const cnt=Object.values(sharedList).filter(i=>!i.done).length;
+  document.getElementById('fabBadge').textContent=cnt;
+  document.getElementById('fabBtn').style.display=activeTab==='all'?'none':'flex';
 }
 
 // LIST
@@ -218,11 +257,12 @@ function renderList(ca){
 }
 function itemHTML(item){
   const catLabel=CATEGORIES.find(c=>c.id===item.cat)?.label||'';
-  const qtyStr=item.qty&&item.unit?`${item.qty} ${item.unit}`:item.qty?`${item.qty} τεμ.`:'';
-  return `<div class="list-item${item.done?' done':''}">
+  const qtyStr=item.qty&&item.unit?`${item.qty} ${item.unit}`:'';
+  const isFav=item.cat==='fav';
+  return `<div class="list-item${item.done?' done':''}${isFav?' is-fav':''}">
     <button class="item-check${item.done?' checked':''}" onclick="toggleItem('${item.id}')">${item.done?'✓':''}</button>
     <div style="flex:1">
-      <span class="item-name">${item.name}${qtyStr?` <span style="font-size:0.78rem;color:#1a7f4b;font-weight:600">(${qtyStr})</span>`:''}</span>
+      <span class="item-name">${isFav?'❤️ ':''}${item.name}${qtyStr?` <span style="font-size:0.78rem;color:#1a7f4b;font-weight:600">(${qtyStr})</span>`:''}</span>
       <span class="item-cat">${catLabel}</span>
     </div>
     <button class="item-del" onclick="deleteItem('${item.id}')">✕</button>
@@ -233,71 +273,91 @@ function itemHTML(item){
 function renderAdd(ca){
   const catBtns=CATEGORIES.map(c=>{
     const sel=addCategory===c.id;
-    return `<button class="prod-btn" onclick="setAddCat('${c.id}')" style="${sel?'border-color:#1a7f4b;background:#f0faf5;color:#1a7f4b;font-weight:600':''}">${c.label}</button>`;
+    const isFavCat=c.id==='fav';
+    return `<button class="prod-btn${isFavCat?' fav':''}" onclick="setAddCat('${c.id}')" style="${sel?'border-color:#1a7f4b;background:#f0faf5;color:#1a7f4b;font-weight:600':''}">${c.label}</button>`;
   }).join('');
   const cat=CATEGORIES.find(c=>c.id===addCategory);
-  const prodBtns=cat.items.map(p=>`<button class="prod-btn" onclick="quickAdd('${p.replace(/'/g,"\\'")}','${addCategory}')">${p}</button>`).join('');
+  const prodBtns=cat.items.length>0
+    ? cat.items.map(p=>`<button class="prod-btn${addCategory==='fav'?' fav':''}" onclick="quickAdd('${p.replace(/'/g,"\\'")}','${addCategory}')">${p}</button>`).join('')
+    : `<div style="grid-column:span 2;text-align:center;color:#bbb;font-size:0.82rem;padding:1rem">Δεν έχετε αγαπημένα ακόμα.<br>Πατήστε ❤️ κατά την προσθήκη!</div>`;
+
   ca.innerHTML=`
     <div class="add-bar">
-      <input id="manualInput" placeholder="Ή πληκτρολογήστε προϊόν..." onkeydown="if(event.key==='Enter')manualAdd()">
-      <button onclick="manualAdd()">+</button>
+      <input id="manualInput" placeholder="Πληκτρολογήστε προϊόν..." onkeydown="if(event.key==='Enter')manualAdd()">
+      <button class="btn-add" onclick="manualAdd()" title="Προσθήκη στη λίστα">+</button>
+      <button class="btn-fav" onclick="manualAddFav()" title="Προσθήκη στη λίστα & Αγαπημένα">❤️+</button>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:0.75rem;align-items:center">
       <input id="qtyInput" type="number" min="0.1" step="0.1" value="1" style="width:70px;padding:0.5rem;border:1.5px solid #e0e0e0;border-radius:10px;font-size:0.9rem;text-align:center">
       <div style="display:flex;gap:6px;flex:1">
-        <button onclick="setUnit('τεμ.')" id="btn-tem" style="flex:1;padding:0.5rem;border-radius:10px;border:1.5px solid #1a7f4b;background:#f0faf5;color:#1a7f4b;font-size:0.82rem;font-weight:600;cursor:pointer">τεμ.</button>
-        <button onclick="setUnit('κιλά')" id="btn-kila" style="flex:1;padding:0.5rem;border-radius:10px;border:1.5px solid #e0e0e0;background:#fff;color:#555;font-size:0.82rem;cursor:pointer">κιλά</button>
-        <button onclick="setUnit('γρ.')" id="btn-gr" style="flex:1;padding:0.5rem;border-radius:10px;border:1.5px solid #e0e0e0;background:#fff;color:#555;font-size:0.82rem;cursor:pointer">γρ.</button>
-        <button onclick="setUnit('lt')" id="btn-lt" style="flex:1;padding:0.5rem;border-radius:10px;border:1.5px solid #e0e0e0;background:#fff;color:#555;font-size:0.82rem;cursor:pointer">lt</button>
+        <button onclick="setUnit('τεμ.')" id="u-tem" class="ubu sel">τεμ.</button>
+        <button onclick="setUnit('κιλά')" id="u-kila" class="ubu">κιλά</button>
+        <button onclick="setUnit('γρ.')"  id="u-gr"   class="ubu">γρ.</button>
+        <button onclick="setUnit('lt')"   id="u-lt"   class="ubu">lt</button>
       </div>
     </div>
+    <style>.ubu{flex:1;padding:0.5rem;border-radius:10px;border:1.5px solid #e0e0e0;background:#fff;color:#555;font-size:0.82rem;cursor:pointer}.ubu.sel{border-color:#1a7f4b;background:#f0faf5;color:#1a7f4b;font-weight:600}</style>
     <div class="section-lbl">Κατηγορία</div>
     <div class="products-grid">${catBtns}</div>
     <div class="section-lbl" style="margin-top:0.5rem">Προϊόντα — ${cat.label}</div>
     <div class="products-grid">${prodBtns}</div>`;
 }
-let activeUnit='τεμ.';
+
 window.setUnit=u=>{
   activeUnit=u;
-  ['τεμ.','κιλά','γρ.','lt'].forEach(x=>{
-    const id='btn-'+x.replace('.','').replace('τεμ','tem').replace('κιλά','kila').replace('γρ','gr').replace('lt','lt');
-    const btn=document.getElementById(id);
-    if(btn){const sel=x===u;btn.style.borderColor=sel?'#1a7f4b':'#e0e0e0';btn.style.background=sel?'#f0faf5':'#fff';btn.style.color=sel?'#1a7f4b':'#555';btn.style.fontWeight=sel?'600':'400';}
-  });
+  document.querySelectorAll('.ubu').forEach(b=>b.classList.remove('sel'));
+  const map={'τεμ.':'u-tem','κιλά':'u-kila','γρ.':'u-gr','lt':'u-lt'};
+  const el=document.getElementById(map[u]);
+  if(el) el.classList.add('sel');
 };
 window.setAddCat=id=>{addCategory=id;renderContent();};
-window.quickAdd=(name,cat)=>addItem(name,cat);
+window.quickAdd=(name,cat)=>addItem(name,cat,false);
 window.manualAdd=()=>{
   const inp=document.getElementById('manualInput');
-  const v=inp.value.trim();
-  if(v){addItem(v,addCategory);inp.value='';}
+  const v=inp.value.trim();if(v){addItem(v,addCategory,false);inp.value='';}
+};
+window.manualAddFav=()=>{
+  const inp=document.getElementById('manualInput');
+  const v=inp.value.trim();if(v){addItem(v,addCategory,true);inp.value='';}
 };
 
+function renderContent(){
+  const ca=document.getElementById('contentArea');
+  activeTab==='all'?renderList(ca):renderAdd(ca);
+  updateFab();
+}
+
 // FIREBASE CRUD
-function addItem(name,cat){
+function getQty(){return parseFloat(document.getElementById('qtyInput')?.value||1);}
+
+function addItem(name,cat,addToFav){
   const existing=Object.values(sharedList).find(i=>i.name.toLowerCase()===name.toLowerCase()&&!i.done);
   if(existing){setStatus('warn','⚠️ Ήδη στη λίστα: '+name);return;}
-  const qty=parseFloat(document.getElementById('qtyInput')?.value||1);
-  const unit=activeUnit;
+  const qty=getQty(), unit=activeUnit;
   const id=Date.now().toString(36)+Math.random().toString(36).slice(2);
-  set(ref(db,'lista/'+id),{name,cat,qty,unit,done:false,ts:Date.now()});
-  setStatus('ok',`✅ Προστέθηκε: ${qty} ${unit} ${name}`);
+  set(ref(db,'rooms/'+roomKey+'/lista/'+id),{name,cat,qty,unit,done:false,ts:Date.now()});
+  if(addToFav&&!favItems.includes(name)){
+    const newFavs=[...favItems,name];
+    set(favRef,newFavs);
+    setStatus('ok','✅ Προστέθηκε στη λίστα & Αγαπημένα: '+name);
+  } else {
+    setStatus('ok',`✅ Προστέθηκε: ${qty} ${unit} ${name}`);
+  }
 }
 window.toggleItem=id=>{
   const item=sharedList[id];
-  if(item) update(ref(db,'lista/'+id),{done:!item.done,ts:Date.now()});
+  if(item) update(ref(db,'rooms/'+roomKey+'/lista/'+id),{done:!item.done,ts:Date.now()});
 };
-window.deleteItem=id=>remove(ref(db,'lista/'+id));
+window.deleteItem=id=>remove(ref(db,'rooms/'+roomKey+'/lista/'+id));
 window.clearDone=()=>{
-  Object.entries(sharedList).forEach(([id,v])=>{if(v.done)remove(ref(db,'lista/'+id));});
+  Object.entries(sharedList).forEach(([id,v])=>{if(v.done)remove(ref(db,'rooms/'+roomKey+'/lista/'+id));});
 };
 
 function setStatus(type,msg){
-  const bar=document.getElementById('statusBar');
-  const txt=document.getElementById('statusTxt');
+  const bar=document.getElementById('statusBar'),txt=document.getElementById('statusTxt');
   bar.className='status-bar '+(type==='ok'?'ok':type==='err'?'err':'');
   txt.textContent=msg;
-  if(type==='ok'&&msg!=='🟢 Live σύνδεση ενεργή') setTimeout(()=>setStatus('ok','🟢 Live σύνδεση ενεργή'),2500);
+  if(type!=='err') setTimeout(()=>{bar.className='status-bar ok';txt.textContent='🟢 Live σύνδεση ενεργή';},2500);
 }
 </script>
 </body>
