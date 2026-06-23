@@ -144,7 +144,14 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 // PIN → room mapping (6-digit PIN = shared room key)
-const KNOWN_PINS = {'676767':'home'};  // προσθέτεις κι άλλα εδώ
+const KNOWN_PINS = {
+  '676767':'home',
+  '123123':'room1',
+  '111222':'room2',
+  '010101':'room3',
+  '456456':'room4',
+  '789789':'room5'
+};  // προσθέτεις κι άλλα εδώ
 let roomKey = null;
 let listRef = null;
 let favRef = null;
