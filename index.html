@@ -46,7 +46,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
 .products-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:0.75rem}
 .prod-btn{padding:0.6rem 0.5rem;background:#fff;border:1.5px solid #e0e0e0;border-radius:10px;font-size:0.78rem;color:#444;cursor:pointer;text-align:center;transition:all 0.2s;text-transform:uppercase}
 .prod-btn:active{background:#f0faf5;border-color:#1a7f4b}
-.prod-btn.fav{border-color:#ffb3b3;background:#fff8f8;color:#c62828}
+.prod-btn.fav{border:2.5px solid #e53935;background:#fff8f8;color:#c62828;font-weight:600}
 .section-lbl{font-size:0.75rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin:0.5rem 0 0.4rem;padding-left:2px}
 .list-item{display:flex;align-items:center;gap:10px;background:#fff;border-radius:12px;padding:0.8rem 1rem;margin-bottom:8px;border:1px solid #f0f0f0;animation:slideIn 0.25s ease}
 @keyframes slideIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
@@ -160,7 +160,7 @@ const CATEGORIES=[
 ];
 const ALL_PRODUCTS=[...new Set(CATEGORIES.filter(c=>c.id!=='fav').flatMap(c=>c.items))];
 
-let pinBuffer='',activeTab='add',addCategory='dairy';
+let pinBuffer='',activeTab='add',addCategory='dairy',showLastItems=false;
 let sharedList={},favItems=[],modalUnit='τεμ.';
 let roomKey=null,listRef=null,favRef=null;
 let unsubList=null,unsubFav=null,suggIdx=-1;
@@ -308,6 +308,10 @@ function renderAdd(ca){
       }).join('')
     :`<div style="grid-column:span 2;text-align:center;color:#bbb;font-size:0.82rem;padding:1rem">Δεν έχετε αγαπημένα ακόμα.<br>Πατήστε ❤️+ κατά την προσθήκη!</div>`;
 
+  const lastItems=JSON.parse(localStorage.getItem('lastItems_'+roomKey)||'[]');
+  const lastSec=showLastItems&&lastItems.length>0?`
+    <div class="section-lbl">🕐 Τελευταία προϊόντα</div>
+    <div class="products-grid">${lastItems.map(p=>`<button class="prod-btn" onclick="quickAdd('${p.replace(/'/g,"\\'")}','${addCategory}')">${p}</button>`).join('')}</div>`:'';
   ca.innerHTML=`
     <div style="position:relative;margin-bottom:0.75rem">
       <div class="add-bar" style="margin-bottom:8px">
@@ -316,11 +320,13 @@ function renderAdd(ca){
         <button class="btn-add" onclick="manualAdd()">+</button>
         <button class="btn-fav" onclick="manualAddFav()">❤️+</button>
       </div>
-      <div style="display:flex;justify-content:center;margin-bottom:4px">
-        <button id="micBtn" class="btn-mic" onclick="startVoice()" title="Φωνητική εισαγωγή" style="padding:0.6rem 2rem">🎤 Φωνητική εισαγωγή</button>
+      <div style="display:flex;justify-content:center;gap:8px;margin-bottom:4px">
+        <button id="micBtn" class="btn-mic" onclick="startVoice()" title="Φωνητική εισαγωγή" style="padding:0.6rem 1.2rem">🎤 Φωνητική εισαγωγή</button>
+        <button onclick="toggleLastItems()" style="padding:0.6rem 1rem;background:${showLastItems?'#e8f5ee':'#f0f0f0'};border:none;border-radius:12px;font-size:0.82rem;cursor:pointer;color:${showLastItems?'#1a7f4b':'#555'};font-weight:${showLastItems?'600':'400'}">🕐 Τελευταία 10</button>
       </div>
       <div id="suggBox" style="display:none;position:absolute;left:0;right:0;background:#fff;border:1.5px solid #1a7f4b;border-top:none;border-radius:0 0 12px 12px;z-index:300;max-height:180px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,0.1)"></div>
     </div>
+    ${lastSec}
     <div class="section-lbl">Κατηγορία</div>
     <div class="products-grid">${catBtns}</div>
     <div class="section-lbl" style="margin-top:0.5rem">Προϊόντα — ${cat.label}</div>
@@ -426,6 +432,7 @@ window.closeQtyModal=()=>{const m=document.getElementById('qtyModal');if(m)m.rem
 
 // ── ACTIONS ──
 window.setAddCat=id=>{addCategory=id;renderContent();};
+window.toggleLastItems=()=>{showLastItems=!showLastItems;renderContent();};
 window.quickAdd=(name,cat)=>addItem(name,cat,false);
 window.manualAdd=()=>{
   const inp=document.getElementById('manualInput');
@@ -445,6 +452,10 @@ window.removeFav=name=>{
 function addItem(name,cat,addToFav){
   const existing=Object.values(sharedList).find(i=>normGr(i.name)===normGr(name)&&!i.done);
   if(existing){setStatus('warn','⚠️ Ήδη στη λίστα: '+name);return;}
+  // Αποθήκευση τελευταίων 10 προϊόντων στο localStorage
+  const histKey='lastItems_'+roomKey;
+  const hist=[name,...JSON.parse(localStorage.getItem(histKey)||'[]').filter(h=>normGr(h)!==normGr(name))].slice(0,10);
+  localStorage.setItem(histKey,JSON.stringify(hist));
   const id=Date.now().toString(36)+Math.random().toString(36).slice(2);
   set(ref(db,'rooms/'+roomKey+'/lista/'+id),{name,cat,done:false,ts:Date.now()});
   if(addToFav&&!favItems.includes(name)){
