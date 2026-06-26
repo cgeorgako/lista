@@ -15,6 +15,10 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
 .login-box{background:#fff;border-radius:20px;padding:2rem;width:100%;max-width:340px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.15)}
 .app-icon{font-size:48px;margin-bottom:0.5rem}
 .login-box h1{font-size:1.4rem;font-weight:700;color:#1a7f4b;margin-bottom:0.25rem}
+.mode-btn{width:100%;padding:0.85rem;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer;margin-bottom:0.75rem;transition:all 0.15s}
+.mode-btn:active{transform:scale(0.97)}
+.mode-btn.primary{background:#1a7f4b;color:#fff;border:none}
+.mode-btn.secondary{background:#fff;color:#1a7f4b;border:2px solid #1a7f4b}
 .pin-label{font-size:0.8rem;color:#888;margin-bottom:0.5rem;margin-top:0.75rem}
 .pin-dots{display:flex;justify-content:center;gap:10px;margin-bottom:1.2rem}
 .pin-dot{width:16px;height:16px;border-radius:50%;border:2px solid #ccc;background:transparent;transition:all 0.2s}
@@ -24,6 +28,8 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
 .num-btn:active{background:#e0e0e0;transform:scale(0.95)}
 .num-btn.del{background:#fff3f3;color:#e53935}
 .err-msg{color:#e53935;font-size:0.82rem;margin-top:0.75rem;min-height:1rem}
+.back-btn{background:none;border:none;color:#999;font-size:0.82rem;cursor:pointer;margin-top:0.5rem;padding:0.4rem 0.75rem;border-radius:8px}
+.back-btn:hover{background:#f5f5f5}
 .app-header{background:#1a7f4b;color:#fff;padding:1rem 1.25rem 0.75rem;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
 .app-header h2{font-size:1.1rem;font-weight:700;flex:1}
 .hdr-sub{font-size:0.75rem;opacity:0.8;display:block}
@@ -78,6 +84,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
 </head>
 <body>
 
+<!-- LOGIN -->
 <div id="loginScreen" class="screen active">
   <div class="login-box">
     <div class="app-icon">🛒</div>
@@ -86,39 +93,65 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
       <a href="english.html" style="font-size:2rem;text-decoration:none;opacity:0.5" title="English">🇬🇧</a>
     </div>
     <h1>Λίστα Αγορών</h1>
-    <p style="font-family:'Georgia',serif;font-size:1.05rem;color:#e65100;font-style:italic;margin-bottom:0.5rem">Μην ξεχάσεις να πάρεις !</p>
-    <div class="pin-label">Εισάγετε 6ψήφιο PIN</div>
-    <div class="pin-dots">
-      <div class="pin-dot" id="d0"></div><div class="pin-dot" id="d1"></div>
-      <div class="pin-dot" id="d2"></div><div class="pin-dot" id="d3"></div>
-      <div class="pin-dot" id="d4"></div><div class="pin-dot" id="d5"></div>
+    <p style="font-family:'Georgia',serif;font-size:1.05rem;color:#e65100;font-style:italic;margin-bottom:1rem">Μην ξεχάσεις να πάρεις !</p>
+
+    <!-- Επιλογή mode -->
+    <div id="modeSelect">
+      <button class="mode-btn primary" onclick="selectMode('create')">➕ Δημιουργία νέου λογαριασμού</button>
+      <button class="mode-btn secondary" onclick="selectMode('join')">🔑 Σύνδεση με το PIN</button>
     </div>
-    <div class="numpad">
-      <button class="num-btn" onclick="addDigit('1')">1</button>
-      <button class="num-btn" onclick="addDigit('2')">2</button>
-      <button class="num-btn" onclick="addDigit('3')">3</button>
-      <button class="num-btn" onclick="addDigit('4')">4</button>
-      <button class="num-btn" onclick="addDigit('5')">5</button>
-      <button class="num-btn" onclick="addDigit('6')">6</button>
-      <button class="num-btn" onclick="addDigit('7')">7</button>
-      <button class="num-btn" onclick="addDigit('8')">8</button>
-      <button class="num-btn" onclick="addDigit('9')">9</button>
-      <button class="num-btn" onclick="clearPin()">C</button>
-      <button class="num-btn" onclick="addDigit('0')">0</button>
-      <button class="num-btn del" onclick="delDigit()">⌫</button>
+
+    <!-- Auto-login loading -->
+    <div id="autoLoginMsg" style="display:none;padding:1.5rem 0;color:#1a7f4b;font-size:0.95rem">
+      ⏳ Σύνδεση...
     </div>
-    <div class="err-msg" id="errMsg"></div>
-    <label style="display:flex;align-items:center;justify-content:center;gap:8px;font-size:0.82rem;color:#888;margin-top:0.75rem;cursor:pointer">
-      <input type="checkbox" id="rememberPin" style="width:16px;height:16px;accent-color:#1a7f4b">
-      Να θυμάσαι το PIN
-    </label>
+
+    <!-- Εισαγωγή PIN -->
+    <div id="pinEntry" style="display:none">
+      <div class="pin-label" id="modeLabel">Εισάγετε PIN</div>
+      <div class="pin-dots">
+        <div class="pin-dot" id="d0"></div><div class="pin-dot" id="d1"></div>
+        <div class="pin-dot" id="d2"></div><div class="pin-dot" id="d3"></div>
+        <div class="pin-dot" id="d4"></div><div class="pin-dot" id="d5"></div>
+      </div>
+      <div class="numpad">
+        <button class="num-btn" onclick="addDigit('1')">1</button>
+        <button class="num-btn" onclick="addDigit('2')">2</button>
+        <button class="num-btn" onclick="addDigit('3')">3</button>
+        <button class="num-btn" onclick="addDigit('4')">4</button>
+        <button class="num-btn" onclick="addDigit('5')">5</button>
+        <button class="num-btn" onclick="addDigit('6')">6</button>
+        <button class="num-btn" onclick="addDigit('7')">7</button>
+        <button class="num-btn" onclick="addDigit('8')">8</button>
+        <button class="num-btn" onclick="addDigit('9')">9</button>
+        <button class="num-btn" onclick="clearPin()">C</button>
+        <button class="num-btn" onclick="addDigit('0')">0</button>
+        <button class="num-btn del" onclick="delDigit()">⌫</button>
+      </div>
+      <div class="err-msg" id="errMsg"></div>
+      <label style="display:flex;align-items:center;justify-content:center;gap:8px;font-size:0.82rem;color:#888;margin-top:0.5rem;cursor:pointer">
+        <input type="checkbox" id="rememberPin" style="width:16px;height:16px;accent-color:#1a7f4b">
+        Να θυμάσαι το PIN
+      </label>
+      <button class="back-btn" onclick="backToMode()">← Πίσω</button>
+    </div>
+
     <p style="font-size:0.72rem;color:#aaa;font-style:italic;margin-top:1.25rem">Σχεδιασμός: Χρήστος Γεωργακόπουλος — 06/2026</p>
+
+    <!-- Android install -->
     <button id="installBtn" onclick="installApp()" style="display:none;margin-top:1rem;width:100%;padding:0.75rem;background:#1a7f4b;color:#fff;border:none;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer;align-items:center;justify-content:center;gap:8px">
       📲 Εγκατάσταση εφαρμογής
     </button>
+
+    <!-- iOS install hint -->
+    <div id="iosInstallHint" style="display:none;margin-top:1rem;padding:0.75rem;background:#e8f5ee;border-radius:12px;font-size:0.78rem;color:#1a7f4b;text-align:left;line-height:1.6">
+      📱 <b>Εγκατάσταση στο iPhone:</b><br>
+      Άνοιξε με <b>Safari</b> → Πάτα <b>Κοινοποίηση 📤</b> → <b>«Προσθήκη στην Αρχική Οθόνη»</b>
+    </div>
   </div>
 </div>
 
+<!-- MAIN -->
 <div id="mainScreen" class="screen">
   <div class="app-header">
     <div style="flex:1"><h2>🛒 Λίστα Αγορών</h2><span class="hdr-sub" id="hdrSub"></span></div>
@@ -136,7 +169,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getDatabase, ref, onValue, set, remove, update } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+import { getDatabase, ref, onValue, set, remove, update, get } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 
 const firebaseConfig={
   apiKey:"AIzaSyC3drMmRGbykwTInDbRhLwdG9ulRz8Iq_0",
@@ -146,8 +179,6 @@ const firebaseConfig={
 };
 const app=initializeApp(firebaseConfig);
 const db=getDatabase(app);
-
-const KNOWN_PINS={'676767':'home','123123':'room1','111222':'room2','010101':'room3','456456':'room4','789789':'room5'};
 
 const CATEGORIES=[
   {id:'fav',    label:'❤️ Αγαπημένα',    items:[],dynamic:true},
@@ -168,43 +199,124 @@ let pinBuffer='',activeTab='add',addCategory='dairy',showLastItems=false;
 let sharedList={},favItems=[],modalUnit='τεμ.';
 let roomKey=null,listRef=null,favRef=null;
 let unsubList=null,unsubFav=null,suggIdx=-1;
+let loginMode=null,failedAttempts=0;
+const MAX_ATTEMPTS=5;
 
-// ── PIN / LOGIN ──
+// ── AUTO LOGIN ──
 window.addEventListener('load',()=>{
+  // iOS install hint
+  const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
+  const isStandalone=window.navigator.standalone;
+  if(isIOS&&!isStandalone){
+    const hint=document.getElementById('iosInstallHint');
+    if(hint)hint.style.display='block';
+  }
+  // Auto-login αν υπάρχει αποθηκευμένο PIN
   const saved=localStorage.getItem('savedPin');
-  const chk=document.getElementById('rememberPin');
-  if(saved){if(chk)chk.checked=true;pinBuffer=saved;updateDots();setTimeout(tryLogin,300);}
+  if(saved){
+    loginMode='join';
+    pinBuffer=saved;
+    // Κρύψε τα κουμπιά, δείξε μόνο "Σύνδεση..."
+    document.getElementById('modeSelect').style.display='none';
+    document.getElementById('pinEntry').style.display='none';
+    document.getElementById('autoLoginMsg').style.display='block';
+    setTimeout(tryLogin,300);
+  }
 });
+
+// ── MODE SELECTION ──
+window.selectMode=mode=>{
+  loginMode=mode;
+  showPinEntry(mode);
+};
+function showPinEntry(mode){
+  document.getElementById('modeSelect').style.display='none';
+  document.getElementById('pinEntry').style.display='block';
+  document.getElementById('modeLabel').textContent=
+    mode==='create'?'Επέλεξε 6ψήφιο PIN για τον νέο σου λογαριασμό':'Εισάγετε το 6ψήφιο PIN σας';
+}
+window.backToMode=()=>{
+  loginMode=null;pinBuffer='';failedAttempts=0;
+  updateDots();document.getElementById('errMsg').textContent='';
+  document.getElementById('modeSelect').style.display='block';
+  document.getElementById('pinEntry').style.display='none';
+};
+
+// ── PIN INPUT ──
 window.addDigit=d=>{if(pinBuffer.length<6){pinBuffer+=d;updateDots();if(pinBuffer.length===6)setTimeout(tryLogin,200);}};
 window.delDigit=()=>{pinBuffer=pinBuffer.slice(0,-1);updateDots();};
 window.clearPin=()=>{pinBuffer='';updateDots();document.getElementById('errMsg').textContent='';};
 function updateDots(){for(let i=0;i<6;i++)document.getElementById('d'+i).classList.toggle('filled',i<pinBuffer.length);}
 
-function tryLogin(){
-  if(KNOWN_PINS[pinBuffer]!==undefined){
-    const chk=document.getElementById('rememberPin');
-    if(chk&&chk.checked)localStorage.setItem('savedPin',pinBuffer);
-    else localStorage.removeItem('savedPin');
-    roomKey=pinBuffer;
-    listRef=ref(db,'rooms/'+pinBuffer+'/lista');
-    favRef=ref(db,'rooms/'+pinBuffer+'/favorites');
-    document.getElementById('loginScreen').classList.remove('active');
-    document.getElementById('mainScreen').classList.add('active');
-    document.getElementById('hdrSub').textContent='PIN: '+pinBuffer.slice(0,3)+'···';
-    startListeners();renderContent();updateFab();
-  } else {
-    document.getElementById('errMsg').textContent='❌ Άγνωστος κωδικός, δοκιμάστε ξανά';
+async function tryLogin(){
+  if(failedAttempts>=MAX_ATTEMPTS){
+    document.getElementById('errMsg').textContent='❌ Πολλές αποτυχίες. Ανανεώστε τη σελίδα.';
+    return;
+  }
+  const pin=pinBuffer;
+  document.getElementById('errMsg').textContent='⏳ Έλεγχος...';
+  try{
+    const snap=await get(ref(db,'rooms/'+pin));
+    if(loginMode==='create'){
+      if(snap.exists()){
+        // PIN κατειλημμένο
+        failedAttempts++;
+        const left=MAX_ATTEMPTS-failedAttempts;
+        document.getElementById('errMsg').textContent=
+          left>0?`❌ Κατειλημμένο PIN — δοκιμάστε άλλο (${left} απόπειρες)`:'❌ Κατειλημμένο PIN. Ανανεώστε τη σελίδα.';
+        pinBuffer='';updateDots();
+      } else {
+        // Δημιουργία νέου δωματίου
+        await set(ref(db,'rooms/'+pin+'/meta'),{created:Date.now()});
+        enterRoom(pin);
+        setStatus('ok','✅ Νέο δωμάτιο δημιουργήθηκε! PIN: '+pin);
+      }
+    } else {
+      // Σύνδεση
+      if(snap.exists()){
+        enterRoom(pin);
+      } else {
+        failedAttempts++;
+        const left=MAX_ATTEMPTS-failedAttempts;
+        document.getElementById('errMsg').textContent=
+          left>0?`❌ Άγνωστο PIN — δοκιμάστε ξανά (${left} απόπειρες)`:'❌ Πολλές αποτυχίες. Ανανεώστε τη σελίδα.';
+        pinBuffer='';updateDots();
+      }
+    }
+  } catch(err){
+    console.error(err);
+    document.getElementById('errMsg').textContent='❌ Σφάλμα σύνδεσης — δοκιμάστε ξανά';
+    // Αν fail στο auto-login, επιστροφή στην επιλογή
+    document.getElementById('autoLoginMsg').style.display='none';
+    document.getElementById('modeSelect').style.display='block';
     pinBuffer='';updateDots();
   }
 }
+
+function enterRoom(pin){
+  const chk=document.getElementById('rememberPin');
+  if(chk&&chk.checked)localStorage.setItem('savedPin',pin);
+  else localStorage.removeItem('savedPin');
+  roomKey=pin;
+  listRef=ref(db,'rooms/'+pin+'/lista');
+  favRef=ref(db,'rooms/'+pin+'/favorites');
+  document.getElementById('loginScreen').classList.remove('active');
+  document.getElementById('mainScreen').classList.add('active');
+  document.getElementById('hdrSub').textContent='PIN: '+pin.slice(0,3)+'···';
+  startListeners();renderContent();updateFab();
+}
+
 window.logout=()=>{
   if(unsubList)unsubList();if(unsubFav)unsubFav();
-  roomKey=null;pinBuffer='';sharedList={};favItems=[];
+  roomKey=null;pinBuffer='';sharedList={};favItems=[];loginMode=null;failedAttempts=0;
   updateDots();document.getElementById('errMsg').textContent='';
   document.getElementById('mainScreen').classList.remove('active');
   document.getElementById('loginScreen').classList.add('active');
   document.getElementById('fabBtn').style.display='none';
   document.getElementById('fabAddBtn').style.display='none';
+  // Επιστροφή στο mode select
+  document.getElementById('modeSelect').style.display='block';
+  document.getElementById('pinEntry').style.display='none';
 };
 
 // ── FIREBASE LISTENERS ──
@@ -263,9 +375,7 @@ function itemHTML(item){
   const qtyStr=item.qty&&item.unit?`${item.qty} ${item.unit}`:'';
   const isFav=item.cat==='fav';
   const esc=item.name.replace(/'/g,"\\'");
-  const qtyBadge=qtyStr
-    ?`<span class="item-qty-badge">${qtyStr}</span>`
-    :`<span class="item-qty-add">+ποσ.</span>`;
+  const qtyBadge=qtyStr?`<span class="item-qty-badge">${qtyStr}</span>`:`<span class="item-qty-add">+ποσ.</span>`;
   return `<div class="list-item${item.done?' done':''}${isFav?' is-fav':''}">
     <button class="item-check${item.done?' checked':''}" onclick="toggleItem('${item.id}')">${item.done?'✓':''}</button>
     <div class="item-body" onclick="editQty('${item.id}')">
@@ -349,13 +459,9 @@ window.showSuggestions=val=>{
   box.innerHTML=matches.map((m,i)=>`<div class="sugg-item" id="sugg-${i}" onclick="pickSugg('${m.replace(/'/g,"\\'")}')">${m}</div>`).join('');
   box.style.display='block';
 };
-window.pickSugg=val=>{
-  document.getElementById('manualInput').value=val;
-  document.getElementById('suggBox').style.display='none';suggIdx=-1;
-};
+window.pickSugg=val=>{document.getElementById('manualInput').value=val;document.getElementById('suggBox').style.display='none';suggIdx=-1;};
 window.handleKey=e=>{
-  const box=document.getElementById('suggBox');
-  const items=box.querySelectorAll('.sugg-item');
+  const box=document.getElementById('suggBox');const items=box.querySelectorAll('.sugg-item');
   if(e.key==='ArrowDown'){e.preventDefault();suggIdx=Math.min(suggIdx+1,items.length-1);}
   else if(e.key==='ArrowUp'){e.preventDefault();suggIdx=Math.max(suggIdx-1,-1);}
   else if(e.key==='Enter'){if(suggIdx>=0&&items[suggIdx]){items[suggIdx].click();return;}manualAdd();return;}
@@ -363,17 +469,14 @@ window.handleKey=e=>{
   items.forEach((el,i)=>el.classList.toggle('sugg-sel',i===suggIdx));
 };
 document.addEventListener('click',e=>{
-  if(!e.target.closest('#suggBox')&&!e.target.closest('#manualInput')){
-    const b=document.getElementById('suggBox');if(b)b.style.display='none';
-  }
+  if(!e.target.closest('#suggBox')&&!e.target.closest('#manualInput')){const b=document.getElementById('suggBox');if(b)b.style.display='none';}
 });
 
-// ── VOICE INPUT ──
+// ── VOICE ──
 window.startVoice=()=>{
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR){setStatus('warn','⚠️ Φωνητική εισαγωγή: χρησιμοποιήστε Chrome');return;}
-  const rec=new SR();
-  rec.lang='el-GR';rec.continuous=false;rec.interimResults=false;
+  const rec=new SR();rec.lang='el-GR';rec.continuous=false;rec.interimResults=false;
   const btn=document.getElementById('micBtn');
   if(btn){btn.classList.add('recording');btn.textContent='🔴';}
   rec.onresult=e=>{
@@ -386,7 +489,7 @@ window.startVoice=()=>{
   rec.onerror=e=>{
     if(btn){btn.classList.remove('recording');btn.textContent='🎤 Φωνητική εισαγωγή';}
     const msgs={'not-allowed':'⚠️ Απαιτείται άδεια μικροφώνου','network':'⚠️ Απαιτείται σύνδεση internet','language-not-supported':'⚠️ Εγκαταστήστε ελληνικά στο κινητό','no-speech':'⚠️ Δεν ακούστηκε ομιλία — δοκιμάστε ξανά','service-not-allowed':'⚠️ Φωνητική εισαγωγή: χρησιμοποιήστε Chrome'};
-    setStatus('warn',msgs[e.error]||'⚠️ Σφάλμα φωνητικής εισαγωγής ('+e.error+')');
+    setStatus('warn',msgs[e.error]||'⚠️ Σφάλμα ('+e.error+')');
   };
   rec.onend=()=>{if(btn){btn.classList.remove('recording');btn.textContent='🎤 Φωνητική εισαγωγή';}};
   rec.start();
@@ -394,8 +497,7 @@ window.startVoice=()=>{
 
 // ── QTY + ΜΑΡΚΑ MODAL ──
 window.editQty=id=>{
-  const item=sharedList[id];
-  if(!item||item.done)return;
+  const item=sharedList[id];if(!item||item.done)return;
   modalUnit=item.unit||'τεμ.';
   const units=['τεμ.','κιλά','γρ.','lt'];
   const overlay=document.createElement('div');
@@ -420,19 +522,13 @@ window.editQty=id=>{
   overlay.addEventListener('click',e=>{if(e.target===overlay)closeQtyModal();});
   document.body.appendChild(overlay);
 };
-window.setMU=u=>{
-  modalUnit=u;
-  document.querySelectorAll('.ubu').forEach(b=>b.classList.remove('sel'));
-  const el=document.getElementById('mu-'+u.replace('.',''));
-  if(el)el.classList.add('sel');
-};
+window.setMU=u=>{modalUnit=u;document.querySelectorAll('.ubu').forEach(b=>b.classList.remove('sel'));const el=document.getElementById('mu-'+u.replace('.',''));if(el)el.classList.add('sel');};
 window.saveQty=id=>{
   const qty=parseFloat(document.getElementById('qtyVal')?.value||1);
   const brand=(document.getElementById('brandVal')?.value||'').trim();
   const upd={qty,unit:modalUnit,ts:Date.now()};
   if(brand)upd.brand=brand;else upd.brand=null;
-  update(ref(db,'rooms/'+roomKey+'/lista/'+id),upd);
-  closeQtyModal();
+  update(ref(db,'rooms/'+roomKey+'/lista/'+id),upd);closeQtyModal();
 };
 window.closeQtyModal=()=>{const m=document.getElementById('qtyModal');if(m)m.remove();};
 
@@ -440,19 +536,9 @@ window.closeQtyModal=()=>{const m=document.getElementById('qtyModal');if(m)m.rem
 window.setAddCat=id=>{addCategory=id;renderContent();};
 window.toggleLastItems=()=>{showLastItems=!showLastItems;renderContent();};
 window.quickAdd=(name,cat)=>addItem(name,cat,false);
-window.manualAdd=()=>{
-  const inp=document.getElementById('manualInput');
-  const v=inp.value.trim();if(v){addItem(v,addCategory,false);inp.value='';const b=document.getElementById('suggBox');if(b)b.style.display='none';}
-};
-window.manualAddFav=()=>{
-  const inp=document.getElementById('manualInput');
-  const v=inp.value.trim();if(v){addItem(v,addCategory,true);inp.value='';const b=document.getElementById('suggBox');if(b)b.style.display='none';}
-};
-window.removeFav=name=>{
-  const newFavs=favItems.filter(f=>f!==name);
-  set(favRef,newFavs.length>0?newFavs:[]);
-  setStatus('ok','🗑 Αφαιρέθηκε από Αγαπημένα: '+name);
-};
+window.manualAdd=()=>{const inp=document.getElementById('manualInput');const v=inp.value.trim();if(v){addItem(v,addCategory,false);inp.value='';const b=document.getElementById('suggBox');if(b)b.style.display='none';}};
+window.manualAddFav=()=>{const inp=document.getElementById('manualInput');const v=inp.value.trim();if(v){addItem(v,addCategory,true);inp.value='';const b=document.getElementById('suggBox');if(b)b.style.display='none';}};
+window.removeFav=name=>{const newFavs=favItems.filter(f=>f!==name);set(favRef,newFavs.length>0?newFavs:[]);setStatus('ok','🗑 Αφαιρέθηκε από Αγαπημένα: '+name);};
 
 // ── FIREBASE CRUD ──
 function addItem(name,cat,addToFav){
@@ -463,12 +549,8 @@ function addItem(name,cat,addToFav){
   localStorage.setItem(histKey,JSON.stringify(hist));
   const id=Date.now().toString(36)+Math.random().toString(36).slice(2);
   set(ref(db,'rooms/'+roomKey+'/lista/'+id),{name,cat,done:false,ts:Date.now()});
-  if(addToFav&&!favItems.includes(name)){
-    set(favRef,[...favItems,name]);
-    setStatus('ok','✅ Προστέθηκε στη λίστα & Αγαπημένα: '+name);
-  } else {
-    setStatus('ok','✅ Προστέθηκε: '+name);
-  }
+  if(addToFav&&!favItems.includes(name)){set(favRef,[...favItems,name]);setStatus('ok','✅ Προστέθηκε στη λίστα & Αγαπημένα: '+name);}
+  else{setStatus('ok','✅ Προστέθηκε: '+name);}
 }
 window.toggleItem=id=>{const item=sharedList[id];if(item)update(ref(db,'rooms/'+roomKey+'/lista/'+id),{done:!item.done,ts:Date.now()});};
 window.deleteItem=id=>remove(ref(db,'rooms/'+roomKey+'/lista/'+id));
@@ -479,33 +561,19 @@ function buildShareText(){
   const items=Object.values(sharedList).filter(i=>!i.done);
   if(items.length===0)return 'Η λίστα αγορών είναι άδεια.';
   let txt='🛒 ΛΙΣΤΑ ΑΓΟΡΩΝ\n\n';
-  items.forEach(i=>{
-    const q=i.qty&&i.unit?` (${i.qty} ${i.unit})`:'';
-    const b=i.brand?` [${i.brand}]`:'';
-    txt+=`• ${i.name.toUpperCase()}${q}${b}\n`;
-  });
+  items.forEach(i=>{const q=i.qty&&i.unit?` (${i.qty} ${i.unit})`:'';const b=i.brand?` [${i.brand}]`:'';txt+=`• ${i.name.toUpperCase()}${q}${b}\n`;});
   return txt+`\nΣύνολο: ${items.length} προϊόντα`;
 }
 window.shareViber=()=>window.open('viber://forward?text='+encodeURIComponent(buildShareText()),'_blank');
 window.shareSMS=()=>window.open('sms:?body='+encodeURIComponent(buildShareText()),'_blank');
-window.shareGeneric=async()=>{
-  const text=buildShareText();
-  if(navigator.share){try{await navigator.share({title:'Λίστα Αγορών',text});}catch(e){}}
-  else if(navigator.clipboard){await navigator.clipboard.writeText(text);setStatus('ok','📋 Λίστα αντιγράφηκε');}
-};
+window.shareGeneric=async()=>{const text=buildShareText();if(navigator.share){try{await navigator.share({title:'Λίστα Αγορών',text});}catch(e){}}else if(navigator.clipboard){await navigator.clipboard.writeText(text);setStatus('ok','📋 Λίστα αντιγράφηκε');}};
 
 // ── POSOKANEI ──
 window.checkPrice=name=>{
   const open=()=>window.open('https://posokanei.gov.gr/','_blank');
-  if(navigator.clipboard?.writeText){
-    navigator.clipboard.writeText(name).then(()=>{setStatus('ok','📋 Αντιγράφηκε: '+name+' — κάντε Επικόλληση στο PosoKanei');open();}).catch(()=>{fbCopy(name);open();});
-  } else {fbCopy(name);open();}
+  if(navigator.clipboard?.writeText){navigator.clipboard.writeText(name).then(()=>{setStatus('ok','📋 Αντιγράφηκε: '+name+' — κάντε Επικόλληση στο PosoKanei');open();}).catch(()=>{fbCopy(name);open();});}else{fbCopy(name);open();}
 };
-function fbCopy(text){
-  const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0';
-  document.body.appendChild(ta);ta.focus();ta.select();
-  try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);
-}
+function fbCopy(text){const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);}
 
 function setStatus(type,msg){
   const bar=document.getElementById('statusBar'),txt=document.getElementById('statusTxt');
@@ -525,14 +593,12 @@ window.addEventListener('beforeinstallprompt',e=>{
   const btn=document.getElementById('installBtn');if(btn)btn.style.display='flex';
 });
 window.addEventListener('appinstalled',()=>{
-  deferredPrompt=null;
-  const btn=document.getElementById('installBtn');if(btn)btn.style.display='none';
+  deferredPrompt=null;const btn=document.getElementById('installBtn');if(btn)btn.style.display='none';
 });
 window.installApp=async()=>{
   if(!deferredPrompt)return;
   deferredPrompt.prompt();await deferredPrompt.userChoice;
-  deferredPrompt=null;
-  const btn=document.getElementById('installBtn');if(btn)btn.style.display='none';
+  deferredPrompt=null;const btn=document.getElementById('installBtn');if(btn)btn.style.display='none';
 };
 </script>
 </html>
