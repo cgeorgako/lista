@@ -360,8 +360,24 @@ function renderList(ca){
     <button onclick="shareGeneric()" style="flex:1;padding:0.6rem;background:#555;border:none;border-radius:10px;color:#fff;font-size:0.82rem;font-weight:600;cursor:pointer">🔗 Κοινοποίηση</button>
   </div>
   <div class="section-lbl">Εκκρεμή <span class="badge">${active.length}</span></div>`;
-  if(active.length===0)html+=`<div style="text-align:center;color:#bbb;padding:1rem;font-size:0.85rem">Όλα αγοράστηκαν! 🎉</div>`;
-  active.forEach(item=>html+=itemHTML(item));
+  if(active.length===0){
+    html+=`<div style="text-align:center;color:#bbb;padding:1rem;font-size:0.85rem">Όλα αγοράστηκαν! 🎉</div>`;
+  } else {
+    // Σειρά τμημάτων supermarket
+    const ORDER=['fav','veg','fruit','dairy','meat','bakery','pantry','spices','drinks','clean','house'];
+    const groups={};
+    active.forEach(i=>{const c=i.cat||'pantry';if(!groups[c])groups[c]=[];groups[c].push(i);});
+    ORDER.forEach(catId=>{
+      if(!groups[catId]||groups[catId].length===0)return;
+      const cat=CATEGORIES.find(c=>c.id===catId);
+      html+=`<div class="section-lbl" style="margin-top:0.75rem;color:#1a7f4b;font-size:0.8rem">${cat?.label||catId}</div>`;
+      groups[catId].forEach(item=>html+=itemHTML(item));
+    });
+    // Fallback για άγνωστες κατηγορίες
+    Object.keys(groups).filter(k=>!ORDER.includes(k)).forEach(catId=>{
+      groups[catId].forEach(item=>html+=itemHTML(item));
+    });
+  }
   if(done.length>0){
     html+=`<div class="section-lbl" style="margin-top:1rem">Αγοράστηκαν <span class="badge">${done.length}</span></div>`;
     done.forEach(item=>html+=itemHTML(item));
