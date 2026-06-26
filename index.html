@@ -378,7 +378,7 @@ document.addEventListener('click',e=>{
 // ── VOICE INPUT ──
 window.startVoice=()=>{
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){setStatus('warn','⚠️ Δεν υποστηρίζεται φωνητική εισαγωγή σε αυτόν τον browser');return;}
+  if(!SR){setStatus('warn','⚠️ Φωνητική εισαγωγή: χρησιμοποιήστε Chrome');return;}
   const rec=new SR();
   rec.lang='el-GR';rec.continuous=false;rec.interimResults=false;
   const btn=document.getElementById('micBtn');
@@ -387,11 +387,21 @@ window.startVoice=()=>{
     const txt=e.results[0][0].transcript;
     const inp=document.getElementById('manualInput');
     if(inp){inp.value=txt;showSuggestions(txt);}
-    if(btn){btn.classList.remove('recording');btn.textContent='🎤';}
+    if(btn){btn.classList.remove('recording');btn.textContent='🎤 Φωνητική εισαγωγή';}
     setStatus('ok','🎤 Αναγνωρίστηκε: '+txt);
   };
-  rec.onerror=()=>{if(btn){btn.classList.remove('recording');btn.textContent='🎤';}setStatus('warn','⚠️ Σφάλμα φωνητικής εισαγωγής');};
-  rec.onend=()=>{if(btn){btn.classList.remove('recording');btn.textContent='🎤';}};
+  rec.onerror=e=>{
+    if(btn){btn.classList.remove('recording');btn.textContent='🎤 Φωνητική εισαγωγή';}
+    const msgs={
+      'not-allowed':'⚠️ Απαιτείται άδεια μικροφώνου',
+      'network':'⚠️ Απαιτείται σύνδεση internet',
+      'language-not-supported':'⚠️ Εγκαταστήστε ελληνικά στο κινητό',
+      'no-speech':'⚠️ Δεν ακούστηκε ομιλία — δοκιμάστε ξανά',
+      'service-not-allowed':'⚠️ Φωνητική εισαγωγή: χρησιμοποιήστε Chrome'
+    };
+    setStatus('warn',msgs[e.error]||'⚠️ Σφάλμα φωνητικής εισαγωγής ('+e.error+')');
+  };
+  rec.onend=()=>{if(btn){btn.classList.remove('recording');btn.textContent='🎤 Φωνητική εισαγωγή';}};
   rec.start();
 };
 
