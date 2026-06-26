@@ -28,13 +28,10 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
 .app-header h2{font-size:1.1rem;font-weight:700;flex:1}
 .hdr-sub{font-size:0.75rem;opacity:0.8;display:block}
 .hdr-btn{background:rgba(255,255,255,0.2);border:none;color:#fff;border-radius:10px;padding:8px 12px;font-size:0.82rem;cursor:pointer}
-.tabs{display:flex;background:#fff;border-bottom:1px solid #e8e8e8;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{padding:0.7rem 1.1rem;border:none;background:none;font-size:1rem;font-weight:500;color:#777;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.2s}
-.tab.active{color:#1a7f4b;border-bottom-color:#1a7f4b;font-weight:600}
 .fab-list{position:fixed;top:72px;right:16px;z-index:200;background:#880e4f;color:#fff;border:none;border-radius:24px;padding:10px 18px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(136,14,79,0.45);display:flex;align-items:center;gap:8px}
+.fab-add{position:fixed;bottom:24px;right:16px;z-index:200;background:#e65100;color:#fff;border:none;border-radius:24px;padding:10px 18px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(230,81,0,0.45);display:flex;align-items:center;gap:8px}
 .fab-badge{background:#fff;color:#1a7f4b;border-radius:50%;width:22px;height:22px;font-size:0.75rem;font-weight:800;display:flex;align-items:center;justify-content:center}
-.content-area{flex:1;overflow-y:auto;padding:0.75rem}
+.content-area{flex:1;overflow-y:auto;padding:0.75rem;padding-bottom:5rem}
 .add-bar{display:flex;gap:8px;margin-bottom:0.75rem}
 .add-bar input{flex:1;padding:0.65rem 1rem;border:1.5px solid #e0e0e0;border-radius:12px;font-size:0.9rem;background:#fff;outline:none;text-transform:uppercase}
 .add-bar input:focus{border-color:#1a7f4b}
@@ -59,6 +56,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
 .item-name{font-size:0.9rem;text-transform:uppercase;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .item-qty-badge{font-size:0.72rem;color:#fff;background:#1a7f4b;border-radius:8px;padding:1px 7px;font-weight:600;white-space:nowrap}
 .item-qty-add{font-size:0.7rem;color:#bbb;border-bottom:1px dashed #ccc}
+.item-brand{font-size:0.72rem;color:#e65100;font-style:italic;display:block;margin-top:2px}
 .item-cat{font-size:0.7rem;color:#999;display:block;margin-top:2px}
 .item-price{background:none;border:none;font-size:1rem;cursor:pointer;padding:3px;flex-shrink:0}
 .item-del{background:none;border:none;color:#ddd;font-size:1.1rem;cursor:pointer;padding:3px;flex-shrink:0}
@@ -72,7 +70,6 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
 .sugg-item{padding:0.65rem 1rem;font-size:0.9rem;cursor:pointer;border-bottom:1px solid #f0f0f0;transition:background 0.15s;text-transform:uppercase}
 .sugg-item:last-child{border-bottom:none}
 .sugg-item:hover,.sugg-item.sugg-sel{background:#f0faf5;color:#1a7f4b}
-/* QTY MODAL */
 .qty-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:500;display:flex;align-items:flex-end;justify-content:center}
 .qty-sheet{background:#fff;border-radius:20px 20px 0 0;padding:1.5rem;width:100%;max-width:420px}
 .ubu{flex:1;padding:0.5rem;border-radius:10px;border:1.5px solid #e0e0e0;background:#fff;color:#555;font-size:0.82rem;cursor:pointer;transition:all 0.15s}
@@ -128,10 +125,12 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
     <button class="hdr-btn" onclick="logout()">Έξοδος</button>
   </div>
   <div id="statusBar" class="status-bar"><div class="dot-pulse"></div><span id="statusTxt">Σύνδεση...</span></div>
-  <div class="tabs" id="tabBar"></div>
   <div class="content-area" id="contentArea"></div>
   <button class="fab-list" id="fabBtn" onclick="setTab('all')" style="display:none">
     📋 Λίστα <span class="fab-badge" id="fabBadge">0</span>
+  </button>
+  <button class="fab-add" id="fabAddBtn" onclick="setTab('add')" style="display:none">
+    ➕ Προσθήκη
   </button>
 </div>
 
@@ -151,16 +150,17 @@ const db=getDatabase(app);
 const KNOWN_PINS={'676767':'home','123123':'room1','111222':'room2','010101':'room3','456456':'room4','789789':'room5'};
 
 const CATEGORIES=[
-  {id:'fav',   label:'❤️ Αγαπημένα',    items:[],dynamic:true},
-  {id:'dairy', label:'🥛 Γαλακτοκομικά', items:['Γάλα','Γιαούρτι','Τυρί Φέτα','Βούτυρο','Κρέμα γάλακτος','Τυρί τριμμένο','Αυγά']},
-  {id:'meat',  label:'🥩 Κρέας / Ψάρι',  items:['Κοτόπουλο','Κιμάς','Χοιρινό','Μοσχάρι','Ψάρι','Λουκάνικα','Μπέικον']},
-  {id:'veg',   label:'🥦 Λαχανικά',      items:['Ντομάτες','Πατάτες','Κρεμμύδια','Σκόρδο','Αγγούρι','Μαρούλι','Καρότα','Πιπεριές','Κολοκυθάκια']},
-  {id:'fruit', label:'🍎 Φρούτα',         items:['Μήλα','Μπανάνες','Πορτοκάλια','Λεμόνια','Σταφύλια','Ροδάκινα','Φράουλες']},
-  {id:'pantry',label:'🥫 Παντοπωλείο',   items:['Λάδι ελαιόλαδο','Ζυμαρικά','Ρύζι','Αλεύρι','Ζάχαρη','Αλάτι','Ξύδι','Κονσέρβες τόνου','Ντομάτα κονσέρβα','Φακές','Ρεβίθια']},
-  {id:'bakery',label:'🧁 Αρτοποιείο',    items:['Ψωμί','Φρυγανιές','Κριτσίνια','Παξιμάδια','Πίτα']},
-  {id:'drinks',label:'🧃 Ροφήματα',      items:['Νερό','Χυμός πορτοκάλι','Καφές','Τσάι','Αναψυκτικά','Μπύρα','Κρασί']},
-  {id:'clean', label:'🧴 Καθαριότητα',   items:['Απορρυπαντικό','Χαρτί υγείας','Χαρτί κουζίνας','Σαπούνι','Σαμπουάν','Αφρόλουτρο','Οδοντόκρεμα','Σφουγγάρια','Λευκαντικό','Μαλακτικό']},
-  {id:'house', label:'🧹 Είδη Σπιτιού',  items:['Σακούλες σκουπιδιών','Σφουγγαρίστρα','Σκούπα','Χαρτοπετσέτες','Μεμβράνη','Αλουμινόχαρτο']}
+  {id:'fav',    label:'❤️ Αγαπημένα',    items:[],dynamic:true},
+  {id:'dairy',  label:'🥛 Γαλακτοκομικά', items:['Γάλα','Γιαούρτι','Τυρί Φέτα','Βούτυρο','Κρέμα γάλακτος','Τυρί τριμμένο','Αυγά']},
+  {id:'meat',   label:'🥩 Κρέας / Ψάρι',  items:['Κοτόπουλο','Κιμάς','Χοιρινό','Μοσχάρι','Ψάρι','Λουκάνικα','Μπέικον']},
+  {id:'veg',    label:'🥦 Λαχανικά',      items:['Ντομάτες','Πατάτες','Κρεμμύδια','Σκόρδο','Αγγούρι','Μαρούλι','Καρότα','Πιπεριές','Κολοκυθάκια']},
+  {id:'fruit',  label:'🍎 Φρούτα',         items:['Μήλα','Μπανάνες','Πορτοκάλια','Λεμόνια','Σταφύλια','Ροδάκινα','Φράουλες']},
+  {id:'pantry', label:'🥫 Παντοπωλείο',   items:['Λάδι ελαιόλαδο','Ζυμαρικά','Ρύζι','Αλεύρι','Ζάχαρη','Αλάτι','Ξύδι','Κονσέρβες τόνου','Ντομάτα κονσέρβα','Φακές','Ρεβίθια']},
+  {id:'spices', label:'🧂 Μπαχαρικά',     items:['Αλάτι','Πιπέρι','Πάπρικα','Ρίγανη','Κανέλλα','Γαρύφαλλο','Κύμινο','Μπαχάρι']},
+  {id:'bakery', label:'🧁 Αρτοποιείο',    items:['Ψωμί','Φρυγανιές','Κριτσίνια','Παξιμάδια','Πίτα']},
+  {id:'drinks', label:'🧃 Ροφήματα',      items:['Νερό','Χυμός πορτοκάλι','Καφές','Τσάι','Αναψυκτικά','Μπύρα','Κρασί']},
+  {id:'clean',  label:'🧴 Καθαριότητα',   items:['Απορρυπαντικό','Χαρτί υγείας','Χαρτί κουζίνας','Σαπούνι','Σαμπουάν','Αφρόλουτρο','Οδοντόκρεμα','Σφουγγάρια','Λευκαντικό','Μαλακτικό']},
+  {id:'house',  label:'🧹 Είδη Σπιτιού',  items:['Σακούλες σκουπιδιών','Σφουγγαρίστρα','Σκούπα','Χαρτοπετσέτες','Μεμβράνη','Αλουμινόχαρτο']}
 ];
 const ALL_PRODUCTS=[...new Set(CATEGORIES.filter(c=>c.id!=='fav').flatMap(c=>c.items))];
 
@@ -169,17 +169,12 @@ let sharedList={},favItems=[],modalUnit='τεμ.';
 let roomKey=null,listRef=null,favRef=null;
 let unsubList=null,unsubFav=null,suggIdx=-1;
 
-// PIN / LOGIN
-// Έλεγχος αν υπάρχει αποθηκευμένο PIN
+// ── PIN / LOGIN ──
 window.addEventListener('load',()=>{
   const saved=localStorage.getItem('savedPin');
   const chk=document.getElementById('rememberPin');
-  if(saved){
-    if(chk) chk.checked=true;
-    pinBuffer=saved;updateDots();setTimeout(tryLogin,300);
-  }
+  if(saved){if(chk)chk.checked=true;pinBuffer=saved;updateDots();setTimeout(tryLogin,300);}
 });
-
 window.addDigit=d=>{if(pinBuffer.length<6){pinBuffer+=d;updateDots();if(pinBuffer.length===6)setTimeout(tryLogin,200);}};
 window.delDigit=()=>{pinBuffer=pinBuffer.slice(0,-1);updateDots();};
 window.clearPin=()=>{pinBuffer='';updateDots();document.getElementById('errMsg').textContent='';};
@@ -187,9 +182,8 @@ function updateDots(){for(let i=0;i<6;i++)document.getElementById('d'+i).classLi
 
 function tryLogin(){
   if(KNOWN_PINS[pinBuffer]!==undefined){
-    // Αποθήκευση PIN αν είναι τσεκαρισμένο
     const chk=document.getElementById('rememberPin');
-    if(chk&&chk.checked) localStorage.setItem('savedPin',pinBuffer);
+    if(chk&&chk.checked)localStorage.setItem('savedPin',pinBuffer);
     else localStorage.removeItem('savedPin');
     roomKey=pinBuffer;
     listRef=ref(db,'rooms/'+pinBuffer+'/lista');
@@ -197,7 +191,7 @@ function tryLogin(){
     document.getElementById('loginScreen').classList.remove('active');
     document.getElementById('mainScreen').classList.add('active');
     document.getElementById('hdrSub').textContent='PIN: '+pinBuffer.slice(0,3)+'···';
-    startListeners();renderTabs();renderContent();
+    startListeners();renderContent();updateFab();
   } else {
     document.getElementById('errMsg').textContent='❌ Άγνωστος κωδικός, δοκιμάστε ξανά';
     pinBuffer='';updateDots();
@@ -210,6 +204,7 @@ window.logout=()=>{
   document.getElementById('mainScreen').classList.remove('active');
   document.getElementById('loginScreen').classList.add('active');
   document.getElementById('fabBtn').style.display='none';
+  document.getElementById('fabAddBtn').style.display='none';
 };
 
 // ── FIREBASE LISTENERS ──
@@ -229,17 +224,14 @@ function startListeners(){
   },()=>{favItems=[];});
 }
 
-// ── TABS ──
-function renderTabs(){
-  document.getElementById('tabBar').innerHTML=
-    [{id:'add',label:'➕ Προσθήκη'}]
-    .map(t=>`<button class="tab${activeTab===t.id?' active':''}" onclick="setTab('${t.id}')">${t.label}</button>`).join('');
-}
-window.setTab=id=>{activeTab=id;renderTabs();renderContent();document.getElementById('fabBtn').style.display=id==='all'?'none':'flex';};
+// ── NAV ──
+window.setTab=id=>{activeTab=id;renderContent();updateFab();};
 function updateFab(){
   const cnt=Object.values(sharedList).filter(i=>!i.done).length;
   document.getElementById('fabBadge').textContent=cnt;
-  document.getElementById('fabBtn').style.display=activeTab==='all'?'none':'flex';
+  const onList=activeTab==='all';
+  document.getElementById('fabBtn').style.display=onList?'none':'flex';
+  document.getElementById('fabAddBtn').style.display=onList?'flex':'none';
 }
 
 // ── LIST ──
@@ -278,6 +270,7 @@ function itemHTML(item){
     <button class="item-check${item.done?' checked':''}" onclick="toggleItem('${item.id}')">${item.done?'✓':''}</button>
     <div class="item-body" onclick="editQty('${item.id}')">
       <div class="item-name">${isFav?'❤️ ':''}${item.name} ${qtyBadge}</div>
+      ${item.brand?`<span class="item-brand">🏷️ ${item.brand}</span>`:''}
       <span class="item-cat">${catLabel}</span>
     </div>
     <button class="item-price" onclick="checkPrice('${esc}')">💰</button>
@@ -325,7 +318,7 @@ function renderAdd(ca){
         <button class="btn-fav" onclick="manualAddFav()">❤️+</button>
       </div>
       <div style="display:flex;justify-content:center;gap:8px;margin-bottom:4px">
-        <button id="micBtn" class="btn-mic" onclick="startVoice()" title="Φωνητική εισαγωγή" style="padding:0.6rem 1.2rem">🎤 Φωνητική εισαγωγή</button>
+        <button id="micBtn" class="btn-mic" onclick="startVoice()" style="padding:0.6rem 1.2rem">🎤 Φωνητική εισαγωγή</button>
         <button onclick="toggleLastItems()" style="padding:0.6rem 1rem;background:${showLastItems?'#e8f5ee':'#f0f0f0'};border:none;border-radius:12px;font-size:0.82rem;cursor:pointer;color:${showLastItems?'#1a7f4b':'#555'};font-weight:${showLastItems?'600':'400'}">🕐 Τελευταία 10</button>
       </div>
       <div id="suggBox" style="display:none;position:absolute;left:0;right:0;background:#fff;border:1.5px solid #1a7f4b;border-top:none;border-radius:0 0 12px 12px;z-index:300;max-height:180px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,0.1)"></div>
@@ -392,20 +385,14 @@ window.startVoice=()=>{
   };
   rec.onerror=e=>{
     if(btn){btn.classList.remove('recording');btn.textContent='🎤 Φωνητική εισαγωγή';}
-    const msgs={
-      'not-allowed':'⚠️ Απαιτείται άδεια μικροφώνου',
-      'network':'⚠️ Απαιτείται σύνδεση internet',
-      'language-not-supported':'⚠️ Εγκαταστήστε ελληνικά στο κινητό',
-      'no-speech':'⚠️ Δεν ακούστηκε ομιλία — δοκιμάστε ξανά',
-      'service-not-allowed':'⚠️ Φωνητική εισαγωγή: χρησιμοποιήστε Chrome'
-    };
+    const msgs={'not-allowed':'⚠️ Απαιτείται άδεια μικροφώνου','network':'⚠️ Απαιτείται σύνδεση internet','language-not-supported':'⚠️ Εγκαταστήστε ελληνικά στο κινητό','no-speech':'⚠️ Δεν ακούστηκε ομιλία — δοκιμάστε ξανά','service-not-allowed':'⚠️ Φωνητική εισαγωγή: χρησιμοποιήστε Chrome'};
     setStatus('warn',msgs[e.error]||'⚠️ Σφάλμα φωνητικής εισαγωγής ('+e.error+')');
   };
   rec.onend=()=>{if(btn){btn.classList.remove('recording');btn.textContent='🎤 Φωνητική εισαγωγή';}};
   rec.start();
 };
 
-// ── QTY MODAL ──
+// ── QTY + ΜΑΡΚΑ MODAL ──
 window.editQty=id=>{
   const item=sharedList[id];
   if(!item||item.done)return;
@@ -416,13 +403,15 @@ window.editQty=id=>{
   overlay.innerHTML=`
     <div class="qty-sheet">
       <div style="text-align:center;font-weight:800;font-size:1rem;text-transform:uppercase;color:#1a7f4b;margin-bottom:1.2rem">${item.name}</div>
-      <div style="display:flex;gap:8px;align-items:center;margin-bottom:1.2rem">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:1rem">
         <input id="qtyVal" type="number" min="0.1" step="0.1" value="${item.qty||1}"
           style="width:80px;padding:0.6rem;border:1.5px solid #e0e0e0;border-radius:10px;font-size:1.2rem;text-align:center;font-weight:700">
         <div style="display:flex;gap:6px;flex:1">
           ${units.map(u=>`<button onclick="setMU('${u}')" id="mu-${u.replace('.','')}" class="ubu${modalUnit===u?' sel':''}">${u}</button>`).join('')}
         </div>
       </div>
+      <input id="brandVal" type="text" placeholder="Μάρκα (προαιρετικό)" value="${item.brand||''}"
+        style="width:100%;padding:0.6rem 1rem;border:1.5px solid #e0e0e0;border-radius:10px;font-size:0.9rem;text-transform:uppercase;margin-bottom:1.2rem">
       <div style="display:flex;gap:8px">
         <button onclick="closeQtyModal()" style="flex:1;padding:0.75rem;border:1.5px solid #ddd;border-radius:12px;background:#fff;color:#555;cursor:pointer;font-size:0.9rem">Ακύρωση</button>
         <button onclick="saveQty('${id}')" style="flex:1;padding:0.75rem;border:none;border-radius:12px;background:#1a7f4b;color:#fff;font-weight:700;cursor:pointer;font-size:0.9rem">✓ Αποθήκευση</button>
@@ -439,7 +428,10 @@ window.setMU=u=>{
 };
 window.saveQty=id=>{
   const qty=parseFloat(document.getElementById('qtyVal')?.value||1);
-  update(ref(db,'rooms/'+roomKey+'/lista/'+id),{qty,unit:modalUnit,ts:Date.now()});
+  const brand=(document.getElementById('brandVal')?.value||'').trim();
+  const upd={qty,unit:modalUnit,ts:Date.now()};
+  if(brand)upd.brand=brand;else upd.brand=null;
+  update(ref(db,'rooms/'+roomKey+'/lista/'+id),upd);
   closeQtyModal();
 };
 window.closeQtyModal=()=>{const m=document.getElementById('qtyModal');if(m)m.remove();};
@@ -466,7 +458,6 @@ window.removeFav=name=>{
 function addItem(name,cat,addToFav){
   const existing=Object.values(sharedList).find(i=>normGr(i.name)===normGr(name)&&!i.done);
   if(existing){setStatus('warn','⚠️ Ήδη στη λίστα: '+name);return;}
-  // Αποθήκευση τελευταίων 10 προϊόντων στο localStorage
   const histKey='lastItems_'+roomKey;
   const hist=[name,...JSON.parse(localStorage.getItem(histKey)||'[]').filter(h=>normGr(h)!==normGr(name))].slice(0,10);
   localStorage.setItem(histKey,JSON.stringify(hist));
@@ -488,7 +479,11 @@ function buildShareText(){
   const items=Object.values(sharedList).filter(i=>!i.done);
   if(items.length===0)return 'Η λίστα αγορών είναι άδεια.';
   let txt='🛒 ΛΙΣΤΑ ΑΓΟΡΩΝ\n\n';
-  items.forEach(i=>{const q=i.qty&&i.unit?` (${i.qty} ${i.unit})`:'';txt+=`• ${i.name.toUpperCase()}${q}\n`;});
+  items.forEach(i=>{
+    const q=i.qty&&i.unit?` (${i.qty} ${i.unit})`:'';
+    const b=i.brand?` [${i.brand}]`:'';
+    txt+=`• ${i.name.toUpperCase()}${q}${b}\n`;
+  });
   return txt+`\nΣύνολο: ${items.length} προϊόντα`;
 }
 window.shareViber=()=>window.open('viber://forward?text='+encodeURIComponent(buildShareText()),'_blank');
@@ -521,33 +516,23 @@ function setStatus(type,msg){
 </script>
 </body>
 <script>
-// Service Worker
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('/lista/sw.js')
-      .catch(e=>console.warn('SW:',e));
-  });
+  window.addEventListener('load',()=>{navigator.serviceWorker.register('/lista/sw.js').catch(e=>console.warn('SW:',e));});
 }
-// Install Prompt
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{
-  e.preventDefault();
-  deferredPrompt=e;
-  const btn=document.getElementById('installBtn');
-  if(btn) btn.style.display='flex';
+  e.preventDefault();deferredPrompt=e;
+  const btn=document.getElementById('installBtn');if(btn)btn.style.display='flex';
 });
 window.addEventListener('appinstalled',()=>{
   deferredPrompt=null;
-  const btn=document.getElementById('installBtn');
-  if(btn) btn.style.display='none';
+  const btn=document.getElementById('installBtn');if(btn)btn.style.display='none';
 });
 window.installApp=async()=>{
-  if(!deferredPrompt) return;
-  deferredPrompt.prompt();
-  await deferredPrompt.userChoice;
+  if(!deferredPrompt)return;
+  deferredPrompt.prompt();await deferredPrompt.userChoice;
   deferredPrompt=null;
-  const btn=document.getElementById('installBtn');
-  if(btn) btn.style.display='none';
+  const btn=document.getElementById('installBtn');if(btn)btn.style.display='none';
 };
 </script>
 </html>
