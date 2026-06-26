@@ -2,7 +2,7 @@ const CACHE = 'lista-v9';
 const ASSETS = [
   '/lista/',
   '/lista/index.html',
-  '/lista/en.html',
+  '/lista/english.html',
   '/lista/manifest.json',
   '/lista/icon-192.png',
   '/lista/icon-512.png'
