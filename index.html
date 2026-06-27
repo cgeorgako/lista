@@ -11,30 +11,30 @@
 body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-height:100vh;color:#1a1a1a}
 .screen{display:none;min-height:100vh;flex-direction:column}
 .screen.active{display:flex}
-#loginScreen{background:linear-gradient(160deg,#1a7f4b 0%,#0d5c35 100%);align-items:center;justify-content:center;padding:2rem}
-.login-box{background:#fff;border-radius:20px;padding:2rem;width:100%;max-width:340px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.15)}
-.app-icon{font-size:48px;margin-bottom:0.5rem}
-.login-box h1{font-size:1.4rem;font-weight:700;color:#1a7f4b;margin-bottom:0.25rem}
-.mode-btn{width:100%;padding:0.85rem;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer;margin-bottom:0.75rem;transition:all 0.15s}
+#loginScreen{background:linear-gradient(160deg,#1a7f4b 0%,#0d5c35 100%);align-items:center;justify-content:center;padding:1.5rem}
+.login-box{background:#fff;border-radius:20px;padding:1.4rem 1.8rem;width:100%;max-width:340px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.15)}
+.app-icon{font-size:40px;margin-bottom:0.3rem}
+.login-box h1{font-size:1.3rem;font-weight:700;color:#1a7f4b;margin-bottom:0.2rem}
+.mode-btn{width:100%;padding:0.65rem;border-radius:12px;font-size:0.9rem;font-weight:700;cursor:pointer;margin-bottom:0.5rem;transition:all 0.15s}
 .mode-btn:active{transform:scale(0.97)}
 .mode-btn.primary{background:#1a7f4b;color:#fff;border:none}
 .mode-btn.secondary{background:#fff;color:#1a7f4b;border:2px solid #1a7f4b}
-.pin-label{font-size:0.8rem;color:#888;margin-bottom:0.5rem;margin-top:0.75rem}
-.pin-dots{display:flex;justify-content:center;gap:10px;margin-bottom:1.2rem}
-.pin-dot{width:16px;height:16px;border-radius:50%;border:2px solid #ccc;background:transparent;transition:all 0.2s}
+.pin-label{font-size:0.78rem;color:#888;margin-bottom:0.4rem;margin-top:0.4rem}
+.pin-dots{display:flex;justify-content:center;gap:10px;margin-bottom:0.8rem}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid #ccc;background:transparent;transition:all 0.2s}
 .pin-dot.filled{background:#1a7f4b;border-color:#1a7f4b}
-.numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.num-btn{padding:1rem;border:none;border-radius:12px;background:#f5f5f5;font-size:1.2rem;font-weight:600;cursor:pointer;transition:all 0.15s;color:#1a1a1a}
+.numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.num-btn{padding:0.75rem;border:none;border-radius:12px;background:#f5f5f5;font-size:1.15rem;font-weight:600;cursor:pointer;transition:all 0.15s;color:#1a1a1a}
 .num-btn:active{background:#e0e0e0;transform:scale(0.95)}
 .num-btn.del{background:#fff3f3;color:#e53935}
-.err-msg{color:#e53935;font-size:0.82rem;margin-top:0.75rem;min-height:1rem}
-.back-btn{background:none;border:none;color:#999;font-size:0.82rem;cursor:pointer;margin-top:0.5rem;padding:0.4rem 0.75rem;border-radius:8px}
-.back-btn:hover{background:#f5f5f5}
+.err-msg{color:#e53935;font-size:0.78rem;margin-top:0.5rem;min-height:1rem}
+.back-btn{background:none;border:none;color:#999;font-size:0.78rem;cursor:pointer;margin-top:0.3rem;padding:0.3rem 0.75rem;border-radius:8px}
 .app-header{background:#1a7f4b;color:#fff;padding:1rem 1.25rem 0.75rem;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
 .app-header h2{font-size:1.1rem;font-weight:700;flex:1}
 .hdr-sub{font-size:0.75rem;opacity:0.8;display:block}
 .hdr-btn{background:rgba(255,255,255,0.2);border:none;color:#fff;border-radius:10px;padding:8px 12px;font-size:0.82rem;cursor:pointer}
-.fab-list{position:fixed;top:72px;right:16px;z-index:200;background:#880e4f;color:#fff;border:none;border-radius:24px;padding:10px 18px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(136,14,79,0.45);display:flex;align-items:center;gap:8px}
+/* FAB κουμπιά — και τα δύο κάτω */
+.fab-list{position:fixed;bottom:24px;left:16px;z-index:200;background:#880e4f;color:#fff;border:none;border-radius:24px;padding:10px 18px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(136,14,79,0.45);display:flex;align-items:center;gap:8px}
 .fab-add{position:fixed;bottom:24px;right:16px;z-index:200;background:#e65100;color:#fff;border:none;border-radius:24px;padding:10px 18px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(230,81,0,0.45);display:flex;align-items:center;gap:8px}
 .fab-badge{background:#fff;color:#1a7f4b;border-radius:50%;width:22px;height:22px;font-size:0.75rem;font-weight:800;display:flex;align-items:center;justify-content:center}
 .content-area{flex:1;overflow-y:auto;padding:0.75rem;padding-bottom:5rem}
@@ -62,6 +62,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
 .item-name{font-size:0.9rem;text-transform:uppercase;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .item-qty-badge{font-size:0.72rem;color:#fff;background:#1a7f4b;border-radius:8px;padding:1px 7px;font-weight:600;white-space:nowrap}
 .item-qty-add{font-size:0.7rem;color:#bbb;border-bottom:1px dashed #ccc}
+.item-price-badge{font-size:0.72rem;color:#fff;background:#e65100;border-radius:8px;padding:1px 7px;font-weight:600;white-space:nowrap}
 .item-brand{font-size:0.72rem;color:#e65100;font-style:italic;display:block;margin-top:2px}
 .item-cat{font-size:0.7rem;color:#999;display:block;margin-top:2px}
 .item-price{background:none;border:none;font-size:1rem;cursor:pointer;padding:3px;flex-shrink:0}
@@ -84,29 +85,23 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="loginScreen" class="screen active">
   <div class="login-box">
     <div class="app-icon">🛒</div>
-    <div style="display:flex;justify-content:center;gap:16px;margin-bottom:0.75rem">
-      <span style="font-size:2rem" title="Ελληνικά">🇬🇷</span>
-      <a href="english.html" style="font-size:2rem;text-decoration:none;opacity:0.5" title="English">🇬🇧</a>
+    <div style="display:flex;justify-content:center;gap:16px;margin-bottom:0.5rem">
+      <span style="font-size:1.8rem" title="Ελληνικά">🇬🇷</span>
+      <a href="english.html" style="font-size:1.8rem;text-decoration:none;opacity:0.5" title="English">🇬🇧</a>
     </div>
     <h1>Λίστα Αγορών</h1>
-    <p style="font-family:'Georgia',serif;font-size:1.05rem;color:#e65100;font-style:italic;margin-bottom:1rem">Μην ξεχάσεις να πάρεις !</p>
+    <p style="font-family:'Georgia',serif;font-size:0.95rem;color:#e65100;font-style:italic;margin-bottom:0.75rem">Μην ξεχάσεις να πάρεις !</p>
 
-    <!-- Επιλογή mode -->
     <div id="modeSelect">
       <button class="mode-btn primary" onclick="selectMode('create')">➕ Δημιουργία νέου λογαριασμού</button>
       <button class="mode-btn secondary" onclick="selectMode('join')">🔑 Σύνδεση με το PIN</button>
     </div>
 
-    <!-- Auto-login loading -->
-    <div id="autoLoginMsg" style="display:none;padding:1.5rem 0;color:#1a7f4b;font-size:0.95rem">
-      ⏳ Σύνδεση...
-    </div>
+    <div id="autoLoginMsg" style="display:none;padding:1rem 0;color:#1a7f4b;font-size:0.9rem">⏳ Σύνδεση...</div>
 
-    <!-- Εισαγωγή PIN -->
     <div id="pinEntry" style="display:none">
       <div class="pin-label" id="modeLabel">Εισάγετε PIN</div>
       <div class="pin-dots">
@@ -129,35 +124,33 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
         <button class="num-btn del" onclick="delDigit()">⌫</button>
       </div>
       <div class="err-msg" id="errMsg"></div>
-      <label style="display:flex;align-items:center;justify-content:center;gap:8px;font-size:0.82rem;color:#888;margin-top:0.5rem;cursor:pointer">
-        <input type="checkbox" id="rememberPin" style="width:16px;height:16px;accent-color:#1a7f4b">
+      <label style="display:flex;align-items:center;justify-content:center;gap:8px;font-size:0.78rem;color:#888;margin-top:0.4rem;cursor:pointer">
+        <input type="checkbox" id="rememberPin" style="width:15px;height:15px;accent-color:#1a7f4b">
         Να θυμάσαι το PIN
       </label>
       <button class="back-btn" onclick="backToMode()">← Πίσω</button>
     </div>
 
-    <p style="font-size:0.72rem;color:#aaa;font-style:italic;margin-top:1.25rem">Σχεδιασμός: Χρήστος Γεωργακόπουλος — 06/2026</p>
-
-    <!-- Android install -->
-    <button id="installBtn" onclick="installApp()" style="display:none;margin-top:1rem;width:100%;padding:0.75rem;background:#1a7f4b;color:#fff;border:none;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer;align-items:center;justify-content:center;gap:8px">
+    <p style="font-size:0.68rem;color:#aaa;font-style:italic;margin-top:0.75rem">Σχεδιασμός: Χρήστος Γεωργακόπουλος — 06/2026</p>
+    <button id="installBtn" onclick="installApp()" style="display:none;margin-top:0.75rem;width:100%;padding:0.65rem;background:#1a7f4b;color:#fff;border:none;border-radius:12px;font-size:0.9rem;font-weight:700;cursor:pointer;align-items:center;justify-content:center;gap:8px">
       📲 Εγκατάσταση εφαρμογής
     </button>
-
-    <!-- iOS install hint -->
-    <div id="iosInstallHint" style="display:none;margin-top:1rem;padding:0.75rem;background:#e8f5ee;border-radius:12px;font-size:0.78rem;color:#1a7f4b;text-align:left;line-height:1.6">
-      📱 <b>Εγκατάσταση στο iPhone:</b><br>
-      Άνοιξε με <b>Safari</b> → Πάτα <b>Κοινοποίηση 📤</b> → <b>«Προσθήκη στην Αρχική Οθόνη»</b>
+    <div id="iosInstallHint" style="display:none;margin-top:0.75rem;padding:0.65rem;background:#e8f5ee;border-radius:12px;font-size:0.75rem;color:#1a7f4b;text-align:left;line-height:1.5">
+      📱 <b>Εγκατάσταση στο iPhone:</b><br>Safari → Κοινοποίηση 📤 → «Προσθήκη στην Αρχική Οθόνη»
     </div>
   </div>
 </div>
 
-<!-- MAIN -->
 <div id="mainScreen" class="screen">
   <div class="app-header">
     <div style="flex:1"><h2>🛒 Λίστα Αγορών</h2><span class="hdr-sub" id="hdrSub"></span></div>
     <button class="hdr-btn" onclick="logout()">Έξοδος</button>
   </div>
   <div id="statusBar" class="status-bar"><div class="dot-pulse"></div><span id="statusTxt">Σύνδεση...</span></div>
+  <!-- Αιωρούμενο σύνολο κόστους -->
+  <div id="totalCostBox" style="display:none;position:fixed;top:72px;right:16px;z-index:150;background:#fff;border:2px solid #e65100;color:#e65100;border-radius:20px;padding:4px 14px;font-size:0.85rem;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,0.12)">
+    💰 €<span id="totalCostVal">0.00</span>
+  </div>
   <div class="content-area" id="contentArea"></div>
   <button class="fab-list" id="fabBtn" onclick="setTab('all')" style="display:none">
     📋 Λίστα <span class="fab-badge" id="fabBadge">0</span>
@@ -194,6 +187,7 @@ const CATEGORIES=[
   {id:'house',  label:'🧹 Είδη Σπιτιού',  items:['Σακούλες σκουπιδιών','Σφουγγαρίστρα','Σκούπα','Χαρτοπετσέτες','Μεμβράνη','Αλουμινόχαρτο']}
 ];
 const ALL_PRODUCTS=[...new Set(CATEGORIES.filter(c=>c.id!=='fav').flatMap(c=>c.items))];
+const SUPERMARKET_ORDER=['fav','veg','fruit','dairy','meat','bakery','pantry','spices','drinks','clean','house'];
 
 let pinBuffer='',activeTab='add',addCategory='dairy',showLastItems=false;
 let sharedList={},favItems=[],modalUnit='τεμ.';
@@ -204,19 +198,13 @@ const MAX_ATTEMPTS=5;
 
 // ── AUTO LOGIN ──
 window.addEventListener('load',()=>{
-  // iOS install hint
   const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
-  const isStandalone=window.navigator.standalone;
-  if(isIOS&&!isStandalone){
-    const hint=document.getElementById('iosInstallHint');
-    if(hint)hint.style.display='block';
+  if(isIOS&&!window.navigator.standalone){
+    const h=document.getElementById('iosInstallHint');if(h)h.style.display='block';
   }
-  // Auto-login αν υπάρχει αποθηκευμένο PIN
   const saved=localStorage.getItem('savedPin');
   if(saved){
-    loginMode='join';
-    pinBuffer=saved;
-    // Κρύψε τα κουμπιά, δείξε μόνο "Σύνδεση..."
+    loginMode='join';pinBuffer=saved;
     document.getElementById('modeSelect').style.display='none';
     document.getElementById('pinEntry').style.display='none';
     document.getElementById('autoLoginMsg').style.display='block';
@@ -225,10 +213,7 @@ window.addEventListener('load',()=>{
 });
 
 // ── MODE SELECTION ──
-window.selectMode=mode=>{
-  loginMode=mode;
-  showPinEntry(mode);
-};
+window.selectMode=mode=>{loginMode=mode;showPinEntry(mode);};
 function showPinEntry(mode){
   document.getElementById('modeSelect').style.display='none';
   document.getElementById('pinEntry').style.display='block';
@@ -242,51 +227,40 @@ window.backToMode=()=>{
   document.getElementById('pinEntry').style.display='none';
 };
 
-// ── PIN INPUT ──
+// ── PIN ──
 window.addDigit=d=>{if(pinBuffer.length<6){pinBuffer+=d;updateDots();if(pinBuffer.length===6)setTimeout(tryLogin,200);}};
 window.delDigit=()=>{pinBuffer=pinBuffer.slice(0,-1);updateDots();};
 window.clearPin=()=>{pinBuffer='';updateDots();document.getElementById('errMsg').textContent='';};
 function updateDots(){for(let i=0;i<6;i++)document.getElementById('d'+i).classList.toggle('filled',i<pinBuffer.length);}
 
 async function tryLogin(){
-  if(failedAttempts>=MAX_ATTEMPTS){
-    document.getElementById('errMsg').textContent='❌ Πολλές αποτυχίες. Ανανεώστε τη σελίδα.';
-    return;
-  }
+  if(failedAttempts>=MAX_ATTEMPTS){document.getElementById('errMsg').textContent='❌ Πολλές αποτυχίες. Ανανεώστε τη σελίδα.';return;}
   const pin=pinBuffer;
   document.getElementById('errMsg').textContent='⏳ Έλεγχος...';
   try{
     const snap=await get(ref(db,'rooms/'+pin));
     if(loginMode==='create'){
       if(snap.exists()){
-        // PIN κατειλημμένο
-        failedAttempts++;
-        const left=MAX_ATTEMPTS-failedAttempts;
-        document.getElementById('errMsg').textContent=
-          left>0?`❌ Κατειλημμένο PIN — δοκιμάστε άλλο (${left} απόπειρες)`:'❌ Κατειλημμένο PIN. Ανανεώστε τη σελίδα.';
+        failedAttempts++;const left=MAX_ATTEMPTS-failedAttempts;
+        document.getElementById('errMsg').textContent=left>0?`❌ Κατειλημμένο PIN — δοκιμάστε άλλο (${left} απόπειρες)`:'❌ Κατειλημμένο PIN. Ανανεώστε τη σελίδα.';
         pinBuffer='';updateDots();
       } else {
-        // Δημιουργία νέου δωματίου
         await set(ref(db,'rooms/'+pin+'/meta'),{created:Date.now()});
-        enterRoom(pin);
-        setStatus('ok','✅ Νέο δωμάτιο δημιουργήθηκε! PIN: '+pin);
+        enterRoom(pin);setStatus('ok','✅ Νέος λογαριασμός δημιουργήθηκε! PIN: '+pin);
       }
     } else {
-      // Σύνδεση
-      if(snap.exists()){
-        enterRoom(pin);
-      } else {
-        failedAttempts++;
-        const left=MAX_ATTEMPTS-failedAttempts;
-        document.getElementById('errMsg').textContent=
-          left>0?`❌ Άγνωστο PIN — δοκιμάστε ξανά (${left} απόπειρες)`:'❌ Πολλές αποτυχίες. Ανανεώστε τη σελίδα.';
+      if(snap.exists()){enterRoom(pin);}
+      else {
+        failedAttempts++;const left=MAX_ATTEMPTS-failedAttempts;
+        document.getElementById('autoLoginMsg').style.display='none';
+        document.getElementById('modeSelect').style.display='block';
+        document.getElementById('errMsg').textContent=left>0?`❌ Άγνωστο PIN — δοκιμάστε ξανά (${left} απόπειρες)`:'❌ Πολλές αποτυχίες. Ανανεώστε τη σελίδα.';
         pinBuffer='';updateDots();
       }
     }
-  } catch(err){
+  }catch(err){
     console.error(err);
     document.getElementById('errMsg').textContent='❌ Σφάλμα σύνδεσης — δοκιμάστε ξανά';
-    // Αν fail στο auto-login, επιστροφή στην επιλογή
     document.getElementById('autoLoginMsg').style.display='none';
     document.getElementById('modeSelect').style.display='block';
     pinBuffer='';updateDots();
@@ -295,8 +269,7 @@ async function tryLogin(){
 
 function enterRoom(pin){
   const chk=document.getElementById('rememberPin');
-  if(chk&&chk.checked)localStorage.setItem('savedPin',pin);
-  else localStorage.removeItem('savedPin');
+  if(chk&&chk.checked)localStorage.setItem('savedPin',pin);else localStorage.removeItem('savedPin');
   roomKey=pin;
   listRef=ref(db,'rooms/'+pin+'/lista');
   favRef=ref(db,'rooms/'+pin+'/favorites');
@@ -314,18 +287,19 @@ window.logout=()=>{
   document.getElementById('loginScreen').classList.add('active');
   document.getElementById('fabBtn').style.display='none';
   document.getElementById('fabAddBtn').style.display='none';
-  // Επιστροφή στο mode select
+  document.getElementById('totalCostBox').style.display='none';
+  document.getElementById('autoLoginMsg').style.display='none';
   document.getElementById('modeSelect').style.display='block';
   document.getElementById('pinEntry').style.display='none';
 };
 
-// ── FIREBASE LISTENERS ──
+// ── FIREBASE ──
 function startListeners(){
   unsubList=onValue(listRef,snap=>{
     sharedList=snap.val()||{};
     if(document.getElementById('mainScreen').classList.contains('active')){
       if(activeTab==='all')renderContent();
-      updateFab();
+      updateFab();updateTotalCost();
     }
     setStatus('ok','🟢 Live σύνδεση ενεργή');
   },err=>{console.error(err);setStatus('err','❌ Σφάλμα σύνδεσης');});
@@ -346,6 +320,16 @@ function updateFab(){
   document.getElementById('fabAddBtn').style.display=onList?'flex':'none';
 }
 
+// ── TOTAL COST ──
+function updateTotalCost(){
+  const box=document.getElementById('totalCostBox');if(!box)return;
+  const items=Object.values(sharedList).filter(i=>!i.done&&i.price>0);
+  if(items.length===0){box.style.display='none';return;}
+  const total=items.reduce((s,i)=>s+(parseFloat(i.price)||0)*(parseFloat(i.qty)||1),0);
+  document.getElementById('totalCostVal').textContent=total.toFixed(2);
+  box.style.display='flex';
+}
+
 // ── LIST ──
 function renderList(ca){
   const items=Object.entries(sharedList).map(([id,v])=>({id,...v}));
@@ -363,18 +347,15 @@ function renderList(ca){
   if(active.length===0){
     html+=`<div style="text-align:center;color:#bbb;padding:1rem;font-size:0.85rem">Όλα αγοράστηκαν! 🎉</div>`;
   } else {
-    // Σειρά τμημάτων supermarket
-    const ORDER=['fav','veg','fruit','dairy','meat','bakery','pantry','spices','drinks','clean','house'];
     const groups={};
     active.forEach(i=>{const c=i.cat||'pantry';if(!groups[c])groups[c]=[];groups[c].push(i);});
-    ORDER.forEach(catId=>{
+    SUPERMARKET_ORDER.forEach(catId=>{
       if(!groups[catId]||groups[catId].length===0)return;
       const cat=CATEGORIES.find(c=>c.id===catId);
-      html+=`<div class="section-lbl" style="margin-top:0.75rem;color:#1a7f4b;font-size:0.8rem">${cat?.label||catId}</div>`;
+      html+=`<div class="section-lbl" style="margin-top:0.75rem;color:#1a7f4b">${cat?.label||catId}</div>`;
       groups[catId].forEach(item=>html+=itemHTML(item));
     });
-    // Fallback για άγνωστες κατηγορίες
-    Object.keys(groups).filter(k=>!ORDER.includes(k)).forEach(catId=>{
+    Object.keys(groups).filter(k=>!SUPERMARKET_ORDER.includes(k)).forEach(catId=>{
       groups[catId].forEach(item=>html+=itemHTML(item));
     });
   }
@@ -392,10 +373,11 @@ function itemHTML(item){
   const isFav=item.cat==='fav';
   const esc=item.name.replace(/'/g,"\\'");
   const qtyBadge=qtyStr?`<span class="item-qty-badge">${qtyStr}</span>`:`<span class="item-qty-add">+ποσ.</span>`;
+  const itemTotal=item.price>0?(parseFloat(item.price)*(parseFloat(item.qty)||1)).toFixed(2):null;
   return `<div class="list-item${item.done?' done':''}${isFav?' is-fav':''}">
     <button class="item-check${item.done?' checked':''}" onclick="toggleItem('${item.id}')">${item.done?'✓':''}</button>
     <div class="item-body" onclick="editQty('${item.id}')">
-      <div class="item-name">${isFav?'❤️ ':''}${item.name} ${qtyBadge}</div>
+      <div class="item-name">${isFav?'❤️ ':''}${item.name} ${qtyBadge}${itemTotal?`<span class="item-price-badge">€${itemTotal}</span>`:''}</div>
       ${item.brand?`<span class="item-brand">🏷️ ${item.brand}</span>`:''}
       <span class="item-cat">${catLabel}</span>
     </div>
@@ -459,7 +441,7 @@ function renderAdd(ca){
 function renderContent(){
   const ca=document.getElementById('contentArea');
   activeTab==='all'?renderList(ca):renderAdd(ca);
-  updateFab();
+  updateFab();updateTotalCost();
 }
 
 // ── AUTOCOMPLETE ──
@@ -511,7 +493,7 @@ window.startVoice=()=>{
   rec.start();
 };
 
-// ── QTY + ΜΑΡΚΑ MODAL ──
+// ── QTY + ΜΑΡΚΑ + ΤΙΜΗ MODAL ──
 window.editQty=id=>{
   const item=sharedList[id];if(!item||item.done)return;
   modalUnit=item.unit||'τεμ.';
@@ -520,19 +502,25 @@ window.editQty=id=>{
   overlay.className='qty-overlay';overlay.id='qtyModal';
   overlay.innerHTML=`
     <div class="qty-sheet">
-      <div style="text-align:center;font-weight:800;font-size:1rem;text-transform:uppercase;color:#1a7f4b;margin-bottom:1.2rem">${item.name}</div>
-      <div style="display:flex;gap:8px;align-items:center;margin-bottom:1rem">
+      <div style="text-align:center;font-weight:800;font-size:1rem;text-transform:uppercase;color:#1a7f4b;margin-bottom:1rem">${item.name}</div>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:0.9rem">
         <input id="qtyVal" type="number" min="0.1" step="0.1" value="${item.qty||1}"
-          style="width:80px;padding:0.6rem;border:1.5px solid #e0e0e0;border-radius:10px;font-size:1.2rem;text-align:center;font-weight:700">
-        <div style="display:flex;gap:6px;flex:1">
+          style="width:75px;padding:0.55rem;border:1.5px solid #e0e0e0;border-radius:10px;font-size:1.1rem;text-align:center;font-weight:700">
+        <div style="display:flex;gap:5px;flex:1">
           ${units.map(u=>`<button onclick="setMU('${u}')" id="mu-${u.replace('.','')}" class="ubu${modalUnit===u?' sel':''}">${u}</button>`).join('')}
         </div>
       </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.9rem">
+        <span style="font-size:1rem;color:#e65100;font-weight:700">€</span>
+        <input id="priceVal" type="number" min="0" step="0.01" placeholder="0.00" value="${item.price||''}"
+          style="flex:1;padding:0.55rem;border:1.5px solid #e0e0e0;border-radius:10px;font-size:1rem;text-align:center">
+        <span style="font-size:0.75rem;color:#aaa">/ μονάδα</span>
+      </div>
       <input id="brandVal" type="text" placeholder="Μάρκα (προαιρετικό)" value="${item.brand||''}"
-        style="width:100%;padding:0.6rem 1rem;border:1.5px solid #e0e0e0;border-radius:10px;font-size:0.9rem;text-transform:uppercase;margin-bottom:1.2rem">
+        style="width:100%;padding:0.55rem 1rem;border:1.5px solid #e0e0e0;border-radius:10px;font-size:0.9rem;text-transform:uppercase;margin-bottom:1rem">
       <div style="display:flex;gap:8px">
-        <button onclick="closeQtyModal()" style="flex:1;padding:0.75rem;border:1.5px solid #ddd;border-radius:12px;background:#fff;color:#555;cursor:pointer;font-size:0.9rem">Ακύρωση</button>
-        <button onclick="saveQty('${id}')" style="flex:1;padding:0.75rem;border:none;border-radius:12px;background:#1a7f4b;color:#fff;font-weight:700;cursor:pointer;font-size:0.9rem">✓ Αποθήκευση</button>
+        <button onclick="closeQtyModal()" style="flex:1;padding:0.7rem;border:1.5px solid #ddd;border-radius:12px;background:#fff;color:#555;cursor:pointer;font-size:0.9rem">Ακύρωση</button>
+        <button onclick="saveQty('${id}')" style="flex:1;padding:0.7rem;border:none;border-radius:12px;background:#1a7f4b;color:#fff;font-weight:700;cursor:pointer;font-size:0.9rem">✓ Αποθήκευση</button>
       </div>
     </div>`;
   overlay.addEventListener('click',e=>{if(e.target===overlay)closeQtyModal();});
@@ -541,8 +529,10 @@ window.editQty=id=>{
 window.setMU=u=>{modalUnit=u;document.querySelectorAll('.ubu').forEach(b=>b.classList.remove('sel'));const el=document.getElementById('mu-'+u.replace('.',''));if(el)el.classList.add('sel');};
 window.saveQty=id=>{
   const qty=parseFloat(document.getElementById('qtyVal')?.value||1);
+  const price=parseFloat(document.getElementById('priceVal')?.value)||null;
   const brand=(document.getElementById('brandVal')?.value||'').trim();
   const upd={qty,unit:modalUnit,ts:Date.now()};
+  if(price)upd.price=price;else upd.price=null;
   if(brand)upd.brand=brand;else upd.brand=null;
   update(ref(db,'rooms/'+roomKey+'/lista/'+id),upd);closeQtyModal();
 };
@@ -577,8 +567,16 @@ function buildShareText(){
   const items=Object.values(sharedList).filter(i=>!i.done);
   if(items.length===0)return 'Η λίστα αγορών είναι άδεια.';
   let txt='🛒 ΛΙΣΤΑ ΑΓΟΡΩΝ\n\n';
-  items.forEach(i=>{const q=i.qty&&i.unit?` (${i.qty} ${i.unit})`:'';const b=i.brand?` [${i.brand}]`:'';txt+=`• ${i.name.toUpperCase()}${q}${b}\n`;});
-  return txt+`\nΣύνολο: ${items.length} προϊόντα`;
+  items.forEach(i=>{
+    const q=i.qty&&i.unit?` (${i.qty} ${i.unit})`:'';
+    const b=i.brand?` [${i.brand}]`:'';
+    const p=i.price>0?` €${(i.price*(i.qty||1)).toFixed(2)}`:'';
+    txt+=`• ${i.name.toUpperCase()}${q}${b}${p}\n`;
+  });
+  const total=items.filter(i=>i.price>0).reduce((s,i)=>s+(i.price||0)*(i.qty||1),0);
+  txt+=`\nΣύνολο: ${items.length} προϊόντα`;
+  if(total>0)txt+=` | €${total.toFixed(2)}`;
+  return txt;
 }
 window.shareViber=()=>window.open('viber://forward?text='+encodeURIComponent(buildShareText()),'_blank');
 window.shareSMS=()=>window.open('sms:?body='+encodeURIComponent(buildShareText()),'_blank');
