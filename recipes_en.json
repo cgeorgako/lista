@@ -50,8 +50,8 @@
                 "name": "Kefalotyri cheese"
             }
         ],
-        "instructions": "Slice and fry the eggplants and potatoes. Prepare the minced meat sauce with onions and tomatoes. Make the b\u00e9chamel sauce. Layer potatoes, eggplants, minced meat, and b\u00e9chamel in a baking pan, and bake at 180\u00b0C until golden brown.",
-        "url": "https://akispetretzikis.com/recipe-search?q=%CE%9C%CE%BF%CF%85%CF%83%CE%B1%CE%BA%CE%AC%CF%82"
+        "instructions": "Slice and fry the eggplants and potatoes. Prepare the minced meat sauce with onions and tomatoes. Make the béchamel sauce. Layer potatoes, eggplants, minced meat, and béchamel in a baking pan, and bake at 180°C until golden brown.",
+        "url": "https://www.allrecipes.com/search?q=Moussaka"
     },
     {
         "id": 2,
@@ -104,8 +104,8 @@
                 "name": "Grated cheese"
             }
         ],
-        "instructions": "Boil the pasta. Cook the minced meat sauce with onion, tomato, and allspice. Prepare the b\u00e9chamel sauce. Layer half the pasta, the minced meat, the remaining pasta, and top with b\u00e9chamel. Bake until golden.",
-        "url": "https://akispetretzikis.com/recipe-search?q=%CE%A0%CE%B1%CF%83%CF%84%CE%AF%CF%84%CF%83%CE%B9%CE%BF"
+        "instructions": "Boil the pasta. Cook the minced meat sauce with onion, tomato, and allspice. Prepare the béchamel sauce. Layer half the pasta, the minced meat, the remaining pasta, and top with béchamel. Bake until golden.",
+        "url": "https://www.allrecipes.com/search?q=Pastitsio"
     },
     {
         "id": 3,
@@ -144,7 +144,7 @@
             }
         ],
         "instructions": "Grate the cucumber and squeeze it tightly to remove all excess moisture. Mix the Greek yogurt with minced garlic, olive oil, vinegar, dill, and the strained cucumber.",
-        "url": "https://akispetretzikis.com/recipe-search?q=%CE%A4%CE%B6%CE%B1%CF%84%CE%B6%CE%AF%CE%BA%CE%B9"
+        "url": "https://www.allrecipes.com/search?q=Tzatziki"
     },
     {
         "id": 4,
@@ -188,7 +188,7 @@
             }
         ],
         "instructions": "Hollow out the tomatoes and bell peppers. Mix the scooped tomato flesh with rice, finely chopped onion, parsley, and olive oil. Stuff the vegetables, place potato wedges in between, and bake.",
-        "url": "https://akispetretzikis.com/recipe-search?q=%CE%93%CE%B5%CE%BC%CE%B9%CF%83%CF%84%CE%AC"
+        "url": "https://www.allrecipes.com/search?q=Gemista%20%28Stuffed%20Vegetables%29"
     },
     {
         "id": 5,
@@ -227,7 +227,7 @@
             }
         ],
         "instructions": "Soak the white beans overnight. Boil them, discard the first water, then boil again with chopped onion, carrots, celery, tomato paste, and olive oil until thick and creamy.",
-        "url": "https://akispetretzikis.com/recipe-search?q=%CE%A6%CE%B1%CF%83%CE%BF%CE%BB%CE%AC%CE%B4%CE%B1"
+        "url": "https://www.allrecipes.com/search?q=Fasolada%20%28Greek%20Bean%20Soup%29"
     },
     {
         "id": 6,
@@ -270,8 +270,8 @@
                 "name": "Olive oil"
             }
         ],
-        "instructions": "Saut\u00e9 the spinach and green onions. Mix with crumbled feta cheese, eggs, and dill. Layer half the phyllo sheets, greasing each one, add the filling, cover with remaining sheets, and bake.",
-        "url": "https://akispetretzikis.com/recipe-search?q=%CE%A3%CF%80%CE%B1%CE%BD%CE%B1%CE%BA%CF%8C%CF%80%CE%B9%CF%84%CE%B1"
+        "instructions": "Sauté the spinach and green onions. Mix with crumbled feta cheese, eggs, and dill. Layer half the phyllo sheets, greasing each one, add the filling, cover with remaining sheets, and bake.",
+        "url": "https://www.allrecipes.com/search?q=Spanakopita%20%28Spinach%20Pie%29"
     },
     {
         "id": 7,
@@ -315,7 +315,7 @@
             }
         ],
         "instructions": "Blanch the cabbage leaves. Mix the minced meat with rice, finely chopped onion, and dill. Roll the mixture into the leaves, place them in a pot, cook, and top with avgolemono (egg-lemon sauce).",
-        "url": "https://akispetretzikis.com/recipe-search?q=%CE%9B%CE%B1%CF%87%CE%B1%CE%BD%CE%BF%CE%BD%CF%84%CE%BF%CE%BB%CE%BC%CE%AC%CE%B4%CE%B5%CF%82"
+        "url": "https://www.allrecipes.com/search?q=Lahanodolmades%20%28Stuffed%20Cabbage%20Rolls%29"
     },
     {
         "id": 8,
@@ -359,7 +359,7 @@
             }
         ],
         "instructions": "Cut lamb and potatoes. Marinate with garlic, lemon juice, and oregano. Wrap them tightly in parchment paper with cubes of kefalotyri cheese and bell peppers, and slow-bake.",
-        "url": "https://akispetretzikis.com/recipe-search?q=%CE%9A%CE%BB%CE%AD%CF%86%CF%84%CE%B9%CE%BA%CE%BF"
+        "url": "https://www.allrecipes.com/search?q=Kleftiko%20%28Parchment-Baked%20Lamb%29"
     },
     {
         "id": 9,
@@ -403,7 +403,7 @@
             }
         ],
         "instructions": "Brown the beef with onion and tomato sauce. Once tender, transfer to a clay pot, add hot water and orzo pasta, and bake in the oven until the pasta cooks.",
-        "url": "https://akispetretzikis.com/recipe-search?q=%CE%93%CE%B9%CE%BF%CF%85%CE%B2%CE%AD%CF%84%CF%83%CE%B9"
+        "url": "https://www.allrecipes.com/search?q=Giouvetsi"
     },
     {
         "id": 10,
@@ -447,7 +447,7 @@
             }
         ],
         "instructions": "Boil lentils for 5 minutes and strain. Bring to a boil again with fresh water, chopped onion, garlic, bay leaves, and tomato paste. Stir in olive oil and vinegar at the end.",
-        "url": "https://akispetretzikis.com/recipe-search?q=%CE%A6%CE%B1%CE%BA%CE%AD%CF%82"
+        "url": "https://www.allrecipes.com/search?q=Fakes%20%28Greek%20Lentil%20Soup%29"
     },
     {
         "id": 11,
@@ -491,7 +491,7 @@
             }
         ],
         "instructions": "De-salt the cod. Make a batter with flour and beer, dip the cod pieces, and deep fry. Make the skordalia by mashing boiled potatoes with garlic, olive oil, and vinegar.",
-        "url": "https://akispetretzikis.com/recipe-search?q=%CE%9C%CF%80%CE%B1%CE%BA%CE%B1%CE%BB%CE%B9%CE%AC%CF%81%CE%BF%CF%82%20%CE%A3%CE%BA%CE%BF%CF%81%CE%B4%CE%B1%CE%BB%CE%B9%CE%AC"
+        "url": "https://www.allrecipes.com/search?q=Bakaliaros%20Skordalia%20%28Cod%20with%20Garlic%20Dip%29"
     },
     {
         "id": 12,
@@ -535,7 +535,7 @@
             }
         ],
         "instructions": "Knead the minced meat with soaked bread, grated onion, fresh mint, and egg. Shape into small balls, roll in flour, and fry in hot oil.",
-        "url": "https://akispetretzikis.com/recipe-search?q=%CE%9A%CE%B5%CF%86%CF%84%CE%B5%CE%B4%CE%AC%CE%BA%CE%B9%CE%B1"
+        "url": "https://www.allrecipes.com/search?q=Keftedakia%20%28Greek%20Meatballs%29"
     },
     {
         "id": 13,
@@ -579,7 +579,7 @@
             }
         ],
         "instructions": "Knead minced beef with garlic, cumin, and bread. Shape into oblong meatballs, lightly fry them, and then simmer in a rich tomato sauce.",
-        "url": "https://akispetretzikis.com/recipe-search?q=%CE%A3%CE%BF%CF%85%CF%84%CE%B6%CE%BF%CF%85%CE%BA%CE%AC%CE%BA%CE%B9%CE%B1%20%CE%A3%CE%BC%CF%85%CF%81%CE%BD%CE%B1%CE%AF%CE%B9%CE%BA%CE%B1"
+        "url": "https://www.allrecipes.com/search?q=Soutzoukakia%20Smyrneika"
     },
     {
         "id": 14,
@@ -622,8 +622,8 @@
                 "name": "Olive oil"
             }
         ],
-        "instructions": "Cut potatoes and chicken. Whisk olive oil, lemon juice, mustard, oregano, and garlic in a bowl. Pour over the chicken and potatoes in a pan and bake at 200\u00b0C.",
-        "url": "https://akispetretzikis.com/recipe-search?q=%CE%9A%CE%BF%CF%84%CF%8C%CF%80%CE%BF%CF%85%CE%BB%CE%BF%20%CE%BC%CE%B5%20%CE%A0%CE%B1%CF%84%CE%AC%CF%84%CE%B5%CF%82%20%CF%83%CF%84%CE%BF%20%CE%A6%CE%BF%CF%8D%CF%81%CE%BD%CE%BF"
+        "instructions": "Cut potatoes and chicken. Whisk olive oil, lemon juice, mustard, oregano, and garlic in a bowl. Pour over the chicken and potatoes in a pan and bake at 200°C.",
+        "url": "https://www.allrecipes.com/search?q=Roasted%20Chicken%20and%20Potatoes"
     },
     {
         "id": 15,
@@ -662,7 +662,7 @@
             }
         ],
         "instructions": "Boil the giant beans until slightly tender. Transfer to a baking pan with a sauce made of tomato, onion, garlic, parsley, and plenty of olive oil, and bake.",
-        "url": "https://akispetretzikis.com/recipe-search?q=%CE%93%CE%AF%CE%B3%CE%B1%CE%BD%CF%84%CE%B5%CF%82%20%CE%A0%CE%BB%CE%B1%CE%BA%CE%AF"
+        "url": "https://www.allrecipes.com/search?q=Gigantes%20Plaki%20%28Baked%20Giant%20Beans%29"
     },
     {
         "id": 16,
@@ -701,7 +701,7 @@
             }
         ],
         "instructions": "Roast whole eggplants until charred. Scoop out the flesh, chop finely, and mix with minced garlic, olive oil, vinegar, and fresh parsley.",
-        "url": "https://akispetretzikis.com/recipe-search?q=%CE%9C%CE%B5%CE%BB%CE%B9%CF%84%CE%B6%CE%B1%CE%BD%CE%BF%CF%83%CE%B1%CE%BB%CE%AC%CF%84%CE%B1"
+        "url": "https://www.allrecipes.com/search?q=Melitzanosalata%20%28Eggplant%20Dip%29"
     },
     {
         "id": 17,
@@ -735,7 +735,7 @@
             }
         ],
         "instructions": "Roll out the dough, spread the tomato sauce, top with fresh mozzarella pieces, and bake at a very high temperature. Garnish with fresh basil leaves.",
-        "url": "https://www.giallozafferano.com/recipes-list/pizza-margherita/"
+        "url": "https://www.giallozafferano.com/search-recipes/Pizza%20Margherita/"
     },
     {
         "id": 18,
@@ -768,8 +768,8 @@
                 "name": "Freshly ground black pepper"
             }
         ],
-        "instructions": "Boil the spaghetti. Saut\u00e9 the guanciale/pancetta until crispy. Whisk egg yolks with Pecorino Romano and black pepper. Toss the hot pasta with meat and egg mixture off the heat.",
-        "url": "https://www.giallozafferano.com/recipes-list/spaghetti-alla-carbonara/"
+        "instructions": "Boil the spaghetti. Sauté the guanciale/pancetta until crispy. Whisk egg yolks with Pecorino Romano and black pepper. Toss the hot pasta with meat and egg mixture off the heat.",
+        "url": "https://www.giallozafferano.com/search-recipes/Spaghetti%20Carbonara/"
     },
     {
         "id": 19,
@@ -794,7 +794,7 @@
             {
                 "qty": "500",
                 "unit": "ml",
-                "name": "B\u00e9chamel sauce"
+                "name": "Béchamel sauce"
             },
             {
                 "qty": "100",
@@ -817,8 +817,8 @@
                 "name": "Celery stalk"
             }
         ],
-        "instructions": "Prepare the meat rag\u00f9 by slow-cooking minced meat with onions, carrots, celery, and tomato sauce. Layer lasagna sheets, rag\u00f9, b\u00e9chamel, and parmesan cheese in a pan. Bake until bubbling.",
-        "url": "https://www.giallozafferano.com/recipes-list/lasagna-alla-bolognese/"
+        "instructions": "Prepare the meat ragù by slow-cooking minced meat with onions, carrots, celery, and tomato sauce. Layer lasagna sheets, ragù, béchamel, and parmesan cheese in a pan. Bake until bubbling.",
+        "url": "https://www.giallozafferano.com/search-recipes/Lasagna%20Bolognese/"
     },
     {
         "id": 20,
@@ -861,8 +861,8 @@
                 "name": "Parmesan cheese"
             }
         ],
-        "instructions": "Saut\u00e9 onion and mushrooms. Add Arborio rice, toast lightly, then deglaze with white wine. Gradually add hot vegetable broth, stirring constantly. Stir in butter and parmesan at the end.",
-        "url": "https://www.giallozafferano.com/recipes-list/risotto-ai-funghi/"
+        "instructions": "Sauté onion and mushrooms. Add Arborio rice, toast lightly, then deglaze with white wine. Gradually add hot vegetable broth, stirring constantly. Stir in butter and parmesan at the end.",
+        "url": "https://www.giallozafferano.com/search-recipes/Mushroom%20Risotto/"
     },
     {
         "id": 21,
@@ -901,7 +901,7 @@
             }
         ],
         "instructions": "Whisk egg yolks with sugar and fold in mascarpone. Dip ladyfingers briefly in espresso and layer them. Spread the cream mixture, repeat layers, and dust with cocoa powder.",
-        "url": "https://www.giallozafferano.com/recipes-list/tiramisu/"
+        "url": "https://www.giallozafferano.com/search-recipes/Tiramisu/"
     },
     {
         "id": 22,
@@ -945,7 +945,7 @@
             }
         ],
         "instructions": "Blend or pound basil leaves, garlic, pine nuts, parmesan, pecorino, and olive oil into a smooth paste. Toss with freshly boiled spaghetti.",
-        "url": "https://www.giallozafferano.com/recipes-list/spaghetti-al-pesto/"
+        "url": "https://www.giallozafferano.com/search-recipes/Spaghetti%20with%20Pesto/"
     },
     {
         "id": 23,
@@ -974,7 +974,7 @@
             }
         ],
         "instructions": "Boil potatoes and mash them. Mix with flour and egg to form a soft dough. Shape into small pieces, mark with a fork, and boil until they float to the surface.",
-        "url": "https://www.giallozafferano.com/recipes-list/gnocchi-di-patate/"
+        "url": "https://www.giallozafferano.com/search-recipes/Potato%20Gnocchi/"
     },
     {
         "id": 24,
@@ -1008,7 +1008,7 @@
             }
         ],
         "instructions": "Toast rustic bread slices and rub them with a garlic clove. Dice tomatoes, toss with basil and olive oil, and spoon over the bread.",
-        "url": "https://www.giallozafferano.com/recipes-list/bruschetta-pomodoro/"
+        "url": "https://www.giallozafferano.com/search-recipes/Tomato%20Bruschetta/"
     },
     {
         "id": 25,
@@ -1046,8 +1046,8 @@
                 "name": "Red wine"
             }
         ],
-        "instructions": "Sear chicken pieces. Saut\u00e9 onion and carrot, deglaze with red wine. Add crushed tomatoes and rosemary, and simmer until the sauce thickens.",
-        "url": "https://www.giallozafferano.com/recipes-list/pollo-alla-cacciatora/"
+        "instructions": "Sear chicken pieces. Sauté onion and carrot, deglaze with red wine. Add crushed tomatoes and rosemary, and simmer until the sauce thickens.",
+        "url": "https://www.giallozafferano.com/search-recipes/Chicken%20Cacciatore/"
     },
     {
         "id": 26,
@@ -1081,7 +1081,7 @@
             }
         ],
         "instructions": "Heat heavy cream with sugar and vanilla. Stir in soaked gelatin sheets until dissolved, pour into molds, and refrigerate until set. Serve with strawberry syrup.",
-        "url": "https://www.giallozafferano.com/recipes-list/panna-cotta/"
+        "url": "https://www.giallozafferano.com/search-recipes/Panna%20Cotta/"
     },
     {
         "id": 27,
@@ -1130,7 +1130,7 @@
             }
         ],
         "instructions": "Slice zucchini, eggplants, and tomatoes into thin rounds. Spread tomato sauce at the bottom of a baking dish, arrange the slices alternately in a circular pattern, drizzle with olive oil and thyme, and bake.",
-        "url": "https://www.cuisineaz.com/recherche?q=Ratatouille"
+        "url": "https://www.bbcgoodfood.com/search?q=Ratatouille"
     },
     {
         "id": 28,
@@ -1168,8 +1168,8 @@
                 "name": "Garlic"
             }
         ],
-        "instructions": "Marinate chicken in red wine. Saut\u00e9 bacon, mushrooms, and shallots. Sear the chicken, pour in the wine marinade, and simmer slowly for 2 hours.",
-        "url": "https://www.cuisineaz.com/recherche?q=Coq%20au%20Vin"
+        "instructions": "Marinate chicken in red wine. Sauté bacon, mushrooms, and shallots. Sear the chicken, pour in the wine marinade, and simmer slowly for 2 hours.",
+        "url": "https://www.bbcgoodfood.com/search?q=Coq%20au%20Vin"
     },
     {
         "id": 29,
@@ -1208,7 +1208,7 @@
             }
         ],
         "instructions": "Slow-cook onions in butter for a long time until perfectly caramelized. Deglaze with white wine, add beef broth, and simmer. Serve topped with a slice of baguette and melted Gruyere cheese.",
-        "url": "https://www.cuisineaz.com/recherche?q=Soupe%20%C3%A0%20l%27Oignon"
+        "url": "https://www.bbcgoodfood.com/search?q=French%20Onion%20Soup"
     },
     {
         "id": 30,
@@ -1247,11 +1247,11 @@
             }
         ],
         "instructions": "Sear beef chunks. Add carrots and onions, pour in red wine and beef broth, toss in a bouquet garni, and simmer on low heat for 3 hours until beef is melt-in-your-mouth tender.",
-        "url": "https://www.cuisineaz.com/recherche?q=Boeuf%20Bourguignon"
+        "url": "https://www.bbcgoodfood.com/search?q=Beef%20Bourguignon"
     },
     {
         "id": 31,
-        "name": "Cr\u00e8me Br\u00fbl\u00e9e",
+        "name": "Crème Brûlée",
         "cuisine": "French",
         "ingredients": [
             {
@@ -1281,7 +1281,7 @@
             }
         ],
         "instructions": "Heat cream with vanilla. Whisk egg yolks with sugar, incorporate the warm cream, and bake in a bain-marie. Chill, sprinkle with brown sugar, and caramelize with a blowtorch.",
-        "url": "https://www.cuisineaz.com/recherche?q=Cr%C3%A8me%20Br%C3%BBl%C3%A9e"
+        "url": "https://www.bbcgoodfood.com/search?q=Cr%C3%A8me%20Br%C3%BBl%C3%A9e"
     },
     {
         "id": 32,
@@ -1291,7 +1291,7 @@
             {
                 "qty": "300",
                 "unit": "g",
-                "name": "Paella rice"
+                "name": "Arborio rice"
             },
             {
                 "qty": "500",
@@ -1299,9 +1299,9 @@
                 "name": "Chicken pieces"
             },
             {
-                "qty": "300",
+                "qty": "200",
                 "unit": "g",
-                "name": "Rabbit pieces"
+                "name": "Rabbit meat"
             },
             {
                 "qty": "200",
@@ -1314,18 +1314,18 @@
                 "name": "Saffron"
             },
             {
-                "qty": "2",
-                "unit": "pcs",
-                "name": "Ripe tomatoes (grated)"
+                "qty": "400",
+                "unit": "g",
+                "name": "Grated tomatoes"
             },
             {
                 "qty": "1",
                 "unit": "liter",
-                "name": "Chicken stock"
+                "name": "Chicken broth"
             }
         ],
-        "instructions": "Brown the chicken and rabbit in the paella pan. Add green beans and grated tomato. Pour in hot stock with saffron dissolved in it, then add the rice. Cook on medium heat without stirring until the liquid is absorbed and a crust (socarrat) forms at the bottom.",
-        "url": "https://www.bonviveur.es/buscar/?q=Paella%20Valenciana"
+        "instructions": "Sauté the chicken and rabbit in a paella pan. Add the green beans and tomatoes. Pour in the broth, saffron, and rice. Let the liquid absorb fully over medium heat without stirring.",
+        "url": "https://www.allrecipes.com/search?q=Paella%20Valenciana"
     },
     {
         "id": 33,
@@ -1333,18 +1333,18 @@
         "cuisine": "Spanish",
         "ingredients": [
             {
-                "qty": "6",
+                "qty": "500",
+                "unit": "g",
+                "name": "Potatoes"
+            },
+            {
+                "qty": "5",
                 "unit": "pcs",
                 "name": "Eggs"
             },
             {
                 "qty": "1",
-                "unit": "kg",
-                "name": "Potatoes"
-            },
-            {
-                "qty": "1",
-                "unit": "large",
+                "unit": "pcs",
                 "name": "Onion"
             },
             {
@@ -1358,8 +1358,8 @@
                 "name": "Salt"
             }
         ],
-        "instructions": "Slice potatoes and onion thinly and cook gently in plenty of olive oil until soft. Drain, mix with beaten eggs, season with salt. Cook the omelette in a lightly oiled pan on both sides, flipping carefully with a plate.",
-        "url": "https://www.bonviveur.es/buscar/?q=Tortilla%20de%20Patatas"
+        "instructions": "Slice potatoes and onion thinly and fry them in olive oil until soft but not browned. Strain them, mix with whisked eggs, and cook the omelette in a pan on both sides.",
+        "url": "https://www.allrecipes.com/search?q=Spanish%20Potato%20Tortilla"
     },
     {
         "id": 34,
@@ -1367,13 +1367,13 @@
         "cuisine": "Spanish",
         "ingredients": [
             {
-                "qty": "800",
+                "qty": "400",
                 "unit": "g",
                 "name": "Ripe tomatoes"
             },
             {
                 "qty": "1",
-                "unit": "medium",
+                "unit": "pcs",
                 "name": "Cucumber"
             },
             {
@@ -1382,14 +1382,14 @@
                 "name": "Green bell pepper"
             },
             {
-                "qty": "1",
-                "unit": "clove",
+                "qty": "2",
+                "unit": "cloves",
                 "name": "Garlic"
             },
             {
-                "qty": "50",
-                "unit": "g",
-                "name": "Stale bread (soaked)"
+                "qty": "1",
+                "unit": "slice",
+                "name": "Stale bread"
             },
             {
                 "qty": "4",
@@ -1402,8 +1402,8 @@
                 "name": "Sherry vinegar"
             }
         ],
-        "instructions": "Soak the bread briefly in water and squeeze dry. Blend all vegetables with the bread, olive oil, and sherry vinegar until completely smooth. Season with salt, chill for at least 2 hours, and serve ice-cold.",
-        "url": "https://www.bonviveur.es/buscar/?q=Gazpacho"
+        "instructions": "Soak the bread in water. Blend all the cleaned vegetables in a blender along with the bread, olive oil, and vinegar until completely smooth. Serve chilled.",
+        "url": "https://www.allrecipes.com/search?q=Gazpacho%20Soup"
     },
     {
         "id": 35,
@@ -1421,9 +1421,9 @@
                 "name": "Butter"
             },
             {
-                "qty": "150",
+                "qty": "200",
                 "unit": "g",
-                "name": "Plain flour"
+                "name": "Flour"
             },
             {
                 "qty": "2",
@@ -1431,7 +1431,7 @@
                 "name": "Eggs"
             },
             {
-                "qty": "3",
+                "qty": "2",
                 "unit": "tbsp",
                 "name": "Sugar"
             },
@@ -1443,11 +1443,11 @@
             {
                 "qty": "150",
                 "unit": "g",
-                "name": "Dark chocolate (for dipping)"
+                "name": "Melted chocolate"
             }
         ],
-        "instructions": "Bring water and butter to a boil, add flour and stir vigorously until a smooth dough forms. Beat in eggs one at a time. Pipe through a star nozzle into hot oil and fry until golden. Roll in sugar and cinnamon and serve with melted dark chocolate.",
-        "url": "https://www.bonviveur.es/buscar/?q=Churros"
+        "instructions": "Boil water with butter, stir in the flour until a dough forms, then mix in the eggs. Pipe dough using a star tip nozzle into hot oil, fry until golden, dust with sugar-cinnamon, and serve with chocolate dip.",
+        "url": "https://www.allrecipes.com/search?q=Churros%20with%20Chocolate"
     },
     {
         "id": 36,
@@ -1455,23 +1455,23 @@
         "cuisine": "Spanish",
         "ingredients": [
             {
-                "qty": "500",
+                "qty": "200",
                 "unit": "g",
                 "name": "Cleaned shrimp"
             },
             {
-                "qty": "6",
+                "qty": "3",
                 "unit": "cloves",
-                "name": "Garlic (sliced)"
+                "name": "Garlic slices"
             },
             {
                 "qty": "1",
                 "unit": "pcs",
-                "name": "Dried chilli pepper"
+                "name": "Chili pepper"
             },
             {
-                "qty": "100",
-                "unit": "ml",
+                "qty": "4",
+                "unit": "tbsp",
                 "name": "Olive oil"
             },
             {
@@ -1482,11 +1482,11 @@
             {
                 "qty": "2",
                 "unit": "tbsp",
-                "name": "Fresh parsley (chopped)"
+                "name": "Fresh parsley"
             }
         ],
-        "instructions": "Heat olive oil and gently saute the garlic and chilli. Add shrimp, cook 2 min, deglaze with white wine, and sprinkle with fresh parsley. Serve immediately, sizzling.",
-        "url": "https://www.bonviveur.es/buscar/?q=Gambas%20al%20Ajillo"
+        "instructions": "Heat olive oil in a pan and sauté the garlic slices and chili. Add the shrimp, cook for 2 minutes, deglaze with white wine, and garnish with fresh parsley.",
+        "url": "https://www.allrecipes.com/search?q=Garlic%20Shrimp%20%28Gambas%20al%20Ajillo%29"
     },
     {
         "id": 37,
@@ -1496,32 +1496,32 @@
             {
                 "qty": "500",
                 "unit": "g",
-                "name": "Chicken breast (diced)"
+                "name": "Chicken"
             },
             {
-                "qty": "80",
+                "qty": "200",
                 "unit": "g",
-                "name": "Roasted peanuts"
+                "name": "Φιστίκια καβουρδισμένα"
             },
             {
-                "qty": "6",
-                "unit": "pcs",
-                "name": "Dried red chilli peppers"
+                "qty": "200",
+                "unit": "g",
+                "name": "Αποξηραμένες πιπεριές τσίλι"
             },
             {
-                "qty": "1",
-                "unit": "pcs",
-                "name": "Green bell pepper (diced)"
+                "qty": "200",
+                "unit": "g",
+                "name": "Πράσινη πιπεριά"
             },
             {
-                "qty": "3",
+                "qty": "4",
                 "unit": "tbsp",
                 "name": "Soy sauce"
             },
             {
                 "qty": "1",
                 "unit": "tsp",
-                "name": "Fresh ginger (grated)"
+                "name": "Ginger"
             },
             {
                 "qty": "2",
@@ -1529,7 +1529,7 @@
                 "name": "Garlic"
             }
         ],
-        "instructions": "Marinate chicken in soy sauce and cornstarch. Stir-fry garlic, ginger, and dried chillies in a very hot wok. Add chicken, diced pepper, and extra soy sauce. Finish with roasted peanuts.",
+        "instructions": "Dice chicken breast into cubes. Sauté garlic, ginger, and dried chilies in a wok. Add the chicken, bell peppers, soy sauce, and fold in roasted peanuts right before serving.",
         "url": "https://www.allrecipes.com/search?q=Kung%20Pao%20Chicken"
     },
     {
@@ -1540,41 +1540,41 @@
             {
                 "qty": "300",
                 "unit": "g",
-                "name": "Cooked rice (cooled)"
+                "name": "Rice"
             },
             {
                 "qty": "2",
                 "unit": "pcs",
-                "name": "Eggs"
+                "name": "Αυγά"
             },
             {
-                "qty": "100",
+                "qty": "200",
                 "unit": "g",
-                "name": "Frozen peas"
+                "name": "Αρακάς"
             },
             {
-                "qty": "1",
-                "unit": "medium",
-                "name": "Carrot (diced)"
+                "qty": "200",
+                "unit": "g",
+                "name": "Καρότο"
             },
             {
-                "qty": "2",
-                "unit": "pcs",
-                "name": "Spring onions (sliced)"
+                "qty": "200",
+                "unit": "g",
+                "name": "Φρέσκο κρεμμυδάκι"
             },
             {
-                "qty": "3",
+                "qty": "4",
                 "unit": "tbsp",
                 "name": "Soy sauce"
             },
             {
-                "qty": "1",
-                "unit": "tbsp",
-                "name": "Sesame oil"
+                "qty": "200",
+                "unit": "g",
+                "name": "Σησαμέλαιο"
             }
         ],
-        "instructions": "Stir-fry carrots and peas in a hot wok. Push to the side and scramble the eggs. Add cold cooked rice, stir in soy sauce, spring onions, and a drizzle of sesame oil over high heat.",
-        "url": "https://www.allrecipes.com/search?q=Fried%20Rice%20%28%CE%A4%CE%B7%CE%B3%CE%B1%CE%BD%CE%B7%CF%84%CF%8C%20%CE%A1%CF%8D%CE%B6%CE%B9%29"
+        "instructions": "Sauté carrots and peas in a wok. Push to the side, pour in whisked eggs and scramble them. Add cold cooked rice, soy sauce, green onions, and sesame oil, and stir-fry on high heat.",
+        "url": "https://www.allrecipes.com/search?q=Chinese%20Fried%20Rice"
     },
     {
         "id": 39,
@@ -1582,48 +1582,48 @@
         "cuisine": "Chinese",
         "ingredients": [
             {
-                "qty": "500",
+                "qty": "200",
                 "unit": "g",
-                "name": "Pork pieces"
+                "name": "Pork"
             },
             {
                 "qty": "200",
                 "unit": "g",
-                "name": "Pineapple chunks"
+                "name": "Ανανάς"
             },
             {
-                "qty": "2",
-                "unit": "pcs",
-                "name": "Bell peppers (diced)"
+                "qty": "200",
+                "unit": "g",
+                "name": "Πιπεριές"
             },
             {
                 "qty": "1",
                 "unit": "pcs",
-                "name": "Onion (diced)"
+                "name": "Onion"
             },
             {
-                "qty": "3",
-                "unit": "tbsp",
-                "name": "Rice vinegar"
+                "qty": "200",
+                "unit": "g",
+                "name": "Ξύδι"
             },
             {
-                "qty": "3",
-                "unit": "tbsp",
-                "name": "Ketchup"
+                "qty": "200",
+                "unit": "g",
+                "name": "Κέτσαπ"
             },
             {
                 "qty": "2",
                 "unit": "tbsp",
-                "name": "Sugar"
+                "name": "Ζάχαρη"
             },
             {
-                "qty": "3",
-                "unit": "tbsp",
-                "name": "Cornstarch"
+                "qty": "200",
+                "unit": "g",
+                "name": "Κορν φλάουρ"
             }
         ],
-        "instructions": "Coat pork in cornstarch and deep-fry until golden. Make the sauce with ketchup, vinegar, sugar, and a splash of water. Add pineapple, peppers, and onion, bring to a simmer, then toss in the fried pork.",
-        "url": "https://www.allrecipes.com/search?q=Sweet%20and%20Sour%20Pork%20%28%CE%93%CE%BB%CF%85%CE%BA%CF%8C%CE%BE%CE%B9%CE%BD%CE%BF%20%CE%A7%CE%BF%CE%B9%CF%81%CE%B9%CE%BD%CF%8C%29"
+        "instructions": "Coat pork chunks in cornstarch and deep fry until crispy. In another pan, toss pineapple chunks, bell peppers, and onion with ketchup, vinegar, and sugar, then coat the pork in the sauce.",
+        "url": "https://www.allrecipes.com/search?q=Sweet%20and%20Sour%20Pork"
     },
     {
         "id": 40,
@@ -1631,38 +1631,38 @@
         "cuisine": "Chinese",
         "ingredients": [
             {
-                "qty": "20",
-                "unit": "pcs",
-                "name": "Dumpling wrappers"
-            },
-            {
-                "qty": "250",
+                "qty": "200",
                 "unit": "g",
-                "name": "Minced pork"
+                "name": "Ζύμη για dumplings"
             },
             {
-                "qty": "150",
+                "qty": "200",
                 "unit": "g",
-                "name": "Chinese cabbage (finely chopped)"
+                "name": "Pork"
             },
             {
-                "qty": "2",
-                "unit": "pcs",
-                "name": "Spring onions (finely chopped)"
+                "qty": "200",
+                "unit": "g",
+                "name": "Λάχανο κινέζικο"
+            },
+            {
+                "qty": "200",
+                "unit": "g",
+                "name": "Φρέσκο κρεμμυδάκι"
             },
             {
                 "qty": "1",
                 "unit": "tsp",
-                "name": "Fresh ginger (grated)"
+                "name": "Ginger"
             },
             {
-                "qty": "2",
+                "qty": "4",
                 "unit": "tbsp",
                 "name": "Soy sauce"
             }
         ],
-        "instructions": "Mix pork with cabbage, spring onions, ginger, and soy sauce. Place filling on each wrapper, fold into a half-moon and crimp edges. Steam for 8 min or pan-fry until the base is golden, then add a splash of water and cover to steam through.",
-        "url": "https://www.allrecipes.com/search?q=Dumplings%20%28Jiaozi%29"
+        "instructions": "Mix minced pork with finely chopped cabbage, green onions, ginger, and soy sauce. Place a spoonful onto each wrapper, fold into half-moons, and steam or pan-fry.",
+        "url": "https://www.allrecipes.com/search?q=Chinese%20Dumplings"
     },
     {
         "id": 41,
@@ -1670,37 +1670,37 @@
         "cuisine": "Chinese",
         "ingredients": [
             {
-                "qty": "10",
-                "unit": "pcs",
-                "name": "Spring roll wrappers"
+                "qty": "200",
+                "unit": "g",
+                "name": "Φύλλα για spring rolls"
             },
             {
                 "qty": "200",
                 "unit": "g",
-                "name": "Cabbage (shredded)"
+                "name": "Λάχανο"
             },
             {
-                "qty": "2",
-                "unit": "medium",
-                "name": "Carrots (julienned)"
-            },
-            {
-                "qty": "100",
+                "qty": "200",
                 "unit": "g",
-                "name": "Mushrooms (sliced)"
+                "name": "Καρότο"
             },
             {
-                "qty": "2",
+                "qty": "200",
+                "unit": "g",
+                "name": "Μανιτάρια"
+            },
+            {
+                "qty": "4",
                 "unit": "tbsp",
                 "name": "Soy sauce"
             },
             {
                 "qty": "1",
                 "unit": "tsp",
-                "name": "Fresh ginger (grated)"
+                "name": "Ginger"
             }
         ],
-        "instructions": "Stir-fry vegetables with ginger and soy sauce until just tender. Allow to cool. Place filling on each wrapper, roll tightly tucking in the sides. Deep-fry in hot oil until crispy and golden.",
+        "instructions": "Shred and sauté cabbage, carrots, and mushrooms with ginger and soy sauce. Let cool, roll tightly inside wrappers, and deep fry in hot oil until completely crispy and golden.",
         "url": "https://www.allrecipes.com/search?q=Spring%20Rolls"
     },
     {
@@ -1711,45 +1711,45 @@
             {
                 "qty": "300",
                 "unit": "g",
-                "name": "Steamed rice"
+                "name": "Rice"
+            },
+            {
+                "qty": "600",
+                "unit": "g",
+                "name": "Μοσχάρι σε φέτες"
             },
             {
                 "qty": "200",
                 "unit": "g",
-                "name": "Beef (thinly sliced)"
+                "name": "Σπανάκι"
             },
             {
-                "qty": "100",
+                "qty": "200",
                 "unit": "g",
-                "name": "Spinach (blanched)"
+                "name": "Βλαστοί φασολιών"
             },
             {
-                "qty": "100",
+                "qty": "200",
                 "unit": "g",
-                "name": "Bean sprouts"
+                "name": "Καρότο"
             },
             {
-                "qty": "1",
-                "unit": "medium",
-                "name": "Carrot (julienned)"
-            },
-            {
-                "qty": "100",
+                "qty": "200",
                 "unit": "g",
-                "name": "Mushrooms (sauteed)"
+                "name": "Μανιτάρια"
             },
             {
                 "qty": "2",
                 "unit": "pcs",
-                "name": "Eggs (fried sunny-side up)"
+                "name": "Αυγό"
             },
             {
-                "qty": "2",
-                "unit": "tbsp",
-                "name": "Gochujang paste"
+                "qty": "200",
+                "unit": "g",
+                "name": "Πάστα Gochujang"
             }
         ],
-        "instructions": "Cook each vegetable separately with sesame oil and soy sauce. Saute the marinated beef. Place rice in a bowl, arrange vegetables and meat in sections, add a fried egg in the centre, and serve with gochujang paste.",
+        "instructions": "Cook each vegetable vegetable separately. Sauté the sliced beef. Assemble by putting warm rice at the base of a bowl, arrange the toppings systematically in a circle, top with a fried egg, and serve with Gochujang paste.",
         "url": "https://www.allrecipes.com/search?q=Bibimbap"
     },
     {
@@ -1758,24 +1758,24 @@
         "cuisine": "Korean",
         "ingredients": [
             {
-                "qty": "300",
+                "qty": "200",
                 "unit": "g",
-                "name": "Kimchi (well fermented)"
+                "name": "Κίμτσι (Kimchi)"
             },
             {
                 "qty": "200",
                 "unit": "g",
-                "name": "Pork belly (sliced)"
+                "name": "Πανσέτα χοιρινή"
             },
             {
                 "qty": "200",
                 "unit": "g",
-                "name": "Firm tofu (cubed)"
+                "name": "Τόφου"
             },
             {
-                "qty": "2",
-                "unit": "pcs",
-                "name": "Spring onions (sliced)"
+                "qty": "200",
+                "unit": "g",
+                "name": "Φρέσκο κρεμμυδάκι"
             },
             {
                 "qty": "2",
@@ -1783,13 +1783,13 @@
                 "name": "Garlic"
             },
             {
-                "qty": "1",
-                "unit": "tbsp",
-                "name": "Gochugaru (Korean chilli flakes)"
+                "qty": "200",
+                "unit": "g",
+                "name": "Νιφάδες Gochugaru"
             }
         ],
-        "instructions": "Saute pork belly and kimchi together in a pot. Add 500ml stock, garlic, and gochugaru, simmer 15 min. Add tofu and spring onions, cook 5 more min. Serve bubbling hot with steamed rice.",
-        "url": "https://www.allrecipes.com/search?q=Kimchi%20Jjigae"
+        "instructions": "Sauté pork belly and kimchi in a pot. Pour in water or broth, add garlic and Gochugaru flakes, and simmer. Finish by adding cubed tofu and fresh green onions.",
+        "url": "https://www.allrecipes.com/search?q=Kimchi%20Stew%20%28Kimchi%20Jjigae%29"
     },
     {
         "id": 44,
@@ -1799,7 +1799,7 @@
             {
                 "qty": "600",
                 "unit": "g",
-                "name": "Beef (very thinly sliced)"
+                "name": "Μοσχάρι σε πολύ λεπτές φέτες"
             },
             {
                 "qty": "4",
@@ -1809,31 +1809,31 @@
             {
                 "qty": "2",
                 "unit": "tbsp",
-                "name": "Sugar"
+                "name": "Ζάχαρη"
             },
             {
-                "qty": "1",
-                "unit": "tbsp",
-                "name": "Sesame oil"
+                "qty": "200",
+                "unit": "g",
+                "name": "Σησαμέλαιο"
             },
             {
                 "qty": "2",
                 "unit": "cloves",
-                "name": "Garlic (minced)"
+                "name": "Garlic"
             },
             {
-                "qty": "1",
-                "unit": "pcs",
-                "name": "Asian pear (grated)"
+                "qty": "200",
+                "unit": "g",
+                "name": "Αχλάδι τριμμένο"
             },
             {
-                "qty": "3",
-                "unit": "pcs",
-                "name": "Spring onions (sliced)"
+                "qty": "200",
+                "unit": "g",
+                "name": "Φρέσκο κρεμμυδάκι"
             }
         ],
-        "instructions": "Marinate beef in soy sauce, sugar, sesame oil, garlic, spring onions, and grated pear for at least 2 hours. Cook in a very hot pan or grill for 1-2 min per side until caramelised.",
-        "url": "https://www.allrecipes.com/search?q=Bulgogi"
+        "instructions": "Marinate thinly sliced beef with soy sauce, sugar, sesame oil, garlic, green onions, and grated pear for at least 2 hours. Grill or stir-fry over very high heat.",
+        "url": "https://www.allrecipes.com/search?q=Beef%20Bulgogi"
     },
     {
         "id": 45,
@@ -1841,38 +1841,38 @@
         "cuisine": "Korean",
         "ingredients": [
             {
-                "qty": "300",
+                "qty": "200",
                 "unit": "g",
-                "name": "Rice cakes (tteok)"
+                "name": "Κέικ ρυζιού (Rice cakes)"
             },
             {
-                "qty": "3",
-                "unit": "tbsp",
-                "name": "Gochujang paste"
-            },
-            {
-                "qty": "1",
-                "unit": "tbsp",
-                "name": "Sugar"
-            },
-            {
-                "qty": "400",
-                "unit": "ml",
-                "name": "Dashi stock"
-            },
-            {
-                "qty": "100",
+                "qty": "200",
                 "unit": "g",
-                "name": "Fish cakes (eomuk, sliced)"
+                "name": "Πάστα Gochujang"
             },
             {
                 "qty": "2",
-                "unit": "pcs",
-                "name": "Spring onions (sliced)"
+                "unit": "tbsp",
+                "name": "Ζάχαρη"
+            },
+            {
+                "qty": "200",
+                "unit": "g",
+                "name": "Ζωμός dashi"
+            },
+            {
+                "qty": "200",
+                "unit": "g",
+                "name": "Κέικ ψαριού (Fish cakes)"
+            },
+            {
+                "qty": "200",
+                "unit": "g",
+                "name": "Φρέσκο κρεμμυδάκι"
             }
         ],
-        "instructions": "Bring dashi stock to a simmer, dissolve gochujang and sugar. Add rice cakes and fish cakes, simmer 10-15 min until sauce thickens and rice cakes are soft and chewy. Garnish with spring onions.",
-        "url": "https://www.allrecipes.com/search?q=Tteokbokki"
+        "instructions": "Bring dashi broth to a boil, dissolve Gochujang paste and sugar. Toss in the rice cakes and fish cakes, and simmer until the sauce turns thick and glaze-like.",
+        "url": "https://www.allrecipes.com/search?q=Tteokbokki%20%28Spicy%20Rice%20Cakes%29"
     },
     {
         "id": 46,
@@ -1882,46 +1882,46 @@
             {
                 "qty": "200",
                 "unit": "g",
-                "name": "Glass noodles (sweet potato starch)"
+                "name": "Γυάλινα μακαρόνια (από άμυλο γλυκοπατάτας)"
+            },
+            {
+                "qty": "600",
+                "unit": "g",
+                "name": "Μοσχάρι"
             },
             {
                 "qty": "200",
                 "unit": "g",
-                "name": "Beef (thinly sliced)"
+                "name": "Σπανάκι"
             },
             {
-                "qty": "100",
+                "qty": "200",
                 "unit": "g",
-                "name": "Spinach (blanched)"
-            },
-            {
-                "qty": "1",
-                "unit": "medium",
-                "name": "Carrot (julienned)"
+                "name": "Καρότο"
             },
             {
                 "qty": "1",
                 "unit": "pcs",
-                "name": "Onion (sliced)"
+                "name": "Onion"
             },
             {
-                "qty": "3",
+                "qty": "4",
                 "unit": "tbsp",
                 "name": "Soy sauce"
             },
             {
-                "qty": "1",
-                "unit": "tbsp",
-                "name": "Sesame oil"
+                "qty": "200",
+                "unit": "g",
+                "name": "Σησαμέλαιο"
             },
             {
                 "qty": "2",
                 "unit": "cloves",
-                "name": "Garlic (minced)"
+                "name": "Garlic"
             }
         ],
-        "instructions": "Soak noodles in hot water 20 min then boil briefly and drain. Saute each vegetable and the beef separately. Combine everything with noodles, soy sauce, sesame oil, and a pinch of sugar. Toss well and serve warm.",
-        "url": "https://www.allrecipes.com/search?q=Japchae"
+        "instructions": "Boil glass noodles. Sauté the vegetables and beef separately. Combine all components together in a large bowl, seasoning with soy sauce, sesame oil, garlic, and sugar.",
+        "url": "https://www.allrecipes.com/search?q=Japchae%20%28Stir-Fried%20Glass%20Noodles%29"
     },
     {
         "id": 47,
@@ -1929,27 +1929,27 @@
         "cuisine": "Indian",
         "ingredients": [
             {
-                "qty": "600",
+                "qty": "500",
                 "unit": "g",
-                "name": "Chicken thighs (boneless)"
+                "name": "Chicken"
             },
             {
-                "qty": "150",
+                "qty": "200",
                 "unit": "g",
-                "name": "Plain yogurt"
+                "name": "Yogurt"
             },
             {
-                "qty": "2",
-                "unit": "tsp",
-                "name": "Garam masala"
+                "qty": "200",
+                "unit": "g",
+                "name": "Γκαράμ μασάλα"
             },
             {
                 "qty": "400",
                 "unit": "g",
-                "name": "Canned crushed tomatoes"
+                "name": "Tomatoes"
             },
             {
-                "qty": "150",
+                "qty": "200",
                 "unit": "ml",
                 "name": "Heavy cream"
             },
@@ -1961,16 +1961,16 @@
             {
                 "qty": "1",
                 "unit": "tsp",
-                "name": "Fresh ginger (grated)"
+                "name": "Ginger"
             },
             {
                 "qty": "2",
                 "unit": "cloves",
-                "name": "Garlic (minced)"
+                "name": "Garlic"
             }
         ],
-        "instructions": "Marinate chicken in yogurt and garam masala for 2 hours, then grill or bake until slightly charred. Saute garlic and ginger in butter, add crushed tomatoes and simmer 15 min. Blend sauce smooth, stir in cream, add chicken and simmer 10 min.",
-        "url": "https://www.allrecipes.com/search?q=Butter%20Chicken%20%28Murgh%20Makhani%29"
+        "instructions": "Follow the detailed recipe link instructions for full cooking guide preparation steps.",
+        "url": "https://www.allrecipes.com/search?q=Butter%20Chicken"
     },
     {
         "id": 48,
@@ -1978,42 +1978,42 @@
         "cuisine": "Indian",
         "ingredients": [
             {
-                "qty": "600",
+                "qty": "500",
                 "unit": "g",
-                "name": "Chicken breast (cubed)"
+                "name": "Chicken"
             },
             {
-                "qty": "150",
+                "qty": "200",
                 "unit": "g",
-                "name": "Plain yogurt"
+                "name": "Yogurt"
             },
             {
-                "qty": "1",
-                "unit": "tsp",
-                "name": "Ground cumin"
-            },
-            {
-                "qty": "1",
-                "unit": "tsp",
-                "name": "Ground coriander"
-            },
-            {
-                "qty": "1",
-                "unit": "tsp",
-                "name": "Turmeric"
-            },
-            {
-                "qty": "400",
+                "qty": "200",
                 "unit": "g",
-                "name": "Tomato sauce"
+                "name": "Κύμινο"
             },
             {
-                "qty": "150",
+                "qty": "200",
+                "unit": "g",
+                "name": "Κορίανδρος"
+            },
+            {
+                "qty": "200",
+                "unit": "g",
+                "name": "Κουρκουμάς"
+            },
+            {
+                "qty": "4",
+                "unit": "tbsp",
+                "name": "Tomatoes"
+            },
+            {
+                "qty": "200",
                 "unit": "ml",
                 "name": "Heavy cream"
             }
         ],
-        "instructions": "Marinate chicken in yogurt with cumin, coriander, and turmeric for 2 hours, then grill until slightly charred. Prepare spiced tomato sauce with onion, ginger, garlic, and cream. Add chicken and simmer 10 min. Serve with basmati rice or naan.",
+        "instructions": "Follow the detailed recipe link instructions for full cooking guide preparation steps.",
         "url": "https://www.allrecipes.com/search?q=Chicken%20Tikka%20Masala"
     },
     {
@@ -2024,36 +2024,36 @@
             {
                 "qty": "300",
                 "unit": "g",
-                "name": "Basmati rice"
+                "name": "Rice"
             },
             {
-                "qty": "600",
+                "qty": "500",
                 "unit": "g",
-                "name": "Chicken pieces"
-            },
-            {
-                "qty": "2",
-                "unit": "large",
-                "name": "Onions (sliced and fried golden)"
-            },
-            {
-                "qty": "150",
-                "unit": "g",
-                "name": "Plain yogurt"
+                "name": "Chicken"
             },
             {
                 "qty": "1",
-                "unit": "pinch",
-                "name": "Saffron (in 2 tbsp warm milk)"
+                "unit": "pcs",
+                "name": "Onion"
+            },
+            {
+                "qty": "200",
+                "unit": "g",
+                "name": "Yogurt"
             },
             {
                 "qty": "1",
-                "unit": "tsp",
-                "name": "Whole spices (cloves, cardamom, cinnamon)"
+                "unit": "κ.α.",
+                "name": "Σαφράν"
+            },
+            {
+                "qty": "1",
+                "unit": "κ.α.",
+                "name": "Μπαχαρικά ολόκληρα (γαρύφαλλο, κάρδαμο)"
             }
         ],
-        "instructions": "Marinate chicken in yogurt and spices. Cook chicken in a heavy pot. Par-boil basmati rice with whole spices until 70% done. Layer rice and chicken alternately, drizzle saffron milk on top, seal lid, and slow-cook on very low heat 30 min (Dum method).",
-        "url": "https://www.allrecipes.com/search?q=Biryani%20%CE%9A%CE%BF%CF%84%CF%8C%CF%80%CE%BF%CF%85%CE%BB%CE%BF"
+        "instructions": "Follow the detailed recipe link instructions for full cooking guide preparation steps.",
+        "url": "https://www.allrecipes.com/search?q=Chicken%20Biryani"
     },
     {
         "id": 50,
@@ -2061,32 +2061,32 @@
         "cuisine": "Indian",
         "ingredients": [
             {
-                "qty": "400",
+                "qty": "200",
                 "unit": "g",
                 "name": "Cooked chickpeas"
             },
             {
                 "qty": "1",
-                "unit": "large",
-                "name": "Onion (finely chopped)"
+                "unit": "pcs",
+                "name": "Onion"
             },
             {
                 "qty": "400",
                 "unit": "g",
-                "name": "Ripe tomatoes (chopped)"
+                "name": "Tomatoes"
             },
             {
                 "qty": "1",
                 "unit": "tsp",
-                "name": "Fresh ginger (grated)"
+                "name": "Ginger"
             },
             {
                 "qty": "2",
                 "unit": "cloves",
-                "name": "Garlic (minced)"
+                "name": "Garlic"
             },
             {
-                "qty": "2",
+                "qty": "1",
                 "unit": "tsp",
                 "name": "Garam masala"
             },
@@ -2101,8 +2101,8 @@
                 "name": "Lemon juice"
             }
         ],
-        "instructions": "Saute onion, ginger, and garlic until golden. Add tomatoes, turmeric, and garam masala, cook until oil separates. Add chickpeas with a splash of water and simmer 15 min until sauce is thick. Finish with lemon juice.",
-        "url": "https://www.allrecipes.com/search?q=Chana%20Masala"
+        "instructions": "Sauté the finely chopped onion, ginger, and garlic in a pan. Add the tomatoes and spices (turmeric, garam masala). Pour in the cooked chickpeas with a little water and simmer on low heat until the sauce thickens nicely.",
+        "url": "https://www.allrecipes.com/search?q=Chana%20Masala%20%28Chickpea%20Curry%29"
     },
     {
         "id": 51,
@@ -2110,37 +2110,37 @@
         "cuisine": "Indian",
         "ingredients": [
             {
-                "qty": "500",
+                "qty": "200",
                 "unit": "g",
                 "name": "Fresh spinach"
             },
             {
-                "qty": "250",
+                "qty": "200",
                 "unit": "g",
                 "name": "Paneer cheese (or halloumi/tofu)"
             },
             {
                 "qty": "1",
                 "unit": "pcs",
-                "name": "Onion (finely chopped)"
+                "name": "Onion"
             },
             {
                 "qty": "1",
                 "unit": "tsp",
-                "name": "Fresh ginger (grated)"
+                "name": "Ginger"
             },
             {
-                "qty": "2",
+                "qty": "1",
                 "unit": "tsp",
                 "name": "Garam masala"
             },
             {
-                "qty": "100",
+                "qty": "200",
                 "unit": "ml",
                 "name": "Heavy cream"
             }
         ],
-        "instructions": "Blanch spinach then blend to a smooth puree. Saute onion, ginger, garlic, and garam masala until fragrant. Add spinach puree and cream, simmer 5 min. Add pan-fried paneer cubes and heat through. Serve with naan or basmati rice.",
+        "instructions": "Blanch and purée the fresh spinach. In a pan, cook the finely chopped onion, ginger, garlic, and spices, then stir in the spinach purée and cream. Finally, add the cubed Paneer cheese and simmer for a couple of minutes.",
         "url": "https://www.allrecipes.com/search?q=Palak%20Paneer"
     },
     {
@@ -2184,8 +2184,8 @@
                 "name": "Mustard"
             }
         ],
-        "instructions": "Cut potatoes and make small incisions in the lamb to insert garlic. Mix olive oil, lemon juice, mustard, and oregano, and pour over everything. Bake covered at 180\u00b0C for 2.5 hours.",
-        "url": "https://akispetretzikis.com/recipe-search?q=%CE%91%CF%81%CE%BD%CE%AF%20%CE%BC%CE%B5%20%CF%80%CE%B1%CF%84%CE%AC%CF%84%CE%B5%CF%82%20%CF%83%CF%84%CE%BF%20%CF%86%CE%BF%CF%8D%CF%81%CE%BD%CE%BF"
+        "instructions": "Cut potatoes and make small incisions in the lamb to insert garlic. Mix olive oil, lemon juice, mustard, and oregano, and pour over everything. Bake covered at 180°C for 2.5 hours.",
+        "url": "https://www.allrecipes.com/search?q=Roasted%20Lamb%20with%20Potatoes"
     },
     {
         "id": 53,
@@ -2233,8 +2233,8 @@
                 "name": "Olive oil"
             }
         ],
-        "instructions": "Saut\u00e9 onion, garlic, and pepper. Add shrimp, flamb\u00e9 with ouzo, and pour in the crushed tomatoes. Simmer for 10 minutes, add crumbled feta cheese, and let it melt.",
-        "url": "https://akispetretzikis.com/recipe-search?q=%CE%93%CE%B1%CF%81%CE%AF%CE%B4%CE%B5%CF%82%20%CE%A3%CE%B1%CE%B3%CE%B1%CE%BD%CE%AC%CE%BA%CE%B9"
+        "instructions": "Sauté onion, garlic, and pepper. Add shrimp, flambé with ouzo, and pour in the crushed tomatoes. Simmer for 10 minutes, add crumbled feta cheese, and let it melt.",
+        "url": "https://www.allrecipes.com/search?q=Shrimp%20Saganaki"
     },
     {
         "id": 54,
@@ -2277,8 +2277,8 @@
                 "name": "Parsley"
             }
         ],
-        "instructions": "Drizzle okra with vinegar and dry them. Saut\u00e9 onion and garlic, add okra, ripe tomatoes, and olive oil, then simmer on low heat without stirring heavily.",
-        "url": "https://akispetretzikis.com/recipe-search?q=%CE%9C%CF%80%CE%AC%CE%BC%CE%B9%CE%B5%CF%82%20%CE%BB%CE%B1%CE%B4%CE%B5%CF%81%CE%AD%CF%82"
+        "instructions": "Drizzle okra with vinegar and dry them. Sauté onion and garlic, add okra, ripe tomatoes, and olive oil, then simmer on low heat without stirring heavily.",
+        "url": "https://www.allrecipes.com/search?q=Okra%20in%20Olive%20Oil"
     },
     {
         "id": 55,
@@ -2317,6 +2317,6 @@
             }
         ],
         "instructions": "Soak chickpeas with baking soda, then rinse thoroughly. Place in a traditional clay pot with lots of chopped onions, olive oil, water, and bay leaves. Seal the lid with dough and slow-bake for 6-8 hours.",
-        "url": "https://akispetretzikis.com/recipe-search?q=%CE%A1%CE%B5%CE%B2%CE%B9%CE%B8%CE%AC%CE%B4%CE%B1%20%CE%A3%CE%AF%CF%86%CE%BD%CE%BF%CF%85"
+        "url": "https://www.allrecipes.com/search?q=Sifnos%20Chickpea%20Stew"
     }
 ]
