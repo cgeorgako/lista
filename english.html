@@ -472,6 +472,9 @@ function renderAdd(ca){
       </div>
       <div id="suggBox" style="display:none;position:absolute;left:0;right:0;background:#fff;border:1.5px solid #1a7f4b;border-top:none;border-radius:0 0 12px 12px;z-index:300;max-height:180px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,0.1)"></div>
     </div>
+    <div style="display:flex;justify-content:center;margin-top:6px;margin-bottom:4px">
+      <button onclick="showRecipeSearch()" style="padding:0.6rem 2rem;background:linear-gradient(135deg,#e65100,#bf360c);color:#fff;border:none;border-radius:14px;font-size:0.88rem;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(230,81,0,0.35)">🍳 AI Recipes</button>
+    </div>
     ${lastSec}
     <div class="section-lbl">Category</div>
     <div class="products-grid">${catBtns}</div>
@@ -666,6 +669,134 @@ function setStatus(type,msg){
   txt.textContent=msg;
   if(type!=='err')setTimeout(()=>{bar.className='status-bar ok';txt.textContent='🟢 Live connection active';},2500);
 }
+
+// ── AI RECIPES (GROQ) ──
+const GROQ_KEY='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';
+const GROQ_URL='https://api.groq.com/openai/v1/chat/completions';
+const RECIPE_PROMPT=`You are an expert chef. For every request give EXACTLY 3 recipes as a JSON array.
+Format: [{"name":"...","description":"...","servings":4,"ingredients":[{"name":"...","qty":1,"unit":"pcs","cat":"pantry"}]}]
+Categories cat: dairy,meat,veg,fruit,pantry,spices,bakery,drinks,house
+Units unit: pcs,kg,g,lt,ml,tbsp,tsp,cup
+Reply ONLY with the JSON array, no markdown, no explanations.`;
+
+window.showRecipeSearch=()=>{
+  if(document.getElementById('recipeModal'))return;
+  const modal=document.createElement('div');
+  modal.id='recipeModal';
+  modal.className='qty-overlay';
+  modal.innerHTML=`
+    <div class="qty-sheet" style="padding:1.25rem;max-height:85vh;display:flex;flex-direction:column">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.9rem;flex-shrink:0">
+        <div>
+          <div style="font-weight:800;font-size:1rem;color:#e65100">🍳 AI Recipes</div>
+          <div style="font-size:0.7rem;color:#aaa">Pick a recipe and add ingredients to your list</div>
+        </div>
+        <button onclick="document.getElementById('recipeModal').remove()" style="background:#f0f0f0;border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:0.9rem">✕</button>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:0.9rem;flex-shrink:0">
+        <input id="recipeQuery" placeholder="e.g. something with chicken, quick dinner..."
+          style="flex:1;padding:0.65rem 1rem;border:1.5px solid #e0e0e0;border-radius:12px;font-size:0.85rem;outline:none"
+          onkeydown="if(event.key==='Enter')searchRecipes()"
+          onfocus="this.style.borderColor='#e65100'" onblur="this.style.borderColor='#e0e0e0'">
+        <button onclick="searchRecipes()" style="padding:0.65rem 1rem;background:#e65100;color:#fff;border:none;border-radius:12px;font-size:1.1rem;cursor:pointer;flex-shrink:0">🔍</button>
+      </div>
+      <div id="recipeResults" style="overflow-y:auto;flex:1">
+        <div style="text-align:center;color:#bbb;padding:2rem;font-size:0.85rem">Type what you'd like to cook 👆</div>
+      </div>
+    </div>`;
+  modal.addEventListener('click',e=>{if(e.target===modal)modal.remove();});
+  document.body.appendChild(modal);
+  setTimeout(()=>document.getElementById('recipeQuery')?.focus(),150);
+};
+
+window.searchRecipes=async()=>{
+  const q=(document.getElementById('recipeQuery')?.value||'').trim();
+  if(!q)return;
+  const res=document.getElementById('recipeResults');
+  res.innerHTML=`<div style="text-align:center;padding:2.5rem;color:#888"><div style="font-size:2.5rem;margin-bottom:0.75rem">⏳</div><div>Searching recipes...</div></div>`;
+  try{
+    const resp=await fetch(GROQ_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
+      body:JSON.stringify({
+        model:'llama3-8b-8192',
+        messages:[{role:'system',content:RECIPE_PROMPT},{role:'user',content:q}],
+        max_tokens:1800,temperature:0.7
+      })
+    });
+    const data=await resp.json();
+    if(data.error){throw new Error(data.error.message);}
+    const text=data.choices?.[0]?.message?.content||'[]';
+    const clean=text.replace(/```json|```/g,'').trim();
+    const recipes=JSON.parse(clean);
+    window._recipes=recipes;
+    renderRecipeCards(recipes);
+  }catch(err){
+    console.error(err);
+    res.innerHTML=`<div style="text-align:center;padding:2rem;color:#e53935">❌ Error — please try again</div>`;
+  }
+};
+
+function renderRecipeCards(recipes){
+  const res=document.getElementById('recipeResults');
+  if(!recipes?.length){res.innerHTML=`<div style="text-align:center;padding:2rem;color:#aaa">No recipes found</div>`;return;}
+  res.innerHTML=recipes.map((r,i)=>`
+    <div style="border:1.5px solid #e8f5ee;border-radius:14px;margin-bottom:0.75rem;overflow:hidden">
+      <div style="padding:0.9rem;cursor:pointer;background:#f8fffe" onclick="toggleRecipe(${i})">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div style="flex:1">
+            <div style="font-weight:700;font-size:0.92rem;margin-bottom:2px">${r.name}</div>
+            <div style="font-size:0.74rem;color:#888">${r.description}</div>
+            <div style="font-size:0.7rem;color:#1a7f4b;margin-top:4px">👥 ${r.servings||4} servings &nbsp;·&nbsp; 🧺 ${r.ingredients?.length||0} ingredients</div>
+          </div>
+          <span id="ra-${i}" style="color:#1a7f4b;font-size:1rem;margin-left:8px;flex-shrink:0">▼</span>
+        </div>
+      </div>
+      <div id="rd-${i}" style="display:none;padding:0.9rem;border-top:1px solid #e8f5ee;background:#fff">
+        <div style="font-size:0.72rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem">Ingredients</div>
+        ${(r.ingredients||[]).map(ing=>`
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.82rem;padding:4px 0;border-bottom:1px solid #f5f5f5">
+            <span>${ing.name}</span>
+            <span style="color:#1a7f4b;font-weight:600;white-space:nowrap;margin-left:8px">${ing.qty||''} ${ing.unit||''}</span>
+          </div>`).join('')}
+        <button onclick="addRecipeIngredients(${i},event)" style="width:100%;margin-top:1rem;padding:0.75rem;background:#1a7f4b;color:#fff;border:none;border-radius:12px;font-weight:700;font-size:0.9rem;cursor:pointer">
+          ➕ Add ingredients to list
+        </button>
+      </div>
+    </div>`).join('');
+}
+
+window.toggleRecipe=i=>{
+  const d=document.getElementById(`rd-${i}`);
+  const a=document.getElementById(`ra-${i}`);
+  const open=d.style.display!=='none';
+  document.querySelectorAll('[id^="rd-"]').forEach(x=>x.style.display='none');
+  document.querySelectorAll('[id^="ra-"]').forEach(x=>x.textContent='▼');
+  if(!open){d.style.display='block';a.textContent='▲';}
+};
+
+window.addRecipeIngredients=(i,evt)=>{
+  evt.stopPropagation();
+  const recipe=window._recipes?.[i];
+  if(!recipe)return;
+  let added=0;
+  (recipe.ingredients||[]).forEach(ing=>{
+    const name=(ing.name||'').trim();
+    if(!name)return;
+    const existing=Object.values(sharedList).find(it=>normStr(it.name)===normStr(name)&&!it.done);
+    if(!existing){
+      const id=Date.now().toString(36)+Math.random().toString(36).slice(2);
+      const item={name,cat:ing.cat||'pantry',done:false,ts:Date.now()};
+      if(ing.qty)item.qty=ing.qty;
+      if(ing.unit)item.unit=ing.unit;
+      set(ref(db,'rooms/'+roomKey+'/lista/'+id),item);
+      added++;
+    }
+  });
+  document.getElementById('recipeModal')?.remove();
+  setStatus('ok',`✅ Added ${added} ingredients from "${recipe.name}"`);
+  setTab('all');
+};
 </script>
 </body>
 <script>
