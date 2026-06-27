@@ -171,12 +171,13 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
   </div>
   <div id="printHeader"></div>
   <div class="content-area" id="contentArea"></div>
-  <button class="fab-list" id="fabBtn" style="display:none">
+  <button class="fab-list" id="fabBtn" onclick="setTab('all')" style="display:none">
     📋 Λίστα <span class="fab-badge" id="fabBadge">0</span>
   </button>
-  <button class="fab-add" id="fabAddBtn" style="display:none">
+  <button class="fab-add" id="fabAddBtn" onclick="setTab('add')" style="display:none">
     ➕ Προσθήκη
   </button>
+  <!-- Κουμπί Συνταγές — εμφανίζεται πάντα στη λίστα -->
   <button id="fabRecipesBtn"
     style="position:fixed;bottom:24px;left:16px;z-index:200;background:#1a7f4b;color:#fff;border:none;border-radius:24px;padding:10px 18px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(26,127,75,0.4);display:none;align-items:center;gap:6px">
     🍽️ Συνταγές
@@ -214,12 +215,6 @@ const ALL_PRODUCTS=[...new Set(CATEGORIES.filter(c=>c.id!=='fav').flatMap(c=>c.i
 const SUPERMARKET_ORDER=['fav','veg','fruit','dairy','meat','bakery','pantry','spices','drinks','clean','house'];
 
 let pinBuffer='',activeTab='add',addCategory='dairy',showLastItems=false;
-
-// ── FAB κουμπιά: addEventListener αντί για onclick attribute ──
-// (τα onclick attributes δεν βλέπουν αξιόπιστα τις module functions)
-document.getElementById('fabBtn')?.addEventListener('click',()=>window.setTab('all'));
-document.getElementById('fabAddBtn')?.addEventListener('click',()=>window.setTab('add'));
-document.getElementById('fabRecipesBtn')?.addEventListener('click',()=>window.setTab('recipes'));
 let sharedList={},favItems=[],modalUnit='τεμ.';
 let roomKey=null,listRef=null,favRef=null;
 let unsubList=null,unsubFav=null,suggIdx=-1;
@@ -303,6 +298,13 @@ function enterRoom(pin){
   document.getElementById('hdrSub').textContent='PIN: '+pin.slice(0,3)+'···';
   startListeners();renderContent();updateFab();
   loadRecipes(); // προφόρτωση
+  // Listener για fabRecipesBtn — προστίθεται εδώ γιατί το element
+  // βρίσκεται εκτός module scope και δεν λαμβάνει inline onclick
+  const recBtn=document.getElementById('fabRecipesBtn');
+  if(recBtn&&!recBtn._listenerAdded){
+    recBtn.addEventListener('click',()=>window.setTab('recipes'));
+    recBtn._listenerAdded=true;
+  }
 }
 
 window.logout=()=>{
