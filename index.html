@@ -337,9 +337,15 @@ function updateFab(){
   const cnt=Object.values(sharedList).filter(i=>!i.done).length;
   document.getElementById('fabBadge').textContent=cnt;
   const onList=activeTab==='all';
+  const onAdd=activeTab==='add';
+  const onRecipes=activeTab==='recipes';
+  // fabBtn (📋 Λίστα): φαίνεται όταν ΔΕΝ είμαστε στη λίστα
   document.getElementById('fabBtn').style.display=onList?'none':'flex';
-  document.getElementById('fabAddBtn').style.display=(activeTab==='add')?'flex':'none';
-  const rBtn=document.getElementById('fabRecipesBtn');if(rBtn)rBtn.style.display=onList||activeTab==='recipes'?'none':'flex';
+  // fabAddBtn (➕ Προσθήκη): φαίνεται όταν ΔΕΝ είμαστε στο add
+  document.getElementById('fabAddBtn').style.display=onAdd?'none':'flex';
+  // fabRecipesBtn (🍽️ Συνταγές): φαίνεται όταν ΔΕΝ είμαστε στο recipes
+  const rBtn=document.getElementById('fabRecipesBtn');
+  if(rBtn)rBtn.style.display=onRecipes?'none':'flex';
 }
 function updateTotalCost(){
   const box=document.getElementById('totalCostBox');if(!box)return;
