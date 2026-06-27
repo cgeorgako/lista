@@ -1,4 +1,4 @@
-const CACHE = 'lista-v10';
+const CACHE = 'lista-v11';
 const ASSETS = [
   '/lista/',
   '/lista/index.html',
