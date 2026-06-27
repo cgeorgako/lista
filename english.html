@@ -371,7 +371,13 @@ function renderList(ca){
   let html=`<div class="share-row" style="display:flex;gap:8px;margin-bottom:0.75rem">
     <button onclick="shareViber()" style="flex:1;padding:0.6rem;background:#7360f2;border:none;border-radius:10px;color:#fff;font-size:0.82rem;font-weight:600;cursor:pointer">📲 Viber</button>
     <button onclick="exportPDF()" style="flex:1;padding:0.6rem;background:#c62828;border:none;border-radius:10px;color:#fff;font-size:0.82rem;font-weight:600;cursor:pointer">📄 PDF</button>
-    <button onclick="shareGeneric()" style="flex:1;padding:0.6rem;background:#555;border:none;border-radius:10px;color:#fff;font-size:0.82rem;font-weight:600;cursor:pointer">🔗 Share</button>
+    <button onclick="shareGeneric()" style="flex:1;padding:0.6rem;background:#555;border:none;border-radius:10px;color:#fff;font-size:0.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px"><svg viewBox="0 0 24 24" width="14" height="14" fill="#fff"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg> Share</button>
+  </div>
+  <div style="display:flex;justify-content:center;margin-bottom:0.75rem">
+    <button onclick="showPKHelp()" style="display:flex;align-items:center;gap:8px;padding:0.45rem 1.4rem;background:#f0f4ff;border:1.5px solid #003476;border-radius:10px;cursor:pointer">
+      <span style="font-size:1.2rem">🇬🇷</span>
+      <span style="text-align:left"><span style="font-size:0.82rem;font-weight:700;color:#003476;display:block">Help</span><span style="font-size:0.62rem;color:#888">Poso_kanei</span></span>
+    </button>
   </div>
   <div class="section-lbl">Pending <span class="badge">${active.length}</span></div>`;
   if(active.length===0){
@@ -621,6 +627,33 @@ window.exportPDF=()=>{
 };
 
 // ── POSOKANEI ──
+window.showPKHelp=()=>{
+  const ov=document.createElement('div');
+  ov.id='pkHelpModal';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:600;display:flex;align-items:center;justify-content:center;padding:1rem';
+  ov.innerHTML=`
+    <div style="background:#fff;border-radius:20px;max-width:340px;width:100%;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.3)">
+      <div style="background:#003476;padding:0.9rem 1.25rem;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="color:#fff;font-weight:700;font-size:0.9rem">User Guide: PosoKanei.gov.gr</div>
+          <div style="color:#adc8ff;font-size:0.72rem">How the 🇬🇷 button works</div>
+        </div>
+        <button onclick="document.getElementById('pkHelpModal').remove()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;border-radius:50%;width:28px;height:28px;font-size:0.9rem;cursor:pointer">✕</button>
+      </div>
+      <div style="max-height:72vh;overflow-y:auto">
+        <img src="help-en.png" style="width:100%;display:block" alt="PosoKanei User Guide"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <div style="display:none;padding:1.25rem;color:#444;font-size:0.85rem;line-height:1.6">
+          <p style="margin-bottom:0.75rem">📋 <b>Step 1:</b> Tap the 🇬🇷 button next to a product in the list.</p>
+          <p style="margin-bottom:0.75rem">📋 <b>Step 2:</b> The product name is automatically copied to the clipboard.</p>
+          <p>📋 <b>Step 3:</b> In PosoKanei (which opens automatically), tap and hold the search field → <b>Paste</b>.</p>
+        </div>
+      </div>
+    </div>`;
+  ov.addEventListener('click',e=>{if(e.target===ov)ov.remove();});
+  document.body.appendChild(ov);
+};
+
 window.checkPrice=name=>{
   const open=()=>window.open('https://posokanei.gov.gr/','_blank');
   if(navigator.clipboard?.writeText){navigator.clipboard.writeText(name).then(()=>{setStatus('ok','📋 Copied: '+name+' — paste into PosoKanei');open();}).catch(()=>{fbCopy(name);open();});}else{fbCopy(name);open();}
