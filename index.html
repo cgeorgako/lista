@@ -171,19 +171,25 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
   </div>
   <div id="printHeader"></div>
   <div class="content-area" id="contentArea"></div>
-  <button class="fab-list" id="fabBtn" onclick="window.setTab('all')" style="display:none">
+  <button class="fab-list" id="fabBtn" onclick="setTab('all')" style="display:none">
     📋 Λίστα <span class="fab-badge" id="fabBadge">0</span>
   </button>
-  <button class="fab-add" id="fabAddBtn" onclick="window.setTab('add')" style="display:none">
+  <button class="fab-add" id="fabAddBtn" onclick="setTab('add')" style="display:none">
     ➕ Προσθήκη
   </button>
   <!-- Κουμπί Συνταγές — εμφανίζεται πάντα στη λίστα -->
-  <button id="fabRecipesBtn" onclick="window.setTab('recipes')"
+  <button id="fabRecipesBtn" onclick="setTab('recipes')"
     style="position:fixed;bottom:24px;left:16px;z-index:200;background:#1a7f4b;color:#fff;border:none;border-radius:24px;padding:10px 18px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(26,127,75,0.4);display:none;align-items:center;gap:6px">
     🍽️ Συνταγές
   </button>
 </div>
 
+<script>
+// Bridge: ορίζεται πριν το module φορτωθεί.
+// Τα inline onclick καλούν αυτό, που με τη σειρά του
+// καλεί την πραγματική window.setTab του module.
+function setTab(id){ if(window._setTab) window._setTab(id); }
+</script>
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getDatabase, ref, onValue, set, remove, update, get } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
@@ -333,6 +339,7 @@ function startListeners(){
 }
 
 window.setTab=id=>{activeTab=id;renderContent();updateFab();};
+window._setTab=window.setTab; // για το bridge script
 function updateFab(){
   const cnt=Object.values(sharedList).filter(i=>!i.done).length;
   document.getElementById('fabBadge').textContent=cnt;
