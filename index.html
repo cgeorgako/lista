@@ -703,24 +703,53 @@ async function callGroq(systemPrompt, userContent, maxTokens=1800){
   return data.choices?.[0]?.message?.content||'';
 }
 
-// ── Εξαγωγή κειμένου από URL μέσω allorigins proxy ──
+// ── Εξαγωγή κειμένου από URL — δοκιμάζει 3 proxies διαδοχικά ──
+// Τα περισσότερα ελληνικά recipe sites (argiro, sintayes κτλ.) έχουν
+// Cloudflare bot protection → επιστρέφουν 403 σε όλα τα automated requests.
+// Αν αποτύχουν όλα, επιστρέφουμε null ώστε το extractFromUrl να εμφανίσει
+// το fallback UI με το textarea επικόλλησης.
 async function fetchPageText(url){
-  // Χρησιμοποιούμε δωρεάν CORS proxy για να διαβάσουμε εξωτερική σελίδα
-  const proxyUrl='https://api.allorigins.win/get?url='+encodeURIComponent(url);
-  const resp=await fetch(proxyUrl);
-  if(!resp.ok) throw new Error('Αδυναμία φόρτωσης σελίδας');
-  const data=await resp.json();
-  const html=data.contents||'';
-  // Αφαιρούμε HTML tags και κρατάμε μόνο κείμενο (max 8000 χαρακτήρες για το AI)
-  const text=html
-    .replace(/<script[\s\S]*?<\/script>/gi,'')
-    .replace(/<style[\s\S]*?<\/style>/gi,'')
-    .replace(/<[^>]+>/g,' ')
-    .replace(/\s+/g,' ')
-    .trim()
-    .slice(0,8000);
-  if(text.length<100) throw new Error('Δεν βρέθηκε κείμενο στη σελίδα');
-  return text;
+  // Βοηθητική: καθαρίζει HTML → plain text
+  function htmlToText(html){
+    return html
+      .replace(/<script[\s\S]*?<\/script>/gi,'')
+      .replace(/<style[\s\S]*?<\/style>/gi,'')
+      .replace(/<[^>]+>/g,' ')
+      .replace(/\s+/g,' ')
+      .trim()
+      .slice(0,8000);
+  }
+  const proxies=[
+    // Proxy 1: allorigins
+    async()=>{
+      const r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent(url),{signal:AbortSignal.timeout(8000)});
+      if(!r.ok) throw new Error('allorigins '+r.status);
+      const d=await r.json();
+      return htmlToText(d.contents||'');
+    },
+    // Proxy 2: corsproxy.io
+    async()=>{
+      const r=await fetch('https://corsproxy.io/?'+encodeURIComponent(url),{signal:AbortSignal.timeout(8000)});
+      if(!r.ok) throw new Error('corsproxy '+r.status);
+      return htmlToText(await r.text());
+    },
+    // Proxy 3: codetabs
+    async()=>{
+      const r=await fetch('https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(url),{signal:AbortSignal.timeout(8000)});
+      if(!r.ok) throw new Error('codetabs '+r.status);
+      return htmlToText(await r.text());
+    },
+  ];
+  for(const proxy of proxies){
+    try{
+      const text=await proxy();
+      if(text.length>=100) return text; // επιτυχία
+    }catch(e){
+      console.warn('Proxy failed:',e.message);
+    }
+  }
+  // Όλοι οι proxies απέτυχαν → επιστρέφουμε null για fallback UI
+  return null;
 }
 
 // ── SHARE TARGET: εκτελείται αυτόματα όταν ο χρήστης κάνει Share από browser ──
@@ -756,7 +785,7 @@ window.showUrlRecipeModal=(url='',title='')=>{
     <div class="qty-sheet" style="padding:1.25rem;max-height:85vh;display:flex;flex-direction:column">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.9rem;flex-shrink:0">
         <div>
-          <div style="font-weight:800;font-size:1rem;color:#e65100">🔗 Εισαγωγή από URL</div>
+          <div style="font-weight:800;font-size:1rem;color:#e65100">🔗 Εισαγωγή από Συνταγή</div>
           <div style="font-size:0.7rem;color:#aaa">Εξαγωγή υλικών από ιστοσελίδα συνταγής</div>
         </div>
         <button onclick="document.getElementById('urlRecipeModal').remove()" style="background:#f0f0f0;border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:0.9rem">✕</button>
@@ -782,33 +811,100 @@ window.showUrlRecipeModal=(url='',title='')=>{
   if(url) setTimeout(extractFromUrl, 400);
 };
 
+// ── Εμφανίζει το fallback UI για επικόλληση κειμένου ──
+// Καλείται όταν όλοι οι proxies αποτύχουν (403 Cloudflare)
+function showPasteFallback(url){
+  const res=document.getElementById('urlRecipeResults');
+  if(!res)return;
+  res.innerHTML=`
+    <div style="background:#fff8e1;border:1.5px solid #ffe082;border-radius:12px;padding:1rem;margin-bottom:0.75rem">
+      <div style="font-weight:700;font-size:0.85rem;color:#e65100;margin-bottom:0.4rem">
+        ⚠️ Η σελίδα δεν επιτρέπει αυτόματη ανάγνωση
+      </div>
+      <div style="font-size:0.78rem;color:#555;line-height:1.5">
+        Αντιγράψτε το κείμενο της συνταγής και επικολλήστε το παρακάτω:
+      </div>
+    </div>
+    <div style="background:#f0f4ff;border:1.5px solid #90caf9;border-radius:12px;padding:0.9rem;margin-bottom:0.75rem;font-size:0.78rem;color:#1565c0;line-height:1.6">
+      <b>Βήματα στον Chrome (κινητό):</b><br>
+      1. Ανοίξτε τη σελίδα συνταγής<br>
+      2. Πατήστε ⋮ → <b>Απλή προβολή</b> (Reader mode)<br>
+      3. Πατήστε παρατεταμένα → <b>Επιλογή όλου</b><br>
+      4. Αντιγράψτε και επικολλήστε εδώ 👇
+    </div>
+    <textarea id="recipePasteText" placeholder="Επικολλήστε εδώ το κείμενο της συνταγής..."
+      style="width:100%;height:120px;padding:0.75rem;border:1.5px solid #e0e0e0;border-radius:12px;font-size:0.82rem;resize:vertical;outline:none;font-family:inherit"
+      onfocus="this.style.borderColor='#e65100'" onblur="this.style.borderColor='#e0e0e0'"></textarea>
+    <button onclick="extractFromPaste()" style="width:100%;margin-top:0.6rem;padding:0.75rem;background:#1a7f4b;color:#fff;border:none;border-radius:12px;font-weight:700;font-size:0.9rem;cursor:pointer">
+      🧠 Ανάλυση κειμένου
+    </button>`;
+  // Focus στο textarea για άμεση επικόλληση
+  setTimeout(()=>document.getElementById('recipePasteText')?.focus(),150);
+}
+
+// ── Εξαγωγή από επικολληθέν κείμενο ──
+window.extractFromPaste=async()=>{
+  const text=(document.getElementById('recipePasteText')?.value||'').trim();
+  if(text.length<50){
+    document.getElementById('recipePasteText').style.borderColor='#e53935';
+    return;
+  }
+  const res=document.getElementById('urlRecipeResults');
+  res.innerHTML=`<div style="text-align:center;padding:1.5rem;color:#888;font-size:0.85rem">⏳ Ανάλυση συνταγής...</div>`;
+  try{
+    const raw=await callGroq(EXTRACT_SYSTEM, text.slice(0,8000), 1200);
+    const clean=raw.replace(/```json|```/g,'').trim();
+    let recipe;
+    try{recipe=JSON.parse(clean);}
+    catch(e){throw new Error('Δεν εντοπίστηκαν υλικά στο κείμενο');}
+    window._urlRecipe=recipe;
+    renderUrlRecipeCard(recipe);
+  }catch(err){
+    console.error('Paste extract error:',err);
+    res.innerHTML=`<div style="text-align:center;padding:2rem;color:#e53935;font-size:0.85rem">
+      ❌ <b>${err.message}</b><br>
+      <span style="color:#aaa;font-size:0.75rem;display:block;margin-top:0.5rem">Βεβαιωθείτε ότι επικολλήσατε το πλήρες κείμενο της συνταγής</span>
+    </div>`;
+  }
+};
+
 window.extractFromUrl=async()=>{
   const url=(document.getElementById('recipeUrl')?.value||'').trim();
-  if(!url){return;}
+  if(!url) return;
   const res=document.getElementById('urlRecipeResults');
+  // Βήμα 1: Προσπαθούμε να κατεβάσουμε τη σελίδα μέσω proxy
   res.innerHTML=`<div style="text-align:center;padding:2rem;color:#888">
     <div style="font-size:2rem;margin-bottom:0.5rem">⏳</div>
-    <div style="font-size:0.85rem">Φόρτωση σελίδας...</div>
+    <div style="font-size:0.85rem">Φόρτωση σελίδας<span id="proxyDots">...</span></div>
   </div>`;
+  // Animation στα dots για να φαίνεται η προσπάθεια
+  let dotCount=0;
+  const dotTimer=setInterval(()=>{
+    const el=document.getElementById('proxyDots');
+    if(el) el.textContent=[' (δοκιμή 1/3)','  (δοκιμή 2/3)','   (δοκιμή 3/3)'][dotCount++%3];
+  },2500);
   try{
-    // Βήμα 1: Κατεβάζουμε το κείμενο της σελίδας μέσω proxy
     const pageText=await fetchPageText(url);
+    clearInterval(dotTimer);
+    if(!pageText){
+      // Όλοι οι proxies απέτυχαν → fallback στο paste UI
+      showPasteFallback(url);
+      return;
+    }
+    // Βήμα 2: Επιτυχία proxy → στέλνουμε στο Groq
     res.innerHTML=`<div style="text-align:center;padding:1rem;color:#888;font-size:0.85rem">⏳ Ανάλυση συνταγής...</div>`;
-    // Βήμα 2: Στέλνουμε το κείμενο στο Groq για εξαγωγή υλικών
     const raw=await callGroq(EXTRACT_SYSTEM, pageText, 1200);
     const clean=raw.replace(/```json|```/g,'').trim();
     let recipe;
     try{recipe=JSON.parse(clean);}
     catch(e){throw new Error('Δεν εντοπίστηκαν υλικά στη σελίδα');}
-    // Βήμα 3: Εμφανίζουμε αποτέλεσμα (μία συνταγή, όχι array)
     window._urlRecipe=recipe;
     renderUrlRecipeCard(recipe);
   }catch(err){
+    clearInterval(dotTimer);
     console.error('URL recipe error:',err);
-    res.innerHTML=`<div style="text-align:center;padding:2rem;color:#e53935;font-size:0.85rem">
-      ❌ <b>${err.message}</b><br>
-      <span style="color:#aaa;font-size:0.75rem;display:block;margin-top:0.5rem">Δοκιμάστε άλλη σελίδα ή αντιγράψτε χειροκίνητα τα υλικά</span>
-    </div>`;
+    // Αν το σφάλμα είναι network/parse → fallback στο paste
+    showPasteFallback(url);
   }
 };
 
