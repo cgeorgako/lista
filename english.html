@@ -64,16 +64,6 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
 .item-qty-badge{font-size:0.72rem;color:#fff;background:#1a7f4b;border-radius:8px;padding:1px 7px;font-weight:600;white-space:nowrap}
 .item-qty-add{font-size:0.7rem;color:#bbb;border-bottom:1px dashed #ccc}
 .item-posokanei{background:none;border:none;cursor:pointer;padding:2px;flex-shrink:0;text-align:center;font-size:0.88rem;line-height:1.1}
-
-/* ── RECIPES ── */
-.recipe-filter-btn{padding:0.4rem 0.9rem;border:1.5px solid #e0e0e0;border-radius:20px;background:#fff;font-size:0.78rem;cursor:pointer;transition:all 0.15s;white-space:nowrap}
-.recipe-filter-btn.active{border-color:#1a7f4b;background:#f0faf5;color:#1a7f4b;font-weight:700}
-.recipe-card{border:1.5px solid #e8f5ee;border-radius:14px;margin-bottom:0.75rem;overflow:hidden;background:#fff}
-.recipe-card-header{padding:0.85rem 1rem;cursor:pointer;background:#f8fffe;display:flex;justify-content:space-between;align-items:flex-start}
-.recipe-card-body{display:none;padding:0.9rem;border-top:1px solid #e8f5ee;background:#fff}
-.recipe-ing-row{display:flex;justify-content:space-between;align-items:center;font-size:0.82rem;padding:4px 0;border-bottom:1px solid #f5f5f5}
-.recipe-ing-row:last-child{border-bottom:none}
-
 #printHeader{display:none}
 @media print{
   #loginScreen,.app-header,.status-bar,#fabBtn,#fabAddBtn,
@@ -103,6 +93,14 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
 .qty-sheet{background:#fff;border-radius:20px 20px 0 0;padding:1.5rem;width:100%;max-width:420px}
 .ubu{flex:1;padding:0.5rem;border-radius:10px;border:1.5px solid #e0e0e0;background:#fff;color:#555;font-size:0.82rem;cursor:pointer;transition:all 0.15s}
 .ubu.sel{border-color:#1a7f4b;background:#f0faf5;color:#1a7f4b;font-weight:600}
+
+.recipe-filter-btn{padding:0.4rem 0.9rem;border:1.5px solid #e0e0e0;border-radius:20px;background:#fff;font-size:0.78rem;cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.recipe-filter-btn.active{border-color:#1a7f4b;background:#f0faf5;color:#1a7f4b;font-weight:700}
+.recipe-card{border:1.5px solid #e8f5ee;border-radius:14px;margin-bottom:0.75rem;overflow:hidden;background:#fff}
+.recipe-card-header{padding:0.85rem 1rem;cursor:pointer;background:#f8fffe;display:flex;justify-content:space-between;align-items:flex-start}
+.recipe-card-body{display:none;padding:0.9rem;border-top:1px solid #e8f5ee;background:#fff}
+.recipe-ing-row{display:flex;justify-content:space-between;align-items:center;font-size:0.82rem;padding:4px 0;border-bottom:1px solid #f5f5f5}
+.recipe-ing-row:last-child{border-bottom:none}
 </style>
 </head>
 <body>
@@ -185,15 +183,11 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
   </div>
   <div id="printHeader"></div>
   <div class="content-area" id="contentArea"></div>
-  <button class="fab-list" id="fabBtn" style="display:none">
+  <button class="fab-list" id="fabBtn" onclick="setTab('all')" style="display:none">
     📋 List <span class="fab-badge" id="fabBadge">0</span>
   </button>
-  <button class="fab-add" id="fabAddBtn" style="display:none">
+  <button class="fab-add" id="fabAddBtn" onclick="setTab('add')" style="display:none">
     ➕ Add Item
-  </button>
-  <button id="fabRecipesBtn"
-    style="position:fixed;bottom:24px;left:16px;z-index:200;background:#1a7f4b;color:#fff;border:none;border-radius:24px;padding:10px 18px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(26,127,75,0.4);display:none;align-items:center;gap:6px">
-    🍽️ Recipes
   </button>
 </div>
 
@@ -228,11 +222,6 @@ const ALL_PRODUCTS=[...new Set(CATEGORIES.filter(c=>c.id!=='fav').flatMap(c=>c.i
 const SUPERMARKET_ORDER=['fav','veg','fruit','dairy','meat','bakery','pantry','spices','drinks','clean','house'];
 
 let pinBuffer='',activeTab='add',addCategory='dairy',showLastItems=false;
-
-// ── FAB buttons: addEventListener instead of onclick attribute ──
-document.getElementById('fabBtn')?.addEventListener('click',()=>window.setTab('all'));
-document.getElementById('fabAddBtn')?.addEventListener('click',()=>window.setTab('add'));
-document.getElementById('fabRecipesBtn')?.addEventListener('click',()=>window.setTab('recipes'));
 let sharedList={},favItems=[],modalUnit='pcs';
 let roomKey=null,listRef=null,favRef=null;
 let unsubList=null,unsubFav=null,suggIdx=-1;
@@ -338,6 +327,11 @@ function enterRoom(pin){
   document.getElementById('hdrSub').textContent='PIN: '+pin.slice(0,3)+'···';
   startListeners();renderContent();updateFab();
   loadRecipes();
+  const recBtn=document.getElementById('fabRecipesBtn');
+  if(recBtn&&!recBtn._listenerAdded){
+    recBtn.addEventListener('click',()=>window.setTab('recipes'));
+    recBtn._listenerAdded=true;
+  }
 }
 
 window.logout=()=>{
@@ -348,7 +342,6 @@ window.logout=()=>{
   document.getElementById('loginScreen').classList.add('active');
   document.getElementById('fabBtn').style.display='none';
   document.getElementById('fabAddBtn').style.display='none';
-  const rb=document.getElementById('fabRecipesBtn');if(rb)rb.style.display='none';
   document.getElementById('autoLoginMsg').style.display='none';
   document.getElementById('modeSelect').style.display='block';
   document.getElementById('pinEntry').style.display='none';
@@ -497,7 +490,9 @@ function renderAdd(ca){
       </div>
       <div id="suggBox" style="display:none;position:absolute;left:0;right:0;background:#fff;border:1.5px solid #1a7f4b;border-top:none;border-radius:0 0 12px 12px;z-index:300;max-height:180px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,0.1)"></div>
     </div>
-
+    <div style="display:flex;justify-content:center;margin-top:6px;margin-bottom:4px">
+      <button onclick="showRecipeSearch()" style="padding:0.6rem 2rem;background:linear-gradient(135deg,#e65100,#bf360c);color:#fff;border:none;border-radius:14px;font-size:0.88rem;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(230,81,0,0.35)">🍳 AI Recipes</button>
+    </div>
     ${lastSec}
     <div class="section-lbl">Category</div>
     <div class="products-grid">${catBtns}</div>
