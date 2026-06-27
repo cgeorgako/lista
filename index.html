@@ -700,15 +700,22 @@ window.searchRecipes=async()=>{
       })
     });
     const data=await resp.json();
-    if(data.error){throw new Error(data.error.message);}
+    if(!resp.ok||data.error){
+      throw new Error(`[${resp.status}] ${data.error?.message||'Άγνωστο σφάλμα'}`);
+    }
     const text=data.choices?.[0]?.message?.content||'[]';
     const clean=text.replace(/```json|```/g,'').trim();
-    const recipes=JSON.parse(clean);
+    let recipes;
+    try{recipes=JSON.parse(clean);}
+    catch(e){throw new Error('Μη έγκυρη απάντηση AI');}
     window._recipes=recipes;
     renderRecipeCards(recipes);
   }catch(err){
-    console.error(err);
-    res.innerHTML=`<div style="text-align:center;padding:2rem;color:#e53935">❌ Σφάλμα — δοκιμάστε ξανά</div>`;
+    console.error('Groq error:',err);
+    res.innerHTML=`<div style="text-align:center;padding:2rem;color:#e53935;font-size:0.85rem">
+      ❌ <b>${err.message}</b><br>
+      <span style="color:#aaa;font-size:0.75rem;display:block;margin-top:0.5rem">Ελέγξτε το API key στον κώδικα</span>
+    </div>`;
   }
 };
 
