@@ -33,7 +33,6 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
 .app-header h2{font-size:1.1rem;font-weight:700;flex:1}
 .hdr-sub{font-size:0.75rem;opacity:0.8;display:block}
 .hdr-btn{background:rgba(255,255,255,0.2);border:none;color:#fff;border-radius:10px;padding:8px 12px;font-size:0.82rem;cursor:pointer}
-/* FAB κουμπιά — και τα δύο κάτω */
 .fab-list{position:fixed;bottom:24px;left:16px;z-index:200;background:#880e4f;color:#fff;border:none;border-radius:24px;padding:10px 18px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(136,14,79,0.45);display:flex;align-items:center;gap:8px}
 .fab-add{position:fixed;bottom:24px;right:16px;z-index:200;background:#e65100;color:#fff;border:none;border-radius:24px;padding:10px 18px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(230,81,0,0.45);display:flex;align-items:center;gap:8px}
 .fab-badge{background:#fff;color:#1a7f4b;border-radius:50%;width:22px;height:22px;font-size:0.75rem;font-weight:800;display:flex;align-items:center;justify-content:center}
@@ -65,7 +64,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
 .item-price-badge{font-size:0.72rem;color:#fff;background:#e65100;border-radius:8px;padding:1px 7px;font-weight:600;white-space:nowrap}
 .item-brand{font-size:0.72rem;color:#e65100;font-style:italic;display:block;margin-top:2px}
 .item-cat{font-size:0.7rem;color:#999;display:block;margin-top:2px}
-.item-price{background:none;border:none;font-size:1rem;cursor:pointer;padding:3px;flex-shrink:0}
+.item-posokanei{background:none;border:none;cursor:pointer;padding:2px;flex-shrink:0;text-align:center;font-size:0.88rem;line-height:1.1}
 .item-del{background:none;border:none;color:#ddd;font-size:1.1rem;cursor:pointer;padding:3px;flex-shrink:0}
 .empty-state{text-align:center;padding:3rem 1rem;color:#aaa}
 .empty-state .es-icon{font-size:3rem;margin-bottom:0.5rem}
@@ -81,6 +80,20 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
 .qty-sheet{background:#fff;border-radius:20px 20px 0 0;padding:1.5rem;width:100%;max-width:420px}
 .ubu{flex:1;padding:0.5rem;border-radius:10px;border:1.5px solid #e0e0e0;background:#fff;color:#555;font-size:0.82rem;cursor:pointer;transition:all 0.15s}
 .ubu.sel{border-color:#1a7f4b;background:#f0faf5;color:#1a7f4b;font-weight:600}
+/* ── PRINT / PDF ── */
+#printHeader{display:none}
+@media print{
+  #loginScreen,.app-header,.status-bar,#fabBtn,#fabAddBtn,
+  #totalCostBox,.item-check,.item-del,.item-posokanei,.share-row{display:none!important}
+  .content-area{overflow:visible!important;padding:0!important}
+  body{background:#fff!important}
+  .list-item{box-shadow:none!important;border:none!important;border-bottom:1px solid #eee!important;
+    border-radius:0!important;animation:none!important;margin:0!important;padding:0.4rem 0!important}
+  .list-item.done{display:none!important}
+  .section-lbl{color:#1a7f4b!important;margin-top:0.75rem!important}
+  #printHeader{display:block!important;padding:0.5rem 0 0.75rem}
+  .item-price-badge{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
 </style>
 </head>
 <body>
@@ -89,19 +102,16 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
   <div class="login-box">
     <div class="app-icon">🛒</div>
     <div style="display:flex;justify-content:center;gap:16px;margin-bottom:0.5rem">
-      <span style="font-size:1.8rem" title="Ελληνικά">🇬🇷</span>
-      <a href="english.html" style="font-size:1.8rem;text-decoration:none;opacity:0.5" title="English">🇬🇧</a>
+      <span style="font-size:1.8rem">🇬🇷</span>
+      <a href="english.html" style="font-size:1.8rem;text-decoration:none;opacity:0.5">🇬🇧</a>
     </div>
     <h1>Λίστα Αγορών</h1>
     <p style="font-family:'Georgia',serif;font-size:0.95rem;color:#e65100;font-style:italic;margin-bottom:0.75rem">Μην ξεχάσεις να πάρεις !</p>
-
     <div id="modeSelect">
       <button class="mode-btn primary" onclick="selectMode('create')">➕ Δημιουργία νέου λογαριασμού</button>
       <button class="mode-btn secondary" onclick="selectMode('join')">🔑 Σύνδεση με το PIN</button>
     </div>
-
     <div id="autoLoginMsg" style="display:none;padding:1rem 0;color:#1a7f4b;font-size:0.9rem">⏳ Σύνδεση...</div>
-
     <div id="pinEntry" style="display:none">
       <div class="pin-label" id="modeLabel">Εισάγετε PIN</div>
       <div class="pin-dots">
@@ -130,7 +140,6 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
       </label>
       <button class="back-btn" onclick="backToMode()">← Πίσω</button>
     </div>
-
     <p style="font-size:0.68rem;color:#aaa;font-style:italic;margin-top:0.75rem">Σχεδιασμός: Χρήστος Γεωργακόπουλος — 06/2026</p>
     <button id="installBtn" onclick="installApp()" style="display:none;margin-top:0.75rem;width:100%;padding:0.65rem;background:#1a7f4b;color:#fff;border:none;border-radius:12px;font-size:0.9rem;font-weight:700;cursor:pointer;align-items:center;justify-content:center;gap:8px">
       📲 Εγκατάσταση εφαρμογής
@@ -147,10 +156,10 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
     <button class="hdr-btn" onclick="logout()">Έξοδος</button>
   </div>
   <div id="statusBar" class="status-bar"><div class="dot-pulse"></div><span id="statusTxt">Σύνδεση...</span></div>
-  <!-- Αιωρούμενο σύνολο κόστους -->
   <div id="totalCostBox" style="display:none;position:fixed;top:72px;right:16px;z-index:150;background:#fff;border:2px solid #e65100;color:#e65100;border-radius:20px;padding:4px 14px;font-size:0.85rem;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,0.12)">
     💰 €<span id="totalCostVal">0.00</span>
   </div>
+  <div id="printHeader"></div>
   <div class="content-area" id="contentArea"></div>
   <button class="fab-list" id="fabBtn" onclick="setTab('all')" style="display:none">
     📋 Λίστα <span class="fab-badge" id="fabBadge">0</span>
@@ -196,12 +205,9 @@ let unsubList=null,unsubFav=null,suggIdx=-1;
 let loginMode=null,failedAttempts=0;
 const MAX_ATTEMPTS=5;
 
-// ── AUTO LOGIN ──
 window.addEventListener('load',()=>{
   const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
-  if(isIOS&&!window.navigator.standalone){
-    const h=document.getElementById('iosInstallHint');if(h)h.style.display='block';
-  }
+  if(isIOS&&!window.navigator.standalone){const h=document.getElementById('iosInstallHint');if(h)h.style.display='block';}
   const saved=localStorage.getItem('savedPin');
   if(saved){
     loginMode='join';pinBuffer=saved;
@@ -212,7 +218,6 @@ window.addEventListener('load',()=>{
   }
 });
 
-// ── MODE SELECTION ──
 window.selectMode=mode=>{loginMode=mode;showPinEntry(mode);};
 function showPinEntry(mode){
   document.getElementById('modeSelect').style.display='none';
@@ -226,8 +231,6 @@ window.backToMode=()=>{
   document.getElementById('modeSelect').style.display='block';
   document.getElementById('pinEntry').style.display='none';
 };
-
-// ── PIN ──
 window.addDigit=d=>{if(pinBuffer.length<6){pinBuffer+=d;updateDots();if(pinBuffer.length===6)setTimeout(tryLogin,200);}};
 window.delDigit=()=>{pinBuffer=pinBuffer.slice(0,-1);updateDots();};
 window.clearPin=()=>{pinBuffer='';updateDots();document.getElementById('errMsg').textContent='';};
@@ -250,17 +253,17 @@ async function tryLogin(){
       }
     } else {
       if(snap.exists()){enterRoom(pin);}
-      else {
+      else{
         failedAttempts++;const left=MAX_ATTEMPTS-failedAttempts;
         document.getElementById('autoLoginMsg').style.display='none';
         document.getElementById('modeSelect').style.display='block';
-        document.getElementById('errMsg').textContent=left>0?`❌ Άγνωστο PIN — δοκιμάστε ξανά (${left} απόπειρες)`:'❌ Πολλές αποτυχίες. Ανανεώστε τη σελίδα.';
+        document.getElementById('errMsg').textContent=left>0?`❌ Άγνωστο PIN (${left} απόπειρες)`:'❌ Πολλές αποτυχίες. Ανανεώστε τη σελίδα.';
         pinBuffer='';updateDots();
       }
     }
   }catch(err){
     console.error(err);
-    document.getElementById('errMsg').textContent='❌ Σφάλμα σύνδεσης — δοκιμάστε ξανά';
+    document.getElementById('errMsg').textContent='❌ Σφάλμα σύνδεσης';
     document.getElementById('autoLoginMsg').style.display='none';
     document.getElementById('modeSelect').style.display='block';
     pinBuffer='';updateDots();
@@ -293,7 +296,6 @@ window.logout=()=>{
   document.getElementById('pinEntry').style.display='none';
 };
 
-// ── FIREBASE ──
 function startListeners(){
   unsubList=onValue(listRef,snap=>{
     sharedList=snap.val()||{};
@@ -310,7 +312,6 @@ function startListeners(){
   },()=>{favItems=[];});
 }
 
-// ── NAV ──
 window.setTab=id=>{activeTab=id;renderContent();updateFab();};
 function updateFab(){
   const cnt=Object.values(sharedList).filter(i=>!i.done).length;
@@ -319,8 +320,6 @@ function updateFab(){
   document.getElementById('fabBtn').style.display=onList?'none':'flex';
   document.getElementById('fabAddBtn').style.display=onList?'flex':'none';
 }
-
-// ── TOTAL COST ──
 function updateTotalCost(){
   const box=document.getElementById('totalCostBox');if(!box)return;
   const items=Object.values(sharedList).filter(i=>!i.done&&i.price>0);
@@ -330,7 +329,6 @@ function updateTotalCost(){
   box.style.display='flex';
 }
 
-// ── LIST ──
 function renderList(ca){
   const items=Object.entries(sharedList).map(([id,v])=>({id,...v}));
   const active=items.filter(i=>!i.done);
@@ -338,9 +336,9 @@ function renderList(ca){
   if(items.length===0){
     ca.innerHTML=`<div class="empty-state"><div class="es-icon">🛒</div><p>Η λίστα είναι άδεια!<br>Πατήστε <b>➕ Προσθήκη</b> για να ξεκινήσετε.</p></div>`;return;
   }
-  let html=`<div style="display:flex;gap:8px;margin-bottom:0.75rem">
+  let html=`<div class="share-row" style="display:flex;gap:8px;margin-bottom:0.75rem">
     <button onclick="shareViber()" style="flex:1;padding:0.6rem;background:#7360f2;border:none;border-radius:10px;color:#fff;font-size:0.82rem;font-weight:600;cursor:pointer">📲 Viber</button>
-    <button onclick="shareSMS()" style="flex:1;padding:0.6rem;background:#1a7f4b;border:none;border-radius:10px;color:#fff;font-size:0.82rem;font-weight:600;cursor:pointer">✉️ SMS</button>
+    <button onclick="exportPDF()" style="flex:1;padding:0.6rem;background:#c62828;border:none;border-radius:10px;color:#fff;font-size:0.82rem;font-weight:600;cursor:pointer">📄 PDF</button>
     <button onclick="shareGeneric()" style="flex:1;padding:0.6rem;background:#555;border:none;border-radius:10px;color:#fff;font-size:0.82rem;font-weight:600;cursor:pointer">🔗 Κοινοποίηση</button>
   </div>
   <div class="section-lbl">Εκκρεμή <span class="badge">${active.length}</span></div>`;
@@ -381,12 +379,11 @@ function itemHTML(item){
       ${item.brand?`<span class="item-brand">🏷️ ${item.brand}</span>`:''}
       <span class="item-cat">${catLabel}</span>
     </div>
-    <button class="item-price" onclick="checkPrice('${esc}')">💰</button>
+    <button class="item-posokanei" onclick="checkPrice('${esc}')" title="Τιμές στο PosoKanei">🇬🇷<br><span style="font-size:0.42rem;font-weight:800;color:#003476">Poso_kanei</span></button>
     <button class="item-del" onclick="deleteItem('${item.id}')">✕</button>
   </div>`;
 }
 
-// ── ADD ──
 function normGr(s){
   return s.toLowerCase()
     .replace(/[άἀἁὰ]/g,'α').replace(/[έἐἑὲ]/g,'ε').replace(/[ήἠἡὴ]/g,'η')
@@ -412,7 +409,6 @@ function renderAdd(ca){
         return `<button class="prod-btn" onclick="quickAdd('${esc}','${addCategory}')">${p}</button>`;
       }).join('')
     :`<div style="grid-column:span 2;text-align:center;color:#bbb;font-size:0.82rem;padding:1rem">Δεν έχετε αγαπημένα ακόμα.<br>Πατήστε ❤️+ κατά την προσθήκη!</div>`;
-
   const lastItems=JSON.parse(localStorage.getItem('lastItems_'+roomKey)||'[]');
   const lastSec=showLastItems&&lastItems.length>0?`
     <div class="section-lbl">🕐 Τελευταία προϊόντα</div>
@@ -444,7 +440,6 @@ function renderContent(){
   updateFab();updateTotalCost();
 }
 
-// ── AUTOCOMPLETE ──
 window.showSuggestions=val=>{
   const box=document.getElementById('suggBox');
   if(!val||val.length<2){box.style.display='none';return;}
@@ -470,7 +465,6 @@ document.addEventListener('click',e=>{
   if(!e.target.closest('#suggBox')&&!e.target.closest('#manualInput')){const b=document.getElementById('suggBox');if(b)b.style.display='none';}
 });
 
-// ── VOICE ──
 window.startVoice=()=>{
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR){setStatus('warn','⚠️ Φωνητική εισαγωγή: χρησιμοποιήστε Chrome');return;}
@@ -486,14 +480,13 @@ window.startVoice=()=>{
   };
   rec.onerror=e=>{
     if(btn){btn.classList.remove('recording');btn.textContent='🎤 Φωνητική εισαγωγή';}
-    const msgs={'not-allowed':'⚠️ Απαιτείται άδεια μικροφώνου','network':'⚠️ Απαιτείται σύνδεση internet','language-not-supported':'⚠️ Εγκαταστήστε ελληνικά στο κινητό','no-speech':'⚠️ Δεν ακούστηκε ομιλία — δοκιμάστε ξανά','service-not-allowed':'⚠️ Φωνητική εισαγωγή: χρησιμοποιήστε Chrome'};
+    const msgs={'not-allowed':'⚠️ Απαιτείται άδεια μικροφώνου','network':'⚠️ Απαιτείται σύνδεση internet','language-not-supported':'⚠️ Εγκαταστήστε ελληνικά στο κινητό','no-speech':'⚠️ Δεν ακούστηκε ομιλία','service-not-allowed':'⚠️ Χρησιμοποιήστε Chrome'};
     setStatus('warn',msgs[e.error]||'⚠️ Σφάλμα ('+e.error+')');
   };
   rec.onend=()=>{if(btn){btn.classList.remove('recording');btn.textContent='🎤 Φωνητική εισαγωγή';}};
   rec.start();
 };
 
-// ── QTY + ΜΑΡΚΑ + ΤΙΜΗ MODAL ──
 window.editQty=id=>{
   const item=sharedList[id];if(!item||item.done)return;
   modalUnit=item.unit||'τεμ.';
@@ -538,7 +531,6 @@ window.saveQty=id=>{
 };
 window.closeQtyModal=()=>{const m=document.getElementById('qtyModal');if(m)m.remove();};
 
-// ── ACTIONS ──
 window.setAddCat=id=>{addCategory=id;renderContent();};
 window.toggleLastItems=()=>{showLastItems=!showLastItems;renderContent();};
 window.quickAdd=(name,cat)=>addItem(name,cat,false);
@@ -546,7 +538,6 @@ window.manualAdd=()=>{const inp=document.getElementById('manualInput');const v=i
 window.manualAddFav=()=>{const inp=document.getElementById('manualInput');const v=inp.value.trim();if(v){addItem(v,addCategory,true);inp.value='';const b=document.getElementById('suggBox');if(b)b.style.display='none';}};
 window.removeFav=name=>{const newFavs=favItems.filter(f=>f!==name);set(favRef,newFavs.length>0?newFavs:[]);setStatus('ok','🗑 Αφαιρέθηκε από Αγαπημένα: '+name);};
 
-// ── FIREBASE CRUD ──
 function addItem(name,cat,addToFav){
   const existing=Object.values(sharedList).find(i=>normGr(i.name)===normGr(name)&&!i.done);
   if(existing){setStatus('warn','⚠️ Ήδη στη λίστα: '+name);return;}
@@ -562,7 +553,6 @@ window.toggleItem=id=>{const item=sharedList[id];if(item)update(ref(db,'rooms/'+
 window.deleteItem=id=>remove(ref(db,'rooms/'+roomKey+'/lista/'+id));
 window.clearDone=()=>{Object.entries(sharedList).forEach(([id,v])=>{if(v.done)remove(ref(db,'rooms/'+roomKey+'/lista/'+id));});};
 
-// ── SHARE ──
 function buildShareText(){
   const items=Object.values(sharedList).filter(i=>!i.done);
   if(items.length===0)return 'Η λίστα αγορών είναι άδεια.';
@@ -579,10 +569,24 @@ function buildShareText(){
   return txt;
 }
 window.shareViber=()=>window.open('viber://forward?text='+encodeURIComponent(buildShareText()),'_blank');
-window.shareSMS=()=>window.open('sms:?body='+encodeURIComponent(buildShareText()),'_blank');
-window.shareGeneric=async()=>{const text=buildShareText();if(navigator.share){try{await navigator.share({title:'Λίστα Αγορών',text});}catch(e){}}else if(navigator.clipboard){await navigator.clipboard.writeText(text);setStatus('ok','📋 Λίστα αντιγράφηκε');}};
+window.shareGeneric=async()=>{
+  const text=buildShareText();
+  if(navigator.share){try{await navigator.share({title:'Λίστα Αγορών',text});}catch(e){}}
+  else if(navigator.clipboard){await navigator.clipboard.writeText(text);setStatus('ok','📋 Λίστα αντιγράφηκε');}
+};
+window.exportPDF=()=>{
+  const h=document.getElementById('printHeader');
+  if(h){
+    const pending=Object.values(sharedList).filter(i=>!i.done);
+    const total=pending.filter(i=>i.price>0).reduce((s,i)=>s+(i.price||0)*(i.qty||1),0);
+    const date=new Date().toLocaleDateString('el-GR');
+    h.innerHTML=`<h2 style="color:#1a7f4b;margin:0 0 4px">🛒 Λίστα Αγορών</h2>
+      <p style="color:#666;font-size:0.82rem;margin:0">${date} · ${pending.length} προϊόντα${total>0?' · Κόστος: €'+total.toFixed(2):''}</p>
+      <hr style="border:none;border-top:2px solid #1a7f4b;margin:8px 0">`;
+  }
+  window.print();
+};
 
-// ── POSOKANEI ──
 window.checkPrice=name=>{
   const open=()=>window.open('https://posokanei.gov.gr/','_blank');
   if(navigator.clipboard?.writeText){navigator.clipboard.writeText(name).then(()=>{setStatus('ok','📋 Αντιγράφηκε: '+name+' — κάντε Επικόλληση στο PosoKanei');open();}).catch(()=>{fbCopy(name);open();});}else{fbCopy(name);open();}
