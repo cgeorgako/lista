@@ -372,9 +372,15 @@ function updateFab(){
   const cnt=Object.values(sharedList).filter(i=>!i.done).length;
   document.getElementById('fabBadge').textContent=cnt;
   const onList=activeTab==='all';
+  const onAdd=activeTab==='add';
+  const onRecipes=activeTab==='recipes';
+  // fabBtn (📋 List): visible when NOT on list tab
   document.getElementById('fabBtn').style.display=onList?'none':'flex';
-  document.getElementById('fabAddBtn').style.display=(activeTab==='add')?'flex':'none';
-  const rBtn=document.getElementById('fabRecipesBtn');if(rBtn)rBtn.style.display=onList||activeTab==='recipes'?'none':'flex';
+  // fabAddBtn (➕ Add): visible when NOT on add tab
+  document.getElementById('fabAddBtn').style.display=onAdd?'none':'flex';
+  // fabRecipesBtn (🍽️ Recipes): visible when NOT on recipes tab
+  const rBtn=document.getElementById('fabRecipesBtn');
+  if(rBtn)rBtn.style.display=onRecipes?'none':'flex';
 }
 
 // ── LIST ──
