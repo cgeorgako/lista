@@ -173,6 +173,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getDatabase, ref, onValue, set, remove, update, get } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 
+// ── FIREBASE CONFIG (διορθωμένο — το σωστό Firebase apiKey) ──
 const firebaseConfig={
   apiKey:"AIzaSyC3drMmRGbykwTInDbRhLwdG9ulRz8Iq_0",
   authDomain:"lista-agoron-ea924.firebaseapp.com",
@@ -205,6 +206,7 @@ let unsubList=null,unsubFav=null,suggIdx=-1;
 let loginMode=null,failedAttempts=0;
 const MAX_ATTEMPTS=5;
 
+// ── AUTO-LOGIN αν υπάρχει αποθηκευμένο PIN ──
 window.addEventListener('load',()=>{
   const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
   if(isIOS&&!window.navigator.standalone){const h=document.getElementById('iosInstallHint');if(h)h.style.display='block';}
@@ -280,6 +282,15 @@ function enterRoom(pin){
   document.getElementById('mainScreen').classList.add('active');
   document.getElementById('hdrSub').textContent='PIN: '+pin.slice(0,3)+'···';
   startListeners();renderContent();updateFab();
+  // Έλεγχος αν ήρθαμε από Web Share Target
+  setTimeout(()=>{
+    checkShareTarget();
+    // Αν υπάρχει pending share από πριν το login
+    if(window._pendingShareUrl||window._pendingShareTitle){
+      showUrlRecipeModal(window._pendingShareUrl||"",window._pendingShareTitle||"");
+      window._pendingShareUrl=null;window._pendingShareTitle=null;
+    }
+  },600);
 }
 
 window.logout=()=>{
@@ -296,6 +307,7 @@ window.logout=()=>{
   document.getElementById('pinEntry').style.display='none';
 };
 
+// ── FIREBASE LISTENERS ──
 function startListeners(){
   unsubList=onValue(listRef,snap=>{
     sharedList=snap.val()||{};
@@ -329,6 +341,7 @@ function updateTotalCost(){
   box.style.display='flex';
 }
 
+// ── ΛΙΣΤΑ ──
 function renderList(ca){
   const items=Object.entries(sharedList).map(([id,v])=>({id,...v}));
   const active=items.filter(i=>!i.done);
@@ -351,6 +364,7 @@ function renderList(ca){
   if(active.length===0){
     html+=`<div style="text-align:center;color:#bbb;padding:1rem;font-size:0.85rem">Όλα αγοράστηκαν! 🎉</div>`;
   } else {
+    // Ομαδοποίηση κατά κατηγορία με σειρά σούπερ μάρκετ
     const groups={};
     active.forEach(i=>{const c=i.cat||'pantry';if(!groups[c])groups[c]=[];groups[c].push(i);});
     SUPERMARKET_ORDER.forEach(catId=>{
@@ -405,6 +419,7 @@ function getLastPrice(name){
   return items.length>0?items[0].price:null;
 }
 
+// ── ΠΡΟΣΘΗΚΗ ──
 function renderAdd(ca){
   const catBtns=CATEGORIES.map(c=>{
     const sel=addCategory===c.id;
@@ -442,8 +457,9 @@ function renderAdd(ca){
       </div>
       <div id="suggBox" style="display:none;position:absolute;left:0;right:0;background:#fff;border:1.5px solid #1a7f4b;border-top:none;border-radius:0 0 12px 12px;z-index:300;max-height:180px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,0.1)"></div>
     </div>
-    <div style="display:flex;justify-content:center;margin-top:6px;margin-bottom:4px">
-      <button onclick="showRecipeSearch()" style="padding:0.6rem 2rem;background:linear-gradient(135deg,#e65100,#bf360c);color:#fff;border:none;border-radius:14px;font-size:0.88rem;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(230,81,0,0.35)">🍳 AI Συνταγές</button>
+    <div style="display:flex;justify-content:center;gap:8px;margin-top:6px;margin-bottom:4px">
+      <button onclick="showRecipeSearch()" style="padding:0.6rem 1.1rem;background:linear-gradient(135deg,#e65100,#bf360c);color:#fff;border:none;border-radius:14px;font-size:0.85rem;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(230,81,0,0.35)">🍳 AI Συνταγές</button>
+      <button onclick="showUrlRecipeModal()" style="padding:0.6rem 1.1rem;background:linear-gradient(135deg,#1565c0,#0d47a1);color:#fff;border:none;border-radius:14px;font-size:0.85rem;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(21,101,192,0.35)">🔗 Από URL</button>
     </div>
     ${lastSec}
     <div class="section-lbl">Κατηγορία</div>
@@ -458,6 +474,7 @@ function renderContent(){
   updateFab();updateTotalCost();
 }
 
+// ── AUTOCOMPLETE ──
 window.showSuggestions=val=>{
   const box=document.getElementById('suggBox');
   if(!val||val.length<2){box.style.display='none';return;}
@@ -483,6 +500,7 @@ document.addEventListener('click',e=>{
   if(!e.target.closest('#suggBox')&&!e.target.closest('#manualInput')){const b=document.getElementById('suggBox');if(b)b.style.display='none';}
 });
 
+// ── ΦΩΝΗΤΙΚΗ ΕΙΣΑΓΩΓΗ ──
 window.startVoice=()=>{
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR){setStatus('warn','⚠️ Φωνητική εισαγωγή: χρησιμοποιήστε Chrome');return;}
@@ -505,6 +523,7 @@ window.startVoice=()=>{
   rec.start();
 };
 
+// ── MODAL ΠΟΣΟΤΗΤΑΣ / ΤΙΜΗΣ / ΜΑΡΚΑΣ ──
 window.editQty=id=>{
   const item=sharedList[id];if(!item||item.done)return;
   modalUnit=item.unit||'τεμ.';
@@ -549,6 +568,7 @@ window.saveQty=id=>{
 };
 window.closeQtyModal=()=>{const m=document.getElementById('qtyModal');if(m)m.remove();};
 
+// ── ΕΝΕΡΓΕΙΕΣ ──
 window.setAddCat=id=>{addCategory=id;renderContent();};
 window.toggleLastItems=()=>{showLastItems=!showLastItems;renderContent();};
 window.quickAdd=(name,cat)=>addItem(name,cat,false);
@@ -556,6 +576,7 @@ window.manualAdd=()=>{const inp=document.getElementById('manualInput');const v=i
 window.manualAddFav=()=>{const inp=document.getElementById('manualInput');const v=inp.value.trim();if(v){addItem(v,addCategory,true);inp.value='';const b=document.getElementById('suggBox');if(b)b.style.display='none';}};
 window.removeFav=name=>{const newFavs=favItems.filter(f=>f!==name);set(favRef,newFavs.length>0?newFavs:[]);setStatus('ok','🗑 Αφαιρέθηκε από Αγαπημένα: '+name);};
 
+// ── FIREBASE CRUD ──
 function addItem(name,cat,addToFav){
   const existing=Object.values(sharedList).find(i=>normGr(i.name)===normGr(name)&&!i.done);
   if(existing){setStatus('warn','⚠️ Ήδη στη λίστα: '+name);return;}
@@ -571,6 +592,7 @@ window.toggleItem=id=>{const item=sharedList[id];if(item)update(ref(db,'rooms/'+
 window.deleteItem=id=>remove(ref(db,'rooms/'+roomKey+'/lista/'+id));
 window.clearDone=()=>{Object.entries(sharedList).forEach(([id,v])=>{if(v.done)remove(ref(db,'rooms/'+roomKey+'/lista/'+id));});};
 
+// ── ΚΟΙΝΟΠΟΙΗΣΗ ──
 function buildShareText(){
   const items=Object.values(sharedList).filter(i=>!i.done);
   if(items.length===0)return 'Η λίστα αγορών είναι άδεια.';
@@ -605,6 +627,7 @@ window.exportPDF=()=>{
   window.print();
 };
 
+// ── ΒΟΗΘΕΙΑ POSOKANEI ──
 window.showPKHelp=()=>{
   const ov=document.createElement('div');
   ov.id='pkHelpModal';
@@ -645,15 +668,200 @@ function setStatus(type,msg){
   if(type!=='err')setTimeout(()=>{bar.className='status-bar ok';txt.textContent='🟢 Live σύνδεση ενεργή';},2500);
 }
 
-// ── AI ΣΥΝΤΑΓΕΣ (GROQ) ──
-const GROQ_KEY='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';
+// ── AI ΣΥΝΤΑΓΕΣ (Groq API) ──
 const GROQ_URL='https://api.groq.com/openai/v1/chat/completions';
-const RECIPE_PROMPT=`Είσαι ειδικός Έλληνας μάγειρας. Για κάθε αίτημα δώσε ΑΚΡΙΒΩΣ 3 συνταγές σε JSON array.
+const GROQ_KEY='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';
+
+// System prompt για αναζήτηση συνταγής με λέξεις-κλειδιά
+const RECIPE_SYSTEM=`Είσαι ειδικός Έλληνας μάγειρας. Για κάθε αίτημα δώσε ΑΚΡΙΒΩΣ 3 συνταγές σε JSON array.
 Μορφή: [{"name":"...","description":"...","servings":4,"ingredients":[{"name":"...","qty":1,"unit":"τεμ.","cat":"pantry"}]}]
 Κατηγορίες cat: dairy,meat,veg,fruit,pantry,spices,bakery,drinks,house
 Μονάδες unit: τεμ.,κιλά,γρ.,lt,ml,κ.σ.,κ.γ.,φλ.
 Απάντησε ΜΟΝΟ με το JSON array, χωρίς markdown, χωρίς εξηγήσεις.`;
 
+// System prompt για εξαγωγή υλικών από HTML σελίδας
+const EXTRACT_SYSTEM=`Είσαι βοηθός εξαγωγής συνταγών. Σου δίνω το κείμενο μιας ιστοσελίδας με συνταγή.
+Εξάγαγε ΤΗ ΜΙΑ κύρια συνταγή και επέστρεψε ΜΟΝΟ ένα JSON object (όχι array):
+{"name":"...","description":"...","servings":4,"ingredients":[{"name":"...","qty":1,"unit":"τεμ.","cat":"pantry"}]}
+Κατηγορίες cat: dairy,meat,veg,fruit,pantry,spices,bakery,drinks,house
+Μονάδες unit: τεμ.,κιλά,γρ.,lt,ml,κ.σ.,κ.γ.,φλ.
+Απάντησε ΜΟΝΟ με το JSON object, χωρίς markdown, χωρίς εξηγήσεις.`;
+
+// ── Κοινή συνάρτηση κλήσης Groq ──
+async function callGroq(systemPrompt, userContent, maxTokens=1800){
+  const resp=await fetch(GROQ_URL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
+    body:JSON.stringify({
+      model:'llama-3.1-8b-instant',
+      messages:[{role:'system',content:systemPrompt},{role:'user',content:userContent}],
+      max_tokens:maxTokens,temperature:0.7
+    })
+  });
+  const data=await resp.json();
+  if(!resp.ok||data.error) throw new Error(`[${resp.status}] ${data.error?.message||'Άγνωστο σφάλμα'}`);
+  return data.choices?.[0]?.message?.content||'';
+}
+
+// ── Εξαγωγή κειμένου από URL μέσω allorigins proxy ──
+async function fetchPageText(url){
+  // Χρησιμοποιούμε δωρεάν CORS proxy για να διαβάσουμε εξωτερική σελίδα
+  const proxyUrl='https://api.allorigins.win/get?url='+encodeURIComponent(url);
+  const resp=await fetch(proxyUrl);
+  if(!resp.ok) throw new Error('Αδυναμία φόρτωσης σελίδας');
+  const data=await resp.json();
+  const html=data.contents||'';
+  // Αφαιρούμε HTML tags και κρατάμε μόνο κείμενο (max 8000 χαρακτήρες για το AI)
+  const text=html
+    .replace(/<script[\s\S]*?<\/script>/gi,'')
+    .replace(/<style[\s\S]*?<\/style>/gi,'')
+    .replace(/<[^>]+>/g,' ')
+    .replace(/\s+/g,' ')
+    .trim()
+    .slice(0,8000);
+  if(text.length<100) throw new Error('Δεν βρέθηκε κείμενο στη σελίδα');
+  return text;
+}
+
+// ── SHARE TARGET: εκτελείται αυτόματα όταν ο χρήστης κάνει Share από browser ──
+// Ο SW ανακατευθύνει /lista/share-recipe → /lista/#share-recipe?url=...
+// Εδώ διαβάζουμε το hash και ανοίγουμε αυτόματα το modal εξαγωγής
+function checkShareTarget(){
+  const hash=window.location.hash;
+  if(!hash.startsWith('#share-recipe?')) return;
+  // Καθαρίζουμε το hash για να μην ξανατρέξει σε reload
+  history.replaceState(null,'','/lista/');
+  const params=new URLSearchParams(hash.replace('#share-recipe?',''));
+  const sharedUrl=params.get('url')||'';
+  const sharedTitle=params.get('title')||'';
+  if(!sharedUrl && !sharedTitle) return;
+  // Αν ο χρήστης είναι ήδη logged in → άνοιξε αμέσως το modal
+  // Αλλιώς αποθηκεύουμε το URL και το ανοίγουμε μετά το login
+  if(roomKey){
+    showUrlRecipeModal(sharedUrl, sharedTitle);
+  } else {
+    // Αποθηκεύουμε προσωρινά για μετά το login
+    window._pendingShareUrl=sharedUrl;
+    window._pendingShareTitle=sharedTitle;
+  }
+}
+
+// ── Modal εξαγωγής συνταγής από URL ──
+window.showUrlRecipeModal=(url='',title='')=>{
+  if(document.getElementById('urlRecipeModal'))return;
+  const modal=document.createElement('div');
+  modal.id='urlRecipeModal';
+  modal.className='qty-overlay';
+  modal.innerHTML=`
+    <div class="qty-sheet" style="padding:1.25rem;max-height:85vh;display:flex;flex-direction:column">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.9rem;flex-shrink:0">
+        <div>
+          <div style="font-weight:800;font-size:1rem;color:#e65100">🔗 Εισαγωγή από URL</div>
+          <div style="font-size:0.7rem;color:#aaa">Εξαγωγή υλικών από ιστοσελίδα συνταγής</div>
+        </div>
+        <button onclick="document.getElementById('urlRecipeModal').remove()" style="background:#f0f0f0;border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:0.9rem">✕</button>
+      </div>
+      <div style="margin-bottom:0.9rem;flex-shrink:0">
+        <input id="recipeUrl" value="${url}" placeholder="https://www.argiro.gr/recipe/..."
+          style="width:100%;padding:0.65rem 1rem;border:1.5px solid #e0e0e0;border-radius:12px;font-size:0.82rem;outline:none"
+          onfocus="this.style.borderColor='#e65100'" onblur="this.style.borderColor='#e0e0e0'">
+        ${title?`<div style="font-size:0.72rem;color:#888;margin-top:4px;padding-left:4px">📄 ${title}</div>`:''}
+      </div>
+      <button onclick="extractFromUrl()" style="width:100%;padding:0.75rem;background:#e65100;color:#fff;border:none;border-radius:12px;font-weight:700;font-size:0.9rem;cursor:pointer;flex-shrink:0;margin-bottom:0.9rem">
+        🔍 Εξαγωγή υλικών
+      </button>
+      <div id="urlRecipeResults" style="overflow-y:auto;flex:1">
+        <div style="text-align:center;color:#bbb;padding:2rem;font-size:0.85rem">
+          Πατήστε «Εξαγωγή» για να διαβαστούν τα υλικά 👆
+        </div>
+      </div>
+    </div>`;
+  modal.addEventListener('click',e=>{if(e.target===modal)modal.remove();});
+  document.body.appendChild(modal);
+  // Αν ήρθε URL από Share, ξεκινάμε αυτόματα την εξαγωγή
+  if(url) setTimeout(extractFromUrl, 400);
+};
+
+window.extractFromUrl=async()=>{
+  const url=(document.getElementById('recipeUrl')?.value||'').trim();
+  if(!url){return;}
+  const res=document.getElementById('urlRecipeResults');
+  res.innerHTML=`<div style="text-align:center;padding:2rem;color:#888">
+    <div style="font-size:2rem;margin-bottom:0.5rem">⏳</div>
+    <div style="font-size:0.85rem">Φόρτωση σελίδας...</div>
+  </div>`;
+  try{
+    // Βήμα 1: Κατεβάζουμε το κείμενο της σελίδας μέσω proxy
+    const pageText=await fetchPageText(url);
+    res.innerHTML=`<div style="text-align:center;padding:1rem;color:#888;font-size:0.85rem">⏳ Ανάλυση συνταγής...</div>`;
+    // Βήμα 2: Στέλνουμε το κείμενο στο Groq για εξαγωγή υλικών
+    const raw=await callGroq(EXTRACT_SYSTEM, pageText, 1200);
+    const clean=raw.replace(/```json|```/g,'').trim();
+    let recipe;
+    try{recipe=JSON.parse(clean);}
+    catch(e){throw new Error('Δεν εντοπίστηκαν υλικά στη σελίδα');}
+    // Βήμα 3: Εμφανίζουμε αποτέλεσμα (μία συνταγή, όχι array)
+    window._urlRecipe=recipe;
+    renderUrlRecipeCard(recipe);
+  }catch(err){
+    console.error('URL recipe error:',err);
+    res.innerHTML=`<div style="text-align:center;padding:2rem;color:#e53935;font-size:0.85rem">
+      ❌ <b>${err.message}</b><br>
+      <span style="color:#aaa;font-size:0.75rem;display:block;margin-top:0.5rem">Δοκιμάστε άλλη σελίδα ή αντιγράψτε χειροκίνητα τα υλικά</span>
+    </div>`;
+  }
+};
+
+function renderUrlRecipeCard(r){
+  const res=document.getElementById('urlRecipeResults');
+  if(!r?.ingredients?.length){
+    res.innerHTML=`<div style="text-align:center;padding:2rem;color:#aaa;font-size:0.85rem">Δεν βρέθηκαν υλικά</div>`;
+    return;
+  }
+  res.innerHTML=`
+    <div style="border:1.5px solid #e8f5ee;border-radius:14px;overflow:hidden">
+      <div style="padding:0.9rem;background:#f8fffe">
+        <div style="font-weight:700;font-size:0.95rem;margin-bottom:2px">${r.name||'Συνταγή'}</div>
+        ${r.description?`<div style="font-size:0.74rem;color:#888;margin-bottom:4px">${r.description}</div>`:''}
+        <div style="font-size:0.7rem;color:#1a7f4b">👥 ${r.servings||4} μερίδες &nbsp;·&nbsp; 🧺 ${r.ingredients.length} υλικά</div>
+      </div>
+      <div style="padding:0.9rem;background:#fff;border-top:1px solid #e8f5ee">
+        <div style="font-size:0.72rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem">Υλικά</div>
+        ${r.ingredients.map(ing=>`
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.82rem;padding:4px 0;border-bottom:1px solid #f5f5f5">
+            <span>${ing.name}</span>
+            <span style="color:#1a7f4b;font-weight:600;white-space:nowrap;margin-left:8px">${ing.qty||''} ${ing.unit||''}</span>
+          </div>`).join('')}
+        <button onclick="addUrlRecipeIngredients()" style="width:100%;margin-top:1rem;padding:0.75rem;background:#1a7f4b;color:#fff;border:none;border-radius:12px;font-weight:700;font-size:0.9rem;cursor:pointer">
+          ➕ Προσθήκη υλικών στη λίστα
+        </button>
+      </div>
+    </div>`;
+}
+
+window.addUrlRecipeIngredients=()=>{
+  const recipe=window._urlRecipe;
+  if(!recipe)return;
+  let added=0;
+  (recipe.ingredients||[]).forEach(ing=>{
+    const name=(ing.name||'').trim();
+    if(!name)return;
+    const existing=Object.values(sharedList).find(it=>normGr(it.name)===normGr(name)&&!it.done);
+    if(!existing){
+      const id=Date.now().toString(36)+Math.random().toString(36).slice(2);
+      const item={name,cat:ing.cat||'pantry',done:false,ts:Date.now()};
+      if(ing.qty)item.qty=ing.qty;
+      if(ing.unit)item.unit=ing.unit;
+      set(ref(db,'rooms/'+roomKey+'/lista/'+id),item);
+      added++;
+    }
+  });
+  document.getElementById('urlRecipeModal')?.remove();
+  setStatus('ok',`✅ Προστέθηκαν ${added} υλικά από «${recipe.name||'συνταγή'}»`);
+  setTab('all');
+};
+
+// ── Modal αναζήτησης συνταγής με λέξεις-κλειδιά (υπάρχουσα λειτουργία) ──
 window.showRecipeSearch=()=>{
   if(document.getElementById('recipeModal'))return;
   const modal=document.createElement('div');
@@ -690,21 +898,8 @@ window.searchRecipes=async()=>{
   const res=document.getElementById('recipeResults');
   res.innerHTML=`<div style="text-align:center;padding:2.5rem;color:#888"><div style="font-size:2.5rem;margin-bottom:0.75rem">⏳</div><div>Αναζήτηση συνταγών...</div></div>`;
   try{
-    const resp=await fetch(GROQ_URL,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
-      body:JSON.stringify({
-        model:'llama-3.1-8b-instant',
-        messages:[{role:'system',content:RECIPE_PROMPT},{role:'user',content:q}],
-        max_tokens:1800,temperature:0.7
-      })
-    });
-    const data=await resp.json();
-    if(!resp.ok||data.error){
-      throw new Error(`[${resp.status}] ${data.error?.message||'Άγνωστο σφάλμα'}`);
-    }
-    const text=data.choices?.[0]?.message?.content||'[]';
-    const clean=text.replace(/```json|```/g,'').trim();
+    const raw=await callGroq(RECIPE_SYSTEM, q);
+    const clean=raw.replace(/```json|```/g,'').trim();
     let recipes;
     try{recipes=JSON.parse(clean);}
     catch(e){throw new Error('Μη έγκυρη απάντηση AI');}
@@ -714,7 +909,7 @@ window.searchRecipes=async()=>{
     console.error('Groq error:',err);
     res.innerHTML=`<div style="text-align:center;padding:2rem;color:#e53935;font-size:0.85rem">
       ❌ <b>${err.message}</b><br>
-      <span style="color:#aaa;font-size:0.75rem;display:block;margin-top:0.5rem">Ελέγξτε το API key στον κώδικα</span>
+      <span style="color:#aaa;font-size:0.75rem;display:block;margin-top:0.5rem">Δοκιμάστε αργότερα</span>
     </div>`;
   }
 };
