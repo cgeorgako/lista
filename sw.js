@@ -1,11 +1,13 @@
-const CACHE = 'lista-v11';
+const CACHE = 'lista-v12';
 const ASSETS = [
   '/lista/',
   '/lista/index.html',
   '/lista/english.html',
   '/lista/manifest.json',
   '/lista/icon-192.png',
-  '/lista/icon-512.png'
+  '/lista/icon-512.png',
+  '/lista/help-gr.png',
+  '/lista/help-en.png'
 ];
 
 self.addEventListener('install', e => {
