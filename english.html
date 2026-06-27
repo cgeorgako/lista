@@ -63,8 +63,19 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
 .item-name{font-size:0.9rem;text-transform:uppercase;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .item-qty-badge{font-size:0.72rem;color:#fff;background:#1a7f4b;border-radius:8px;padding:1px 7px;font-weight:600;white-space:nowrap}
 .item-qty-add{font-size:0.7rem;color:#bbb;border-bottom:1px dashed #ccc}
-.item-price-badge{font-size:0.72rem;color:#fff;background:#e65100;border-radius:8px;padding:1px 7px;font-weight:600;white-space:nowrap}
-.item-brand{font-size:0.72rem;color:#e65100;font-style:italic;display:block;margin-top:2px}
+.item-posokanei{background:none;border:none;cursor:pointer;padding:2px;flex-shrink:0;text-align:center;font-size:0.88rem;line-height:1.1}
+#printHeader{display:none}
+@media print{
+  #loginScreen,.app-header,.status-bar,#fabBtn,#fabAddBtn,
+  #totalCostBox,.item-check,.item-del,.item-posokanei,.share-row{display:none!important}
+  .content-area{overflow:visible!important;padding:0!important}
+  body{background:#fff!important}
+  .list-item{box-shadow:none!important;border:none!important;border-bottom:1px solid #eee!important;
+    border-radius:0!important;animation:none!important;margin:0!important;padding:0.4rem 0!important}
+  .list-item.done{display:none!important}
+  .section-lbl{color:#1a7f4b!important;margin-top:0.75rem!important}
+  #printHeader{display:block!important;padding:0.5rem 0 0.75rem}
+}
 .item-cat{font-size:0.7rem;color:#999;display:block;margin-top:2px}
 .item-price{background:none;border:none;font-size:1rem;cursor:pointer;padding:3px;flex-shrink:0}
 .item-del{background:none;border:none;color:#ddd;font-size:1.1rem;cursor:pointer;padding:3px;flex-shrink:0}
@@ -162,6 +173,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-heigh
   <div id="totalCostBox" style="display:none;position:fixed;top:72px;right:16px;z-index:150;background:#fff;border:2px solid #e65100;color:#e65100;border-radius:20px;padding:4px 14px;font-size:0.85rem;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,0.12)">
     💰 €<span id="totalCostVal">0.00</span>
   </div>
+  <div id="printHeader"></div>
   <div class="content-area" id="contentArea"></div>
   <button class="fab-list" id="fabBtn" onclick="setTab('all')" style="display:none">
     📋 List <span class="fab-badge" id="fabBadge">0</span>
@@ -356,9 +368,9 @@ function renderList(ca){
   if(items.length===0){
     ca.innerHTML=`<div class="empty-state"><div class="es-icon">🛒</div><p>Your list is empty!<br>Tap <b>➕ Add Item</b> to get started.</p></div>`;return;
   }
-  let html=`<div style="display:flex;gap:8px;margin-bottom:0.75rem">
+  let html=`<div class="share-row" style="display:flex;gap:8px;margin-bottom:0.75rem">
     <button onclick="shareViber()" style="flex:1;padding:0.6rem;background:#7360f2;border:none;border-radius:10px;color:#fff;font-size:0.82rem;font-weight:600;cursor:pointer">📲 Viber</button>
-    <button onclick="shareSMS()" style="flex:1;padding:0.6rem;background:#1a7f4b;border:none;border-radius:10px;color:#fff;font-size:0.82rem;font-weight:600;cursor:pointer">✉️ SMS</button>
+    <button onclick="exportPDF()" style="flex:1;padding:0.6rem;background:#c62828;border:none;border-radius:10px;color:#fff;font-size:0.82rem;font-weight:600;cursor:pointer">📄 PDF</button>
     <button onclick="shareGeneric()" style="flex:1;padding:0.6rem;background:#555;border:none;border-radius:10px;color:#fff;font-size:0.82rem;font-weight:600;cursor:pointer">🔗 Share</button>
   </div>
   <div class="section-lbl">Pending <span class="badge">${active.length}</span></div>`;
@@ -401,7 +413,7 @@ function itemHTML(item){
       ${item.brand?`<span class="item-brand">🏷️ ${item.brand}</span>`:''}
       <span class="item-cat">${catLabel}</span>
     </div>
-    <button class="item-price" onclick="checkPrice('${esc}')">💰</button>
+    <button class="item-posokanei" onclick="checkPrice('${esc}')" title="Prices on PosoKanei">🇬🇷<br><span style="font-size:0.42rem;font-weight:800;color:#003476">Poso_kanei</span></button>
     <button class="item-del" onclick="deleteItem('${item.id}')">✕</button>
   </div>`;
 }
@@ -586,8 +598,19 @@ function buildShareText(){
   return txt+`\nTotal: ${items.length} items`;
 }
 window.shareViber=()=>window.open('viber://forward?text='+encodeURIComponent(buildShareText()),'_blank');
-window.shareSMS=()=>window.open('sms:?body='+encodeURIComponent(buildShareText()),'_blank');
 window.shareGeneric=async()=>{const text=buildShareText();if(navigator.share){try{await navigator.share({title:'Shopping List',text});}catch(e){}}else if(navigator.clipboard){await navigator.clipboard.writeText(text);setStatus('ok','📋 List copied to clipboard');}};
+window.exportPDF=()=>{
+  const h=document.getElementById('printHeader');
+  if(h){
+    const pending=Object.values(sharedList).filter(i=>!i.done);
+    const total=pending.filter(i=>i.price>0).reduce((s,i)=>s+(i.price||0)*(i.qty||1),0);
+    const date=new Date().toLocaleDateString('en-GB');
+    h.innerHTML=`<h2 style="color:#1a7f4b;margin:0 0 4px">🛒 Shopping List</h2>
+      <p style="color:#666;font-size:0.82rem;margin:0">${date} · ${pending.length} items${total>0?' · Cost: €'+total.toFixed(2):''}</p>
+      <hr style="border:none;border-top:2px solid #1a7f4b;margin:8px 0">`;
+  }
+  window.print();
+};
 
 // ── POSOKANEI ──
 window.checkPrice=name=>{
