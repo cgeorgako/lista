@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#1a7f4b">
+<link rel="manifest" href="manifest.json">
+<title>Λίστα Αγορών</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:system-ui,-apple-system,sans-serif;background:#f4f7f5;min-height:100vh;color:#1a1a1a}
+.screen{display:none;min-height:100vh;flex-direction:column}
+.screen.active{display:flex}
+#loginScreen{background:linear-gradient(160deg,#1a7f4b 0%,#0d5c35 100%);align-items:center;justify-content:center;padding:1.5rem}
+.login-box{background:#fff;border-radius:20px;padding:1.4rem 1.8rem;width:100%;max-width:340px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.15)}
+.app-icon{font-size:40px;margin-bottom:0.3rem}
+.login-box h1{font-size:1.3rem;font-weight:700;color:#1a7f4b;margin-bottom:0.2rem}
+.mode-btn{width:100%;padding:0.65rem;border-radius:12px;font-size:0.9rem;font-weight:700;cursor:pointer;margin-bottom:0.5rem;transition:all 0.15s}
+.mode-btn:active{transform:scale(0.97)}
+.mode-btn.primary{background:#1a7f4b;color:#fff;border:none}
+.mode-btn.secondary{background:#fff;color:#1a7f4b;border:2px solid #1a7f4b}
+.pin-label{font-size:0.78rem;color:#888;margin-bottom:0.4rem;margin-top:0.4rem}
+.pin-dots{display:flex;justify-content:center;gap:10px;margin-bottom:0.8rem}
+.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid #ccc;background:transparent;transition:all 0.2s}
+.pin-dot.filled{background:#1a7f4b;border-color:#1a7f4b}
+.numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.num-btn{padding:0.75rem;border:none;border-radius:12px;background:#f5f5f5;font-size:1.15rem;font-weight:600;cursor:pointer;transition:all 0.15s;color:#1a1a1a}
+.num-btn:active{background:#e0e0e0;transform:scale(0.95)}
+.num-btn.del{background:#fff3f3;color:#e53935}
+.err-msg{color:#e53935;font-size:0.78rem;margin-top:0.5rem;min-height:1rem}
+.back-btn{background:none;border:none;color:#999;font-size:0.78rem;cursor:pointer;margin-top:0.3rem;padding:0.3rem 0.75rem;border-radius:8px}
+.app-header{background:#1a7f4b;color:#fff;padding:1rem 1.25rem 0.75rem;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
+.app-header h2{font-size:1.1rem;font-weight:700;flex:1}
+.hdr-sub{font-size:0.75rem;opacity:0.8;display:block}
+.hdr-btn{background:rgba(255,255,255,0.2);border:none;color:#fff;border-radius:10px;padding:8px 12px;font-size:0.82rem;cursor:pointer}
+.fab-list{position:fixed;bottom:24px;right:16px;z-index:200;background:#880e4f;color:#fff;border:none;border-radius:24px;padding:10px 18px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(136,14,79,0.45);display:flex;align-items:center;gap:8px}
+.fab-add{position:fixed;bottom:24px;right:16px;z-index:200;background:#e65100;color:#fff;border:none;border-radius:24px;padding:10px 18px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(230,81,0,0.45);display:flex;align-items:center;gap:8px}
+.fab-badge{background:#fff;color:#1a7f4b;border-radius:50%;width:22px;height:22px;font-size:0.75rem;font-weight:800;display:flex;align-items:center;justify-content:center}
+.content-area{flex:1;overflow-y:auto;padding:0.75rem;padding-bottom:5rem}
+.add-bar{display:flex;gap:8px;margin-bottom:0.75rem}
+.add-bar input{flex:1;padding:0.65rem 1rem;border:1.5px solid #e0e0e0;border-radius:12px;font-size:0.9rem;background:#fff;outline:none;text-transform:uppercase}
+.add-bar input:focus{border-color:#1a7f4b}
+.btn-add{padding:0.65rem 1rem;background:#1a7f4b;color:#fff;border:none;border-radius:12px;font-size:1.2rem;cursor:pointer;flex-shrink:0}
+.btn-fav{padding:0.65rem 0.3rem;background:#fff0f0;border:1.5px solid #ffb3b3;border-radius:12px;font-size:1.1rem;cursor:pointer;flex-shrink:0}
+.btn-mic{padding:0.65rem 0.9rem;background:#f0f0f0;border:none;border-radius:12px;font-size:1.1rem;cursor:pointer;flex-shrink:0;transition:all 0.2s}
+.btn-mic.recording{background:#fff0f0;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.products-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:0.75rem}
+.prod-btn{padding:0.6rem 0.5rem;background:#fff;border:1.5px solid #e0e0e0;border-radius:10px;font-size:0.78rem;color:#444;cursor:pointer;text-align:center;transition:all 0.2s;text-transform:uppercase}
+.prod-btn:active{background:#f0faf5;border-color:#1a7f4b}
+.prod-btn.fav{border:2.5px solid #e53935;background:#fff8f8;color:#c62828;font-weight:600}
+.section-lbl{font-size:0.75rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin:0.5rem 0 0.4rem;padding-left:2px}
+.list-item{display:flex;align-items:center;gap:10px;background:#fff;border-radius:12px;padding:0.8rem 1rem;margin-bottom:8px;border:1px solid #f0f0f0;animation:slideIn 0.25s ease}
+@keyframes slideIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.list-item.done{opacity:0.4}
+.list-item.done .item-name{text-decoration:line-through;color:#aaa}
+.list-item.is-fav{border-left:3px solid #e53935}
+.item-check{width:26px;height:26px;border-radius:50%;border:2px solid #ccc;background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.item-check.checked{background:#1a7f4b;border-color:#1a7f4b;color:#fff}
+.item-body{flex:1;cursor:pointer;min-width:0}
+.item-name{font-size:0.9rem;text-transform:uppercase;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.item-qty-badge{font-size:0.72rem;color:#fff;background:#1a7f4b;border-radius:8px;padding:1px 7px;font-weight:600;white-space:nowrap}
+.item-qty-add{font-size:0.7rem;color:#bbb;border-bottom:1px dashed #ccc}
+.item-price-badge{font-size:0.72rem;color:#fff;background:#e65100;border-radius:8px;padding:1px 7px;font-weight:600;white-space:nowrap}
+.item-brand{font-size:0.72rem;color:#e65100;font-style:italic;display:block;margin-top:2px}
+.item-cat{font-size:0.7rem;color:#999;display:block;margin-top:2px}
+.item-posokanei{background:none;border:none;cursor:pointer;padding:2px;flex-shrink:0;text-align:center;font-size:0.88rem;line-height:1.1}
+.item-del{background:none;border:none;color:#ddd;font-size:1.1rem;cursor:pointer;padding:3px;flex-shrink:0}
+.empty-state{text-align:center;padding:3rem 1rem;color:#aaa}
+.empty-state .es-icon{font-size:3rem;margin-bottom:0.5rem}
+.badge{background:#e8f5ee;color:#1a7f4b;border-radius:20px;padding:2px 10px;font-size:0.75rem;font-weight:600}
+.status-bar{padding:0.5rem 1rem;font-size:0.78rem;display:flex;align-items:center;gap:6px;background:#fff3cd;color:#856404}
+.status-bar.ok{background:#d4edda;color:#155724}
+.status-bar.err{background:#f8d7da;color:#721c24}
+.dot-pulse{width:8px;height:8px;border-radius:50%;background:currentColor;flex-shrink:0}
+.sugg-item{padding:0.65rem 1rem;font-size:0.9rem;cursor:pointer;border-bottom:1px solid #f0f0f0;transition:background 0.15s;text-transform:uppercase}
+.sugg-item:last-child{border-bottom:none}
+.sugg-item:hover,.sugg-item.sugg-sel{background:#f0faf5;color:#1a7f4b}
+.qty-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:500;display:flex;align-items:flex-end;justify-content:center}
+.qty-sheet{background:#fff;border-radius:20px 20px 0 0;padding:1.5rem;width:100%;max-width:420px}
+.ubu{flex:1;padding:0.5rem;border-radius:10px;border:1.5px solid #e0e0e0;background:#fff;color:#555;font-size:0.82rem;cursor:pointer;transition:all 0.15s}
+.ubu.sel{border-color:#1a7f4b;background:#f0faf5;color:#1a7f4b;font-weight:600}
+
+/* ── ΣΥΝΤΑΓΕΣ ── */
+.recipe-filter-btn{padding:0.4rem 0.9rem;border:1.5px solid #e0e0e0;border-radius:20px;background:#fff;font-size:0.78rem;cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.recipe-filter-btn.active{border-color:#1a7f4b;background:#f0faf5;color:#1a7f4b;font-weight:700}
+.recipe-card{border:1.5px solid #e8f5ee;border-radius:14px;margin-bottom:0.75rem;overflow:hidden;background:#fff}
+.recipe-card-header{padding:0.85rem 1rem;cursor:pointer;background:#f8fffe;display:flex;justify-content:space-between;align-items:flex-start}
+.recipe-card-body{display:none;padding:0.9rem;border-top:1px solid #e8f5ee;background:#fff}
+.recipe-ing-row{display:flex;justify-content:space-between;align-items:center;font-size:0.82rem;padding:4px 0;border-bottom:1px solid #f5f5f5}
+.recipe-ing-row:last-child{border-bottom:none}
+
+/* ── PRINT / PDF ── */
+#printHeader{display:none}
+@media print{
+  #loginScreen,.app-header,.status-bar,#fabBtn,#fabAddBtn,
+  #totalCostBox,.item-check,.item-del,.item-posokanei,.share-row{display:none!important}
+  .content-area{overflow:visible!important;padding:0!important}
+  body{background:#fff!important}
+  .list-item{box-shadow:none!important;border:none!important;border-bottom:1px solid #eee!important;
+    border-radius:0!important;animation:none!important;margin:0!important;padding:0.4rem 0!important}
+  .list-item.done{display:none!important}
+  .section-lbl{color:#1a7f4b!important;margin-top:0.75rem!important}
+  #printHeader{display:block!important;padding:0.5rem 0 0.75rem}
+  .item-price-badge{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<div id="loginScreen" class="screen active">
+  <div class="login-box">
+    <div class="app-icon">🛒</div>
+    <div style="display:flex;justify-content:center;gap:16px;margin-bottom:0.5rem">
+      <span style="font-size:1.8rem">🇬🇷</span>
+      <a href="english.html" style="font-size:1.8rem;text-decoration:none;opacity:0.5">🇬🇧</a>
+    </div>
+    <h1>Λίστα Αγορών</h1>
+    <p style="font-family:'Georgia',serif;font-size:0.95rem;color:#e65100;font-style:italic;margin-bottom:0.75rem">Μην ξεχάσεις να πάρεις !</p>
+    <div id="modeSelect">
+      <button class="mode-btn primary" onclick="selectMode('create')">➕ Δημιουργία νέου λογαριασμού</button>
+      <button class="mode-btn secondary" onclick="selectMode('join')">🔑 Σύνδεση με το PIN</button>
+    </div>
+    <div id="autoLoginMsg" style="display:none;padding:1rem 0;color:#1a7f4b;font-size:0.9rem">⏳ Σύνδεση...</div>
+    <div id="pinEntry" style="display:none">
+      <div class="pin-label" id="modeLabel">Εισάγετε PIN</div>
+      <div class="pin-dots">
+        <div class="pin-dot" id="d0"></div><div class="pin-dot" id="d1"></div>
+        <div class="pin-dot" id="d2"></div><div class="pin-dot" id="d3"></div>
+        <div class="pin-dot" id="d4"></div><div class="pin-dot" id="d5"></div>
+      </div>
+      <div class="numpad">
+        <button class="num-btn" onclick="addDigit('1')">1</button>
+        <button class="num-btn" onclick="addDigit('2')">2</button>
+        <button class="num-btn" onclick="addDigit('3')">3</button>
+        <button class="num-btn" onclick="addDigit('4')">4</button>
+        <button class="num-btn" onclick="addDigit('5')">5</button>
+        <button class="num-btn" onclick="addDigit('6')">6</button>
+        <button class="num-btn" onclick="addDigit('7')">7</button>
+        <button class="num-btn" onclick="addDigit('8')">8</button>
+        <button class="num-btn" onclick="addDigit('9')">9</button>
+        <button class="num-btn" onclick="clearPin()">C</button>
+        <button class="num-btn" onclick="addDigit('0')">0</button>
+        <button class="num-btn del" onclick="delDigit()">⌫</button>
+      </div>
+      <div class="err-msg" id="errMsg"></div>
+      <label style="display:flex;align-items:center;justify-content:center;gap:8px;font-size:0.78rem;color:#888;margin-top:0.4rem;cursor:pointer">
+        <input type="checkbox" id="rememberPin" style="width:15px;height:15px;accent-color:#1a7f4b">
+        Να θυμάσαι το PIN
+      </label>
+      <button class="back-btn" onclick="backToMode()">← Πίσω</button>
+    </div>
+    <p style="font-size:0.68rem;color:#aaa;font-style:italic;margin-top:0.75rem">Σχεδιασμός: Χρήστος Γεωργακόπουλος — 06/2026</p>
+    <button id="installBtn" onclick="installApp()" style="display:none;margin-top:0.75rem;width:100%;padding:0.65rem;background:#1a7f4b;color:#fff;border:none;border-radius:12px;font-size:0.9rem;font-weight:700;cursor:pointer;align-items:center;justify-content:center;gap:8px">
+      📲 Εγκατάσταση εφαρμογής
+    </button>
+    <div id="iosInstallHint" style="display:none;margin-top:0.75rem;padding:0.65rem;background:#e8f5ee;border-radius:12px;font-size:0.75rem;color:#1a7f4b;text-align:left;line-height:1.5">
+      📱 <b>Εγκατάσταση στο iPhone:</b><br>Safari → Κοινοποίηση 📤 → «Προσθήκη στην Αρχική Οθόνη»
+    </div>
+  </div>
+</div>
+
+<div id="mainScreen" class="screen">
+  <div class="app-header">
+    <div style="flex:1"><h2>🛒 Λίστα Αγορών</h2><span class="hdr-sub" id="hdrSub"></span></div>
+    <button class="hdr-btn" onclick="logout()">Έξοδος</button>
+  </div>
+  <div id="statusBar" class="status-bar"><div class="dot-pulse"></div><span id="statusTxt">Σύνδεση...</span></div>
+  <div id="totalCostBox" style="display:none;position:fixed;top:72px;right:16px;z-index:150;background:#fff;border:2px solid #e65100;color:#e65100;border-radius:20px;padding:4px 14px;font-size:0.85rem;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,0.12)">
+    💰 €<span id="totalCostVal">0.00</span>
+  </div>
+  <div id="printHeader"></div>
+  <div class="content-area" id="contentArea"></div>
+  <button class="fab-list" id="fabBtn" style="display:none">
+    📋 Λίστα <span class="fab-badge" id="fabBadge">0</span>
+  </button>
+  <button class="fab-add" id="fabAddBtn" style="display:none">
+    ➕ Προσθήκη
+  </button>
+  <!-- Κουμπί Συνταγές — εμφανίζεται πάντα στη λίστα -->
+  <button id="fabRecipesBtn"
+    style="position:fixed;bottom:24px;left:16px;z-index:200;background:#1a7f4b;color:#fff;border:none;border-radius:24px;padding:10px 18px;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(26,127,75,0.4);display:none;align-items:center;gap:6px">
+    🍽️ Συνταγές
+  </button>
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getDatabase, ref, onValue, set, remove, update, get } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+
+// ── FIREBASE CONFIG (διορθωμένο — το σωστό Firebase apiKey) ──
+const firebaseConfig={
+  apiKey:"AIzaSyC3drMmRGbykwTInDbRhLwdG9ulRz8Iq_0",
+  authDomain:"lista-agoron-ea924.firebaseapp.com",
+  databaseURL:"https://lista-agoron-ea924-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:"lista-agoron-ea924"
+};
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+const CATEGORIES=[
+  {id:'fav',    label:'❤️ Αγαπημένα',    items:[],dynamic:true},
+  {id:'dairy',  label:'🥛 Γαλακτοκομικά', items:['Γάλα','Γιαούρτι','Τυρί Φέτα','Βούτυρο','Κρέμα γάλακτος','Τυρί τριμμένο','Αυγά']},
+  {id:'meat',   label:'🥩 Κρέας / Ψάρι',  items:['Κοτόπουλο','Κιμάς','Χοιρινό','Μοσχάρι','Ψάρι','Λουκάνικα','Μπέικον']},
+  {id:'veg',    label:'🥦 Λαχανικά',      items:['Ντομάτες','Πατάτες','Κρεμμύδια','Σκόρδο','Αγγούρι','Μαρούλι','Καρότα','Πιπεριές','Κολοκυθάκια']},
+  {id:'fruit',  label:'🍎 Φρούτα',         items:['Μήλα','Μπανάνες','Πορτοκάλια','Λεμόνια','Σταφύλια','Ροδάκινα','Φράουλες']},
+  {id:'pantry', label:'🥫 Παντοπωλείο',   items:['Λάδι ελαιόλαδο','Ζυμαρικά','Ρύζι','Αλεύρι','Ζάχαρη','Αλάτι','Ξύδι','Κονσέρβες τόνου','Ντομάτα κονσέρβα','Φακές','Ρεβίθια']},
+  {id:'spices', label:'🧂 Μπαχαρικά',     items:['Αλάτι','Πιπέρι','Πάπρικα','Ρίγανη','Κανέλλα','Γαρύφαλλο','Κύμινο','Μπαχάρι']},
+  {id:'bakery', label:'🧁 Αρτοποιείο',    items:['Ψωμί','Φρυγανιές','Κριτσίνια','Παξιμάδια','Πίτα']},
+  {id:'drinks', label:'🧃 Ροφήματα',      items:['Νερό','Χυμός πορτοκάλι','Καφές','Τσάι','Αναψυκτικά','Μπύρα','Κρασί']},
+  {id:'clean',  label:'🧴 Καθαριότητα',   items:['Απορρυπαντικό','Χαρτί υγείας','Χαρτί κουζίνας','Σαπούνι','Σαμπουάν','Αφρόλουτρο','Οδοντόκρεμα','Σφουγγάρια','Λευκαντικό','Μαλακτικό']},
+  {id:'house',  label:'🧹 Είδη Σπιτιού',  items:['Σακούλες σκουπιδιών','Σφουγγαρίστρα','Σκούπα','Χαρτοπετσέτες','Μεμβράνη','Αλουμινόχαρτο']}
+];
+const ALL_PRODUCTS=[...new Set(CATEGORIES.filter(c=>c.id!=='fav').flatMap(c=>c.items))];
+const SUPERMARKET_ORDER=['fav','veg','fruit','dairy','meat','bakery','pantry','spices','drinks','clean','house'];
+
+let pinBuffer='',activeTab='add',addCategory='dairy',showLastItems=false;
+let sharedList={},favItems=[],modalUnit='τεμ.';
+let roomKey=null,listRef=null,favRef=null;
+let unsubList=null,unsubFav=null,suggIdx=-1;
+let loginMode=null,failedAttempts=0;
+const MAX_ATTEMPTS=5;
+
+// ── AUTO-LOGIN αν υπάρχει αποθηκευμένο PIN ──
+window.addEventListener('load',()=>{
+  const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
+  if(isIOS&&!window.navigator.standalone){const h=document.getElementById('iosInstallHint');if(h)h.style.display='block';}
+  const saved=localStorage.getItem('savedPin');
+  if(saved){
+    loginMode='join';pinBuffer=saved;
+    document.getElementById('modeSelect').style.display='none';
+    document.getElementById('pinEntry').style.display='none';
+    document.getElementById('autoLoginMsg').style.display='block';
+    setTimeout(tryLogin,300);
+  }
+});
+
+window.selectMode=mode=>{loginMode=mode;showPinEntry(mode);};
+function showPinEntry(mode){
+  document.getElementById('modeSelect').style.display='none';
+  document.getElementById('pinEntry').style.display='block';
+  document.getElementById('modeLabel').textContent=
+    mode==='create'?'Επέλεξε 6ψήφιο PIN για τον νέο σου λογαριασμό':'Εισάγετε το 6ψήφιο PIN σας';
+}
+window.backToMode=()=>{
+  loginMode=null;pinBuffer='';failedAttempts=0;
+  updateDots();document.getElementById('errMsg').textContent='';
+  document.getElementById('modeSelect').style.display='block';
+  document.getElementById('pinEntry').style.display='none';
+};
+window.addDigit=d=>{if(pinBuffer.length<6){pinBuffer+=d;updateDots();if(pinBuffer.length===6)setTimeout(tryLogin,200);}};
+window.delDigit=()=>{pinBuffer=pinBuffer.slice(0,-1);updateDots();};
+window.clearPin=()=>{pinBuffer='';updateDots();document.getElementById('errMsg').textContent='';};
+function updateDots(){for(let i=0;i<6;i++)document.getElementById('d'+i).classList.toggle('filled',i<pinBuffer.length);}
+
+async function tryLogin(){
+  if(failedAttempts>=MAX_ATTEMPTS){document.getElementById('errMsg').textContent='❌ Πολλές αποτυχίες. Ανανεώστε τη σελίδα.';return;}
+  const pin=pinBuffer;
+  document.getElementById('errMsg').textContent='⏳ Έλεγχος...';
+  try{
+    const snap=await get(ref(db,'rooms/'+pin));
+    if(loginMode==='create'){
+      if(snap.exists()){
+        failedAttempts++;const left=MAX_ATTEMPTS-failedAttempts;
+        document.getElementById('errMsg').textContent=left>0?`❌ Κατειλημμένο PIN — δοκιμάστε άλλο (${left} απόπειρες)`:'❌ Κατειλημμένο PIN. Ανανεώστε τη σελίδα.';
+        pinBuffer='';updateDots();
+      } else {
+        await set(ref(db,'rooms/'+pin+'/meta'),{created:Date.now()});
+        enterRoom(pin);setStatus('ok','✅ Νέος λογαριασμός δημιουργήθηκε! PIN: '+pin);
+      }
+    } else {
+      if(snap.exists()){enterRoom(pin);}
+      else{
+        failedAttempts++;const left=MAX_ATTEMPTS-failedAttempts;
+        document.getElementById('autoLoginMsg').style.display='none';
+        document.getElementById('modeSelect').style.display='block';
+        document.getElementById('errMsg').textContent=left>0?`❌ Άγνωστο PIN (${left} απόπειρες)`:'❌ Πολλές αποτυχίες. Ανανεώστε τη σελίδα.';
+        pinBuffer='';updateDots();
+      }
+    }
+  }catch(err){
+    console.error(err);
+    document.getElementById('errMsg').textContent='❌ Σφάλμα σύνδεσης';
+    document.getElementById('autoLoginMsg').style.display='none';
+    document.getElementById('modeSelect').style.display='block';
+    pinBuffer='';updateDots();
+  }
+}
+
+function enterRoom(pin){
+  const chk=document.getElementById('rememberPin');
+  if(chk&&chk.checked)localStorage.setItem('savedPin',pin);else localStorage.removeItem('savedPin');
+  roomKey=pin;
+  listRef=ref(db,'rooms/'+pin+'/lista');
+  favRef=ref(db,'rooms/'+pin+'/favorites');
+  document.getElementById('loginScreen').classList.remove('active');
+  document.getElementById('mainScreen').classList.add('active');
+  document.getElementById('hdrSub').textContent='PIN: '+pin.slice(0,3)+'···';
+  startListeners();renderContent();updateFab();
+  loadRecipes(); // προφόρτωση
+}
+
+window.logout=()=>{
+  if(unsubList)unsubList();if(unsubFav)unsubFav();
+  roomKey=null;pinBuffer='';sharedList={};favItems=[];loginMode=null;failedAttempts=0;
+  updateDots();document.getElementById('errMsg').textContent='';
+  document.getElementById('mainScreen').classList.remove('active');
+  document.getElementById('loginScreen').classList.add('active');
+  document.getElementById('fabBtn').style.display='none';
+  document.getElementById('fabAddBtn').style.display='none';
+  const rb=document.getElementById('fabRecipesBtn');if(rb)rb.style.display='none';
+  document.getElementById('totalCostBox').style.display='none';
+  document.getElementById('autoLoginMsg').style.display='none';
+  document.getElementById('modeSelect').style.display='block';
+  document.getElementById('pinEntry').style.display='none';
+};
+
+// ── FIREBASE LISTENERS ──
+function startListeners(){
+  unsubList=onValue(listRef,snap=>{
+    sharedList=snap.val()||{};
+    if(document.getElementById('mainScreen').classList.contains('active')){
+      if(activeTab==='all')renderContent();
+      updateFab();updateTotalCost();
+    }
+    setStatus('ok','🟢 Live σύνδεση ενεργή');
+  },err=>{console.error(err);setStatus('err','❌ Σφάλμα σύνδεσης');});
+  unsubFav=onValue(favRef,snap=>{
+    favItems=snap.val()||[];
+    CATEGORIES.find(c=>c.id==='fav').items=[...favItems];
+    if(activeTab==='add')renderContent();
+  },()=>{favItems=[];});
+}
+
+window.setTab=id=>{activeTab=id;renderContent();updateFab();};
+// Σύνδεση FAB κουμπιών — .onclick μέσα στο module (εγγυημένη πρόσβαση στο DOM)
+document.getElementById('fabBtn').onclick=()=>setTab('all');
+document.getElementById('fabAddBtn').onclick=()=>setTab('add');
+document.getElementById('fabRecipesBtn').onclick=()=>setTab('recipes');
+function updateFab(){
+  const cnt=Object.values(sharedList).filter(i=>!i.done).length;
+  document.getElementById('fabBadge').textContent=cnt;
+  const onList=activeTab==='all';
+  const onAdd=activeTab==='add';
+  const onRecipes=activeTab==='recipes';
+  // fabBtn (📋 Λίστα): φαίνεται όταν ΔΕΝ είμαστε στη λίστα
+  document.getElementById('fabBtn').style.display=onList?'none':'flex';
+  // fabAddBtn (➕ Προσθήκη): φαίνεται όταν ΔΕΝ είμαστε στο add
+  document.getElementById('fabAddBtn').style.display=onAdd?'none':'flex';
+  // fabRecipesBtn (🍽️ Συνταγές): φαίνεται όταν ΔΕΝ είμαστε στο recipes
+  const rBtn=document.getElementById('fabRecipesBtn');
+  if(rBtn)rBtn.style.display=onRecipes?'none':'flex';
+}
+function updateTotalCost(){
+  const box=document.getElementById('totalCostBox');if(!box)return;
+  const items=Object.values(sharedList).filter(i=>!i.done&&i.price>0);
+  if(items.length===0){box.style.display='none';return;}
+  const total=items.reduce((s,i)=>s+(parseFloat(i.price)||0)*(parseFloat(i.qty)||1),0);
+  document.getElementById('totalCostVal').textContent=total.toFixed(2);
+  box.style.display='flex';
+}
+
+// ── ΛΙΣΤΑ ──
+function renderList(ca){
+  const items=Object.entries(sharedList).map(([id,v])=>({id,...v}));
+  const active=items.filter(i=>!i.done);
+  const done=items.filter(i=>i.done);
+  if(items.length===0){
+    ca.innerHTML=`<div class="empty-state"><div class="es-icon">🛒</div><p>Η λίστα είναι άδεια!<br>Πατήστε <b>➕ Προσθήκη</b> για να ξεκινήσετε.</p></div>`;return;
+  }
+  let html=`<div class="share-row" style="display:flex;gap:8px;margin-bottom:0.75rem">
+    <button onclick="shareViber()" style="flex:1;padding:0.6rem;background:#7360f2;border:none;border-radius:10px;color:#fff;font-size:0.82rem;font-weight:600;cursor:pointer">📲 Viber</button>
+    <button onclick="exportPDF()" style="flex:1;padding:0.6rem;background:#c62828;border:none;border-radius:10px;color:#fff;font-size:0.82rem;font-weight:600;cursor:pointer">📄 PDF</button>
+    <button onclick="shareGeneric()" style="flex:1;padding:0.6rem;background:#555;border:none;border-radius:10px;color:#fff;font-size:0.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px"><svg viewBox="0 0 24 24" width="14" height="14" fill="#fff"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg> Κοινοποίηση</button>
+  </div>
+  <div style="display:flex;justify-content:center;margin-bottom:0.75rem">
+    <button onclick="showPKHelp()" style="display:flex;align-items:center;gap:8px;padding:0.45rem 1.4rem;background:#f0f4ff;border:1.5px solid #003476;border-radius:10px;cursor:pointer">
+      <span style="font-size:1.2rem">🇬🇷</span>
+      <span style="text-align:left"><span style="font-size:0.82rem;font-weight:700;color:#003476;display:block">Βοήθεια</span><span style="font-size:0.62rem;color:#888">Poso_kanei</span></span>
+    </button>
+  </div>
+  <div class="section-lbl">Εκκρεμή <span class="badge">${active.length}</span></div>`;
+  if(active.length===0){
+    html+=`<div style="text-align:center;color:#bbb;padding:1rem;font-size:0.85rem">Όλα αγοράστηκαν! 🎉</div>`;
+  } else {
+    // Ομαδοποίηση κατά κατηγορία με σειρά σούπερ μάρκετ
+    const groups={};
+    active.forEach(i=>{const c=i.cat||'pantry';if(!groups[c])groups[c]=[];groups[c].push(i);});
+    SUPERMARKET_ORDER.forEach(catId=>{
+      if(!groups[catId]||groups[catId].length===0)return;
+      const cat=CATEGORIES.find(c=>c.id===catId);
+      html+=`<div class="section-lbl" style="margin-top:0.75rem;color:#1a7f4b">${cat?.label||catId}</div>`;
+      groups[catId].forEach(item=>html+=itemHTML(item));
+    });
+    Object.keys(groups).filter(k=>!SUPERMARKET_ORDER.includes(k)).forEach(catId=>{
+      groups[catId].forEach(item=>html+=itemHTML(item));
+    });
+  }
+  if(done.length>0){
+    html+=`<div class="section-lbl" style="margin-top:1rem">Αγοράστηκαν <span class="badge">${done.length}</span></div>`;
+    done.forEach(item=>html+=itemHTML(item));
+    html+=`<button onclick="clearDone()" style="width:100%;margin-top:8px;padding:0.6rem;background:#fff3f3;border:1px solid #fcc;border-radius:10px;color:#c62828;font-size:0.82rem;cursor:pointer">🗑 Καθαρισμός αγορασμένων</button>`;
+  }
+  ca.innerHTML=html;
+}
+
+function itemHTML(item){
+  const catLabel=CATEGORIES.find(c=>c.id===item.cat)?.label||'';
+  const qtyStr=item.qty&&item.unit?`${item.qty} ${item.unit}`:'';
+  const isFav=item.cat==='fav';
+  const esc=item.name.replace(/'/g,"\\'");
+  const qtyBadge=qtyStr?`<span class="item-qty-badge">${qtyStr}</span>`:`<span class="item-qty-add">+ποσ.</span>`;
+  const itemTotal=item.price>0?(parseFloat(item.price)*(parseFloat(item.qty)||1)).toFixed(2):null;
+  return `<div class="list-item${item.done?' done':''}${isFav?' is-fav':''}">
+    <button class="item-check${item.done?' checked':''}" onclick="toggleItem('${item.id}')">${item.done?'✓':''}</button>
+    <div class="item-body" onclick="editQty('${item.id}')">
+      <div class="item-name">${isFav?'❤️ ':''}${item.name} ${qtyBadge}${itemTotal?`<span class="item-price-badge">€${itemTotal}</span>`:''}</div>
+      ${item.brand?`<span class="item-brand">🏷️ ${item.brand}</span>`:''}
+      <span class="item-cat">${catLabel}</span>
+    </div>
+    <button class="item-posokanei" onclick="checkPrice('${esc}')" title="Τιμές στο PosoKanei">🇬🇷<br><span style="font-size:0.42rem;font-weight:800;color:#003476">Poso_kanei</span></button>
+    <button class="item-del" onclick="deleteItem('${item.id}')">✕</button>
+  </div>`;
+}
+
+function normGr(s){
+  return s.toLowerCase()
+    .replace(/[άἀἁὰ]/g,'α').replace(/[έἐἑὲ]/g,'ε').replace(/[ήἠἡὴ]/g,'η')
+    .replace(/[ίἰἱὶϊΐ]/g,'ι').replace(/[όὀὁὸ]/g,'ο').replace(/[ύὐὑὺϋΰ]/g,'υ')
+    .replace(/[ώὠὡὼ]/g,'ω').trim();
+}
+
+// Επιστρέφει την τελευταία καταχωρημένη τιμή για ένα προϊόν
+function getLastPrice(name){
+  const items=Object.values(sharedList)
+    .filter(i=>normGr(i.name)===normGr(name)&&i.price>0)
+    .sort((a,b)=>(b.ts||0)-(a.ts||0));
+  return items.length>0?items[0].price:null;
+}
+
+// ── ΠΡΟΣΘΗΚΗ ──
+function renderAdd(ca){
+  const catBtns=CATEGORIES.map(c=>{
+    const sel=addCategory===c.id;
+    return `<button class="prod-btn${c.id==='fav'?' fav':''}" onclick="setAddCat('${c.id}')" style="${sel?'border-color:#1a7f4b;background:#f0faf5;color:#1a7f4b;font-weight:600':''}">${c.label}</button>`;
+  }).join('');
+  const cat=CATEGORIES.find(c=>c.id===addCategory);
+  const prodBtns=cat.items.length>0
+    ?cat.items.map(p=>{
+        const esc=p.replace(/'/g,"\\'");
+        if(addCategory==='fav'){
+          const lp=getLastPrice(p);
+          return `<div style="position:relative;display:flex">
+            <button class="prod-btn fav" style="flex:1;padding-right:28px;line-height:1.4" onclick="quickAdd('${esc}','fav')">${p}${lp?`<span style="display:block;font-size:0.65rem;color:#c62828;font-weight:700;margin-top:2px">€${lp.toFixed(2)}</span>`:''}</button>
+            <button onclick="removeFav('${esc}')" style="position:absolute;right:4px;top:50%;transform:translateY(-50%);background:#e53935;border:none;color:#fff;border-radius:50%;width:20px;height:20px;font-size:0.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+          </div>`;
+        }
+        return `<button class="prod-btn" onclick="quickAdd('${esc}','${addCategory}')">${p}</button>`;
+      }).join('')
+    :`<div style="grid-column:span 2;text-align:center;color:#bbb;font-size:0.82rem;padding:1rem">Δεν έχετε αγαπημένα ακόμα.<br>Πατήστε ❤️+ κατά την προσθήκη!</div>`;
+  const lastItems=JSON.parse(localStorage.getItem('lastItems_'+roomKey)||'[]');
+  const lastSec=showLastItems&&lastItems.length>0?`
+    <div class="section-lbl">🕐 Τελευταία προϊόντα</div>
+    <div class="products-grid">${lastItems.map(p=>`<button class="prod-btn" onclick="quickAdd('${p.replace(/'/g,"\\'")}','${addCategory}')">${p}</button>`).join('')}</div>`:'';
+  ca.innerHTML=`
+    <div style="position:relative;margin-bottom:0.75rem">
+      <div class="add-bar" style="margin-bottom:8px">
+        <input id="manualInput" placeholder="Πληκτρολογήστε προϊόν..." autocomplete="off"
+          oninput="showSuggestions(this.value)" onkeydown="handleKey(event)">
+        <button class="btn-add" onclick="manualAdd()">+</button>
+        <button class="btn-fav" onclick="manualAddFav()">❤️+</button>
+      </div>
+      <div style="display:flex;justify-content:center;gap:8px;margin-bottom:4px">
+        <button id="micBtn" class="btn-mic" onclick="startVoice()" style="padding:0.6rem 1.2rem">🎤 Φωνητική εισαγωγή</button>
+        <button onclick="toggleLastItems()" style="padding:0.6rem 1rem;background:${showLastItems?'#e8f5ee':'#f0f0f0'};border:none;border-radius:12px;font-size:0.82rem;cursor:pointer;color:${showLastItems?'#1a7f4b':'#555'};font-weight:${showLastItems?'600':'400'}">🕐 Τελευταία 10</button>
+      </div>
+      <div id="suggBox" style="display:none;position:absolute;left:0;right:0;background:#fff;border:1.5px solid #1a7f4b;border-top:none;border-radius:0 0 12px 12px;z-index:300;max-height:180px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,0.1)"></div>
+    </div>
+
+    ${lastSec}
+    <div class="section-lbl">Κατηγορία</div>
+    <div class="products-grid">${catBtns}</div>
+    <div class="section-lbl" style="margin-top:0.5rem">Προϊόντα — ${cat.label}</div>
+    <div class="products-grid">${prodBtns}</div>`;
+}
+
+function renderContent(){
+  const ca=document.getElementById('contentArea');
+  if(activeTab==='all')renderList(ca);
+  else if(activeTab==='recipes')renderRecipes(ca);
+  else renderAdd(ca);
+  updateFab();updateTotalCost();
+}
+
+// ── AUTOCOMPLETE ──
+window.showSuggestions=val=>{
+  const box=document.getElementById('suggBox');
+  if(!val||val.length<2){box.style.display='none';return;}
+  const q=normGr(val);
+  const history=[...new Set(Object.values(sharedList).map(i=>i.name))];
+  const pool=[...new Set([...history,...ALL_PRODUCTS,...favItems])];
+  const matches=pool.filter(p=>normGr(p).includes(q)&&normGr(p)!==q).slice(0,6);
+  if(matches.length===0){box.style.display='none';return;}
+  suggIdx=-1;
+  box.innerHTML=matches.map((m,i)=>`<div class="sugg-item" id="sugg-${i}" onclick="pickSugg('${m.replace(/'/g,"\\'")}')">${m}</div>`).join('');
+  box.style.display='block';
+};
+window.pickSugg=val=>{document.getElementById('manualInput').value=val;document.getElementById('suggBox').style.display='none';suggIdx=-1;};
+window.handleKey=e=>{
+  const box=document.getElementById('suggBox');const items=box.querySelectorAll('.sugg-item');
+  if(e.key==='ArrowDown'){e.preventDefault();suggIdx=Math.min(suggIdx+1,items.length-1);}
+  else if(e.key==='ArrowUp'){e.preventDefault();suggIdx=Math.max(suggIdx-1,-1);}
+  else if(e.key==='Enter'){if(suggIdx>=0&&items[suggIdx]){items[suggIdx].click();return;}manualAdd();return;}
+  else if(e.key==='Escape'){box.style.display='none';return;}
+  items.forEach((el,i)=>el.classList.toggle('sugg-sel',i===suggIdx));
+};
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#suggBox')&&!e.target.closest('#manualInput')){const b=document.getElementById('suggBox');if(b)b.style.display='none';}
+});
+
+// ── ΦΩΝΗΤΙΚΗ ΕΙΣΑΓΩΓΗ ──
+window.startVoice=()=>{
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){setStatus('warn','⚠️ Φωνητική εισαγωγή: χρησιμοποιήστε Chrome');return;}
+  const rec=new SR();rec.lang='el-GR';rec.continuous=false;rec.interimResults=false;
+  const btn=document.getElementById('micBtn');
+  if(btn){btn.classList.add('recording');btn.textContent='🔴';}
+  rec.onresult=e=>{
+    const txt=e.results[0][0].transcript;
+    const inp=document.getElementById('manualInput');
+    if(inp){inp.value=txt;showSuggestions(txt);}
+    if(btn){btn.classList.remove('recording');btn.textContent='🎤 Φωνητική εισαγωγή';}
+    setStatus('ok','🎤 Αναγνωρίστηκε: '+txt);
+  };
+  rec.onerror=e=>{
+    if(btn){btn.classList.remove('recording');btn.textContent='🎤 Φωνητική εισαγωγή';}
+    const msgs={'not-allowed':'⚠️ Απαιτείται άδεια μικροφώνου','network':'⚠️ Απαιτείται σύνδεση internet','language-not-supported':'⚠️ Εγκαταστήστε ελληνικά στο κινητό','no-speech':'⚠️ Δεν ακούστηκε ομιλία','service-not-allowed':'⚠️ Χρησιμοποιήστε Chrome'};
+    setStatus('warn',msgs[e.error]||'⚠️ Σφάλμα ('+e.error+')');
+  };
+  rec.onend=()=>{if(btn){btn.classList.remove('recording');btn.textContent='🎤 Φωνητική εισαγωγή';}};
+  rec.start();
+};
+
+// ── MODAL ΠΟΣΟΤΗΤΑΣ / ΤΙΜΗΣ / ΜΑΡΚΑΣ ──
+window.editQty=id=>{
+  const item=sharedList[id];if(!item||item.done)return;
+  modalUnit=item.unit||'τεμ.';
+  const units=['τεμ.','κιλά','γρ.','lt'];
+  const overlay=document.createElement('div');
+  overlay.className='qty-overlay';overlay.id='qtyModal';
+  overlay.innerHTML=`
+    <div class="qty-sheet">
+      <div style="text-align:center;font-weight:800;font-size:1rem;text-transform:uppercase;color:#1a7f4b;margin-bottom:1rem">${item.name}</div>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:0.9rem">
+        <input id="qtyVal" type="number" min="0.1" step="0.1" value="${item.qty||1}"
+          style="width:75px;padding:0.55rem;border:1.5px solid #e0e0e0;border-radius:10px;font-size:1.1rem;text-align:center;font-weight:700">
+        <div style="display:flex;gap:5px;flex:1">
+          ${units.map(u=>`<button onclick="setMU('${u}')" id="mu-${u.replace('.','')}" class="ubu${modalUnit===u?' sel':''}">${u}</button>`).join('')}
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.9rem">
+        <span style="font-size:1rem;color:#e65100;font-weight:700">€</span>
+        <input id="priceVal" type="number" min="0" step="0.01" placeholder="0.00" value="${item.price||''}"
+          style="flex:1;padding:0.55rem;border:1.5px solid #e0e0e0;border-radius:10px;font-size:1rem;text-align:center">
+        <span style="font-size:0.75rem;color:#aaa">/ μονάδα</span>
+      </div>
+      <input id="brandVal" type="text" placeholder="Μάρκα (προαιρετικό)" value="${item.brand||''}"
+        style="width:100%;padding:0.55rem 1rem;border:1.5px solid #e0e0e0;border-radius:10px;font-size:0.9rem;text-transform:uppercase;margin-bottom:1rem">
+      <div style="display:flex;gap:8px">
+        <button onclick="closeQtyModal()" style="flex:1;padding:0.7rem;border:1.5px solid #ddd;border-radius:12px;background:#fff;color:#555;cursor:pointer;font-size:0.9rem">Ακύρωση</button>
+        <button onclick="saveQty('${id}')" style="flex:1;padding:0.7rem;border:none;border-radius:12px;background:#1a7f4b;color:#fff;font-weight:700;cursor:pointer;font-size:0.9rem">✓ Αποθήκευση</button>
+      </div>
+    </div>`;
+  overlay.addEventListener('click',e=>{if(e.target===overlay)closeQtyModal();});
+  document.body.appendChild(overlay);
+};
+window.setMU=u=>{modalUnit=u;document.querySelectorAll('.ubu').forEach(b=>b.classList.remove('sel'));const el=document.getElementById('mu-'+u.replace('.',''));if(el)el.classList.add('sel');};
+window.saveQty=id=>{
+  const qty=parseFloat(document.getElementById('qtyVal')?.value||1);
+  const price=parseFloat(document.getElementById('priceVal')?.value)||null;
+  const brand=(document.getElementById('brandVal')?.value||'').trim();
+  const upd={qty,unit:modalUnit,ts:Date.now()};
+  if(price)upd.price=price;else upd.price=null;
+  if(brand)upd.brand=brand;else upd.brand=null;
+  update(ref(db,'rooms/'+roomKey+'/lista/'+id),upd);closeQtyModal();
+};
+window.closeQtyModal=()=>{const m=document.getElementById('qtyModal');if(m)m.remove();};
+
+// ── ΕΝΕΡΓΕΙΕΣ ──
+window.setAddCat=id=>{addCategory=id;renderContent();};
+window.toggleLastItems=()=>{showLastItems=!showLastItems;renderContent();};
+window.quickAdd=(name,cat)=>addItem(name,cat,false);
+window.manualAdd=()=>{const inp=document.getElementById('manualInput');const v=inp.value.trim();if(v){addItem(v,addCategory,false);inp.value='';const b=document.getElementById('suggBox');if(b)b.style.display='none';}};
+window.manualAddFav=()=>{const inp=document.getElementById('manualInput');const v=inp.value.trim();if(v){addItem(v,addCategory,true);inp.value='';const b=document.getElementById('suggBox');if(b)b.style.display='none';}};
+window.removeFav=name=>{const newFavs=favItems.filter(f=>f!==name);set(favRef,newFavs.length>0?newFavs:[]);setStatus('ok','🗑 Αφαιρέθηκε από Αγαπημένα: '+name);};
+
+// ── FIREBASE CRUD ──
+function addItem(name,cat,addToFav){
+  const existing=Object.values(sharedList).find(i=>normGr(i.name)===normGr(name)&&!i.done);
+  if(existing){setStatus('warn','⚠️ Ήδη στη λίστα: '+name);return;}
+  const histKey='lastItems_'+roomKey;
+  const hist=[name,...JSON.parse(localStorage.getItem(histKey)||'[]').filter(h=>normGr(h)!==normGr(name))].slice(0,10);
+  localStorage.setItem(histKey,JSON.stringify(hist));
+  const id=Date.now().toString(36)+Math.random().toString(36).slice(2);
+  set(ref(db,'rooms/'+roomKey+'/lista/'+id),{name,cat,done:false,ts:Date.now()});
+  if(addToFav&&!favItems.includes(name)){set(favRef,[...favItems,name]);setStatus('ok','✅ Προστέθηκε στη λίστα & Αγαπημένα: '+name);}
+  else{setStatus('ok','✅ Προστέθηκε: '+name);}
+}
+window.toggleItem=id=>{const item=sharedList[id];if(item)update(ref(db,'rooms/'+roomKey+'/lista/'+id),{done:!item.done,ts:Date.now()});};
+window.deleteItem=id=>remove(ref(db,'rooms/'+roomKey+'/lista/'+id));
+window.clearDone=()=>{Object.entries(sharedList).forEach(([id,v])=>{if(v.done)remove(ref(db,'rooms/'+roomKey+'/lista/'+id));});};
+
+// ── ΚΟΙΝΟΠΟΙΗΣΗ ──
+function buildShareText(){
+  const items=Object.values(sharedList).filter(i=>!i.done);
+  if(items.length===0)return 'Η λίστα αγορών είναι άδεια.';
+  let txt='🛒 ΛΙΣΤΑ ΑΓΟΡΩΝ\n\n';
+  items.forEach(i=>{
+    const q=i.qty&&i.unit?` (${i.qty} ${i.unit})`:'';
+    const b=i.brand?` [${i.brand}]`:'';
+    const p=i.price>0?` €${(i.price*(i.qty||1)).toFixed(2)}`:'';
+    txt+=`• ${i.name.toUpperCase()}${q}${b}${p}\n`;
+  });
+  const total=items.filter(i=>i.price>0).reduce((s,i)=>s+(i.price||0)*(i.qty||1),0);
+  txt+=`\nΣύνολο: ${items.length} προϊόντα`;
+  if(total>0)txt+=` | €${total.toFixed(2)}`;
+  return txt;
+}
+window.shareViber=()=>window.open('viber://forward?text='+encodeURIComponent(buildShareText()),'_blank');
+window.shareGeneric=async()=>{
+  const text=buildShareText();
+  if(navigator.share){try{await navigator.share({title:'Λίστα Αγορών',text});}catch(e){}}
+  else if(navigator.clipboard){await navigator.clipboard.writeText(text);setStatus('ok','📋 Λίστα αντιγράφηκε');}
+};
+window.exportPDF=()=>{
+  const h=document.getElementById('printHeader');
+  if(h){
+    const pending=Object.values(sharedList).filter(i=>!i.done);
+    const total=pending.filter(i=>i.price>0).reduce((s,i)=>s+(i.price||0)*(i.qty||1),0);
+    const date=new Date().toLocaleDateString('el-GR');
+    h.innerHTML=`<h2 style="color:#1a7f4b;margin:0 0 4px">🛒 Λίστα Αγορών</h2>
+      <p style="color:#666;font-size:0.82rem;margin:0">${date} · ${pending.length} προϊόντα${total>0?' · Κόστος: €'+total.toFixed(2):''}</p>
+      <hr style="border:none;border-top:2px solid #1a7f4b;margin:8px 0">`;
+  }
+  window.print();
+};
+
+// ── ΒΟΗΘΕΙΑ POSOKANEI ──
+window.showPKHelp=()=>{
+  const ov=document.createElement('div');
+  ov.id='pkHelpModal';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:600;display:flex;align-items:center;justify-content:center;padding:1rem';
+  ov.innerHTML=`
+    <div style="background:#fff;border-radius:20px;max-width:340px;width:100%;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.3)">
+      <div style="background:#003476;padding:0.9rem 1.25rem;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="color:#fff;font-weight:700;font-size:0.9rem">Οδηγός PosoKanei.gov.gr</div>
+          <div style="color:#adc8ff;font-size:0.72rem">Πώς λειτουργεί το κουμπί 🇬🇷</div>
+        </div>
+        <button onclick="document.getElementById('pkHelpModal').remove()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;border-radius:50%;width:28px;height:28px;font-size:0.9rem;cursor:pointer">✕</button>
+      </div>
+      <div style="max-height:72vh;overflow-y:auto">
+        <img src="help-gr.png" style="width:100%;display:block" alt="Οδηγός PosoKanei"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <div style="display:none;padding:1.25rem;color:#444;font-size:0.85rem;line-height:1.6">
+          <p style="margin-bottom:0.75rem">📋 <b>Βήμα 1:</b> Πατήστε το 🇬🇷 δίπλα σε ένα προϊόν της λίστας.</p>
+          <p style="margin-bottom:0.75rem">📋 <b>Βήμα 2:</b> Το όνομα αντιγράφεται αυτόματα στο clipboard.</p>
+          <p>📋 <b>Βήμα 3:</b> Στο PosoKanei που ανοίγει, πατήστε παρατεταμένα στο πεδίο αναζήτησης → <b>Επικόλληση</b>.</p>
+        </div>
+      </div>
+    </div>`;
+  ov.addEventListener('click',e=>{if(e.target===ov)ov.remove();});
+  document.body.appendChild(ov);
+};
+
+window.checkPrice=name=>{
+  const open=()=>window.open('https://posokanei.gov.gr/','_blank');
+  if(navigator.clipboard?.writeText){navigator.clipboard.writeText(name).then(()=>{setStatus('ok','📋 Αντιγράφηκε: '+name+' — κάντε Επικόλληση στο PosoKanei');open();}).catch(()=>{fbCopy(name);open();});}else{fbCopy(name);open();}
+};
+function fbCopy(text){const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);}
+
+function setStatus(type,msg){
+  const bar=document.getElementById('statusBar'),txt=document.getElementById('statusTxt');
+  bar.className='status-bar '+(type==='ok'?'ok':type==='err'?'err':'');
+  txt.textContent=msg;
+  if(type!=='err')setTimeout(()=>{bar.className='status-bar ok';txt.textContent='🟢 Live σύνδεση ενεργή';},2500);
+}
+
+
+// ── ΣΥΝΤΑΓΕΣ ──────────────────────────────────────────
+let allRecipes=[], recipeFilter='Όλες';
+
+async function loadRecipes(){
+  if(allRecipes.length>0)return; // φορτώθηκαν ήδη
+  try{
+    const r=await fetch('/lista/recipes.json');
+    allRecipes=await r.json();
+  }catch(e){console.error('Σφάλμα φόρτωσης συνταγών:',e);}
+}
+
+function renderRecipes(ca){
+  // Φόρτωση αν δεν έχουν φορτωθεί ακόμα
+  if(allRecipes.length===0){
+    loadRecipes().then(()=>renderRecipes(ca));
+    ca.innerHTML=`<div style="text-align:center;padding:3rem;color:#aaa"><div style="font-size:2rem;margin-bottom:0.5rem">⏳</div>Φόρτωση συνταγών...</div>`;
+    return;
+  }
+  // Φίλτρα κουζίνας
+  const cuisines=['Όλες',...new Set(allRecipes.map(r=>r.cuisine))];
+  const filtered=recipeFilter==='Όλες'?allRecipes:allRecipes.filter(r=>r.cuisine===recipeFilter);
+
+  const filterBtns=`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem;overflow-x:auto;padding-bottom:4px">
+    ${cuisines.map(c=>`<button class="recipe-filter-btn${recipeFilter===c?' active':''}" onclick="setRecipeFilter('${c}')">${c}</button>`).join('')}
+  </div>`;
+
+  const cards=filtered.map((r,i)=>{
+    const idx=allRecipes.indexOf(r);
+    const ingList=r.ingredients.map(ing=>`
+      <div class="recipe-ing-row">
+        <span>${ing.name}</span>
+        <span style="color:#1a7f4b;font-weight:600;white-space:nowrap;margin-left:8px">${ing.qty} ${ing.unit}</span>
+      </div>`).join('');
+    return `<div class="recipe-card">
+      <div class="recipe-card-header" onclick="toggleRecipeCard(${idx})">
+        <div style="flex:1">
+          <div style="font-weight:700;font-size:0.92rem;margin-bottom:2px">${r.name}</div>
+          <div style="font-size:0.72rem;color:#888">${r.cuisine} &nbsp;·&nbsp; 🧺 ${r.ingredients.length} υλικά</div>
+        </div>
+        <span id="rcarrow-${idx}" style="color:#1a7f4b;margin-left:8px;flex-shrink:0">▼</span>
+      </div>
+      <div id="rcbody-${idx}" class="recipe-card-body">
+        <div style="font-size:0.72rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem">Υλικά</div>
+        ${ingList}
+        <div style="display:flex;gap:8px;margin-top:1rem">
+          <button onclick="addAllRecipeIngredients(${idx},event)"
+            style="flex:1;padding:0.7rem;background:#1a7f4b;color:#fff;border:none;border-radius:12px;font-weight:700;font-size:0.85rem;cursor:pointer">
+            ➕ Προσθήκη όλων
+          </button>
+          <a href="${r.url}" target="_blank" rel="noopener"
+            style="padding:0.7rem 1rem;background:#f0f0f0;color:#555;border:none;border-radius:12px;font-size:0.85rem;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:4px">
+            🔗 Συνταγή
+          </a>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  ca.innerHTML = filterBtns + (filtered.length===0
+    ? `<div style="text-align:center;padding:2rem;color:#aaa">Δεν βρέθηκαν συνταγές</div>`
+    : cards);
+}
+
+window.setRecipeFilter=cuisine=>{
+  recipeFilter=cuisine;
+  renderContent();
+};
+
+window.toggleRecipeCard=idx=>{
+  const body=document.getElementById('rcbody-'+idx);
+  const arrow=document.getElementById('rcarrow-'+idx);
+  if(!body)return;
+  // Κλείνω όλες τις άλλες
+  document.querySelectorAll('.recipe-card-body').forEach(b=>b.style.display='none');
+  document.querySelectorAll('[id^="rcarrow-"]').forEach(a=>a.textContent='▼');
+  // Ανοίγω αυτή αν ήταν κλειστή
+  if(body.style.display!=='block'){
+    body.style.display='block';
+    if(arrow)arrow.textContent='▲';
+  }
+};
+
+window.addAllRecipeIngredients=(idx,evt)=>{
+  evt.stopPropagation();
+  const recipe=allRecipes[idx];
+  if(!recipe)return;
+  let added=0;
+  recipe.ingredients.forEach(ing=>{
+    const name=(ing.name||'').trim();
+    if(!name)return;
+    const existing=Object.values(sharedList).find(it=>normGr(it.name)===normGr(name)&&!it.done);
+    if(!existing){
+      const id=Date.now().toString(36)+Math.random().toString(36).slice(2);
+      const item={name,cat:guessCat(name),done:false,ts:Date.now()};
+      if(ing.qty)item.qty=ing.qty;
+      if(ing.unit)item.unit=ing.unit;
+      set(ref(db,'rooms/'+roomKey+'/lista/'+id),item);
+      added++;
+    }
+  });
+  setStatus('ok',`✅ Προστέθηκαν ${added} υλικά από «${recipe.name}»`);
+  setTab('all');
+};
+
+// Εικασία κατηγορίας βάσει ονόματος (fallback)
+function guessCat(name){
+  const n=normGr(name);
+  if(/γαλα|τυρι|γιαουρτ|αυγ|βουτυρ|κρεμα/.test(n))return 'dairy';
+  if(/κρεας|κοτοπουλ|κιμας|χοιριν|μοσχαρ|ψαρι|λουκαν|μπεικ/.test(n))return 'meat';
+  if(/ντοματ|πατατ|κρεμμυδ|σκορδ|αγγουρ|καροτ|πιπερι|σπανακ|κολοκ|μελιτζ|λαχαν|μαϊντ/.test(n))return 'veg';
+  if(/μηλ|μπαναν|πορτοκαλ|λεμον|σταφυλ|φραουλ/.test(n))return 'fruit';
+  if(/ψωμι|πιτα|φρυγ|κριτσ/.test(n))return 'bakery';
+  if(/νερο|χυμος|καφε|τσαι|κρασι|μπυρ/.test(n))return 'drinks';
+  if(/σαπουν|χαρτι|απορρυπ|σκουπ/.test(n))return 'clean';
+  if(/αλατ|πιπερ|ριγαν|κανελ|κυμιν|μπαχαρ|σαφραν|κουρκ|τζιντζ/.test(n))return 'spices';
+  return 'pantry';
+}
+
+</script>
+</body>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{navigator.serviceWorker.register('/lista/sw.js').catch(e=>console.warn('SW:',e));});
+}
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();deferredPrompt=e;
+  const btn=document.getElementById('installBtn');if(btn)btn.style.display='flex';
+});
+window.addEventListener('appinstalled',()=>{
+  deferredPrompt=null;const btn=document.getElementById('installBtn');if(btn)btn.style.display='none';
+});
+window.installApp=async()=>{
+  if(!deferredPrompt)return;
+  deferredPrompt.prompt();await deferredPrompt.userChoice;
+  deferredPrompt=null;const btn=document.getElementById('installBtn');if(btn)btn.style.display='none';
+};
+</script>
+</html>
